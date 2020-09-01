@@ -78,27 +78,29 @@ void prong_length_adjust()
   Var numuE = LSTME::numuEnergy(model);
 
   // Spectrum to be filled from the loader
-  Spectrum len("Track length (cm)", bins, loader, muE, cut);
-  Spectrum len1("Track length1 (cm)", bins, loader, hadE, cut);
-  Spectrum len2("Track length2 (cm)", bins, loader, numuE, cut);
+  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut);
+  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut);
+  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut);
 
   // Do it!
   loader.Go();
 
   // How to scale histograms
-  const double pot = 18e20;
+  //const double pot = 18e20;
 
   // We have histograms
-  len.ToTH1(pot)->Draw("hist");
-  new TCanvas;
-  len1.ToTH1(pot)->Draw("hist");
-  new TCanvas;
-  len2.ToTH1(pot)->Draw("hist");
+  //len.ToTH1(pot)->Draw("hist");
+  //new TCanvas;
+  //len1.ToTH1(pot)->Draw("hist");
+  //new TCanvas;
+  //len2.ToTH1(pot)->Draw("hist");
 
   // Now save to disk...
-  //TFile *outFile = new TFile("save_your_spectra_to_disk.root","RECREATE");
+  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra.root","RECREATE");
 
-  //len.SaveTo(outFile->mkdir("dir_nhit_spectra"));
+  muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
+  hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
+  numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));
 
-  //outFile->Close();
+  outFile->Close();
 }
