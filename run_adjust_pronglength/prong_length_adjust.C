@@ -11,15 +11,22 @@
 #include "TCanvas.h"
 #include "TH2.h"
 
+#include "TensorFlowEvaluator/LSTME/cafana/LSTMEVar.h"
+
+#include "CAFAna/Cuts/NumuCuts.h"
+#include "CAFAna/Cuts/NumuCuts2018.h"
+#include "TFile.h"  
+#include "TH1.h"   
+
 using namespace ana;
 
 
-void prong_length_ajust()
+void prong_length_adjust()
 {
   // Environment variables and wildcards work. Most commonly you want a SAM
   // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
   // reasonable amount of time for demo purposes.
-  const std::string fname = " prod_caf_R19-02-23-miniprod5.l_fd_genie_nonswap_fhc_nova_v08_full_v1_addtrainingdatapixelmaps";
+  const std::string fname = "prod_caf_R19-11-18-prod5reco.f_fd_genie_N1810j0211a_nonswap_fhc_nova_v08_period3_v1";
 
   SpectrumLoader loader(fname);
 
@@ -48,7 +55,7 @@ void prong_length_ajust()
       {
           return (
                 (sr->sel.remid.pid > 0.5)
-              && (sr->sel.cvnProd3Train.numuid > 0.5)
+              && (sr->sel.cvnloosepreselptp.numuid > 0.5)
           );
       }
   );
@@ -62,8 +69,18 @@ void prong_length_ajust()
         )
         && kTrueEbelow7GeV
         && SanityCut;
+
+
+  auto model = LSTME::initCAFAnaModel("tf");
+
+  Var muE   = LSTME::muonEnergy(model);
+  Var hadE  = LSTME::hadEnergy(model);
+  Var numuE = LSTME::numuEnergy(model);
+
   // Spectrum to be filled from the loader
-  Spectrum len("Track length (cm)", bins, loader, kTrackLen, cut);
+  Spectrum len("Track length (cm)", bins, loader, muE, cut);
+  Spectrum len1("Track length1 (cm)", bins, loader, hadE, cut);
+  Spectrum len2("Track length2 (cm)", bins, loader, numuE, cut);
 
   // Do it!
   loader.Go();
@@ -73,4 +90,15 @@ void prong_length_ajust()
 
   // We have histograms
   len.ToTH1(pot)->Draw("hist");
+  new TCanvas;
+  len1.ToTH1(pot)->Draw("hist");
+  new TCanvas;
+  len2.ToTH1(pot)->Draw("hist");
+
+  // Now save to disk...
+  //TFile *outFile = new TFile("save_your_spectra_to_disk.root","RECREATE");
+
+  //len.SaveTo(outFile->mkdir("dir_nhit_spectra"));
+
+  //outFile->Close();
 }
