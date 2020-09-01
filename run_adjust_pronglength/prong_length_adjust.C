@@ -30,7 +30,7 @@ void prong_length_adjust()
 
   SpectrumLoader loader(fname);
 
-  const Binning bins = Binning::Simple(100, 0, 1000);
+  const Binning bins = Binning::Simple(100, 0, 5);
 
   // Specify variables needed and arbitrary code to extract value from
   // SRProxy
