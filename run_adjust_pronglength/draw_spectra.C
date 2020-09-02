@@ -8,6 +8,7 @@
 #include "TH1.h"    
 
 #include "CAFAna/Core/Spectrum.h"
+#include "CAFAna/Systs/EnergySysts2018.h"
 
 
 
@@ -15,7 +16,7 @@ using namespace ana;
 
 
 
-void demo2p5b(){
+void draw_spectra(){
 
   TFile inFile("/nova/ana/users/wus/root_files/FD_FHC_spectra.root");
 
