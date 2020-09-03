@@ -84,7 +84,7 @@ void prong_length_adjust()
   // Spectrum to be filled from the loader
   SystShifts shift_2020(NeutronVisEScaleSyst2018, 1.0);
 
-  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020);
+  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020, kUnweighted);
   Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020);
   Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut, shift_2020);
 
