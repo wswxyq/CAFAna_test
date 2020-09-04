@@ -81,7 +81,7 @@ void prong_length_adjust()
 
   SpectrumLoader loader(fname);
 
-  const Binning bins = Binning::Simple(100, 0, 20);
+  const Binning bins = Binning::Simple(100, 0, 10);
 
   // Specify variables needed and arbitrary code to extract value from
   // SRProxy
@@ -151,7 +151,7 @@ void prong_length_adjust()
   //len2.ToTH1(pot)->Draw("hist");
 
   // Now save to disk...
-  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_x.root","RECREATE");
+  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10.root","RECREATE");
 
   muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
   hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
