@@ -134,8 +134,8 @@ void prong_length_adjust()
   SystShifts shift_2020(&wsw_sys, 5.0);
 
   Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020, kUnweighted);
-  //Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020);
-  //Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut, shift_2020);
+  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020, kUnweighted);
+  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut, shift_2020, kUnweighted);
 
   // Do it!
   loader.Go();
@@ -154,8 +154,8 @@ void prong_length_adjust()
   TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_x.root","RECREATE");
 
   muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
-  //hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
-  //numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));
+  hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
+  numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));
 
   outFile->Close();
 }
