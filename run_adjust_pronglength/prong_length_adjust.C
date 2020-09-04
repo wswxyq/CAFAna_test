@@ -18,11 +18,56 @@
 #include "TFile.h"  
 #include "TH1.h"   
 
-#include "CAFAna/Systs/EnergySysts2018.h"
 
 
 using namespace ana;
 
+
+  class Prong_length_Shift : public ISyst
+  {
+    public:
+      Prong_length_Shift()
+        : ISyst("Prong_length_Shift", "Prong_length_Shift ##0")
+      {}
+
+      // we'll be modifying the SRProxy this time.
+      // (that's why it's passed non-const.)
+      void Shift(double sigma, caf::SRProxy* sr, double& weight) const override
+      {
+        // if no truth info, we can't do anything
+        //if (sr->mc.nnu != 1)
+        //  return;
+
+        //unsigned int nNeutron = 0;
+        //for (const auto & particle : sr->mc.nu[0].prim)
+        //{
+        //  if (particle.pdg != 2112)
+        //    continue;
+
+          // only increase if they were less than 50 MeV to begin with
+        //  if (particle.visEinslcBirks + particle.daughterVisEinslcBirks >= 0.050)
+        //    continue;
+
+        //  nNeutron++;
+        //}
+
+        // now adjust the numu energy.
+        // we're going to add 25 MeV of visible energy for each neutron
+        // for the +1 sigma shift (and subtract it for -1 sigma, etc.)
+        //double addedE = sigma * 0.025 * nNeutron;
+        //if (sr->energy.numu.hadcalE + addedE < 0)
+        //  addedE = -sr->energy.numu.hadcalE;  // don't let the shift make a negative energy deposit
+
+        //sr->energy.numu.hadcalE += addedE;   // this goes into the numu energy estimator function
+
+
+        auto &png = sr->vtx.elastic.fuzzyk.png;
+        for (size_t i = 0; i < png.size(); i++) {
+          // png[i].len // this will give you lenght of the prong number i
+          png[i].len *= (1 + sigma * 0.01) 
+        }
+      }
+  };
 
 
 void prong_length_adjust()
@@ -82,9 +127,9 @@ void prong_length_adjust()
   Var numuE = LSTME::numuEnergy(model);
 
   // Spectrum to be filled from the loader
-  const NeutronVisEScaleSyst2018 wsw_sys(true, 0.040, 3.6, 0.33);
+  const Prong_length_Shift wsw_sys;
 
-  SystShifts shift_2020(&wsw_sys, 1.0);
+  SystShifts shift_2020(&wsw_sys, 5.0);
 
   Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020, kUnweighted);
   //Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020);
