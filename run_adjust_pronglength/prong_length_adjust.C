@@ -18,6 +18,8 @@
 #include "TFile.h"  
 #include "TH1.h"   
 
+#include "CAFAna/Core/ISyst.h"
+
 
 
 using namespace ana;
@@ -64,7 +66,7 @@ using namespace ana;
         auto &png = sr->vtx.elastic.fuzzyk.png;
         for (size_t i = 0; i < png.size(); i++) {
           // png[i].len // this will give you lenght of the prong number i
-          png[i].len *= (1 + sigma * 0.01) 
+          png[i].len *= (1 + sigma * 0.01); 
         }
       }
   };
