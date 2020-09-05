@@ -18,8 +18,8 @@ using namespace ana;
 
 void draw_spectra(){
 
-  TFile inFile_0("/nova/ana/users/wus/root_files/FD_FHC_spectra.root");
-  TFile inFile_5("/nova/ana/users/wus/root_files/FD_FHC_spectra_x.root");
+  TFile inFile_0("/nova/ana/users/wus/root_files/FD_FHC_spectra_original_x_0_10.root");
+  TFile inFile_5("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10.root");
 
   // Load the spectrum...
   std::unique_ptr<Spectrum> spect_0 = Spectrum::LoadFrom(inFile_0.GetDirectory("subdir_muE_spectra"));
