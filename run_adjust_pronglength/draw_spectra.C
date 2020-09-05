@@ -37,11 +37,14 @@ void draw_spectra(){
   TH1D *TH1D_5 = spect_5->ToTH1(spect_5->POT());
 
   TH1D_0->SetLineWidth(2);
-  TH1D_0->SetLineColor(kGreen+2);
+  TH1D_0->SetLineColor(kGreen);
+  TH1D_0->SetLineStyle(kSolid);
   TH1D_0->Draw("hist_0");
 
   TH1D_5->SetLineWidth(2);
-  TH1D_5->SetLineColor(kRed+2);
-  TH1D_5->Draw("hist_0");
+  TH1D_5->SetLineColor(kRed);
+  TH1D_5->SetLineStyle(kSolid);
+  TH1D_5->Draw("SAME");
+  canvas_0->Print("compare.pdf");
 
 }
