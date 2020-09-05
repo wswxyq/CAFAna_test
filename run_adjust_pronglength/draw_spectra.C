@@ -8,7 +8,7 @@
 #include "TH1.h"    
 
 #include "CAFAna/Core/Spectrum.h"
-#include "CAFAna/Systs/EnergySysts2018.h"
+
 
 
 
@@ -42,6 +42,6 @@ void draw_spectra(){
 
   TH1D_5->SetLineWidth(2);
   TH1D_5->SetLineColor(kRed+2);
-  TH1D_5->Draw("hist_5");
+  TH1D_5->Draw("hist_0");
 
 }
