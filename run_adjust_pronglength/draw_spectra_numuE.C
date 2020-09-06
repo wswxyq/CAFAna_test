@@ -18,7 +18,7 @@ using namespace ana;
 
 
 
-void draw_spectra(){
+void draw_spectra_numuE(){
 
   TFile inFile_0("/nova/ana/users/wus/root_files/FD_FHC_spectra_original_x_0_10.root");
   TFile inFile_5("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10.root");
@@ -26,10 +26,10 @@ void draw_spectra(){
   TFile inFile_5_2D("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_2D.root");
 
   // Load the spectrum...
-  std::unique_ptr<Spectrum> spect_0 = Spectrum::LoadFrom(inFile_0.GetDirectory("subdir_muE_spectra"));
-  std::unique_ptr<Spectrum> spect_5 = Spectrum::LoadFrom(inFile_5.GetDirectory("subdir_muE_spectra"));
-  std::unique_ptr<Spectrum> spect_5_all = Spectrum::LoadFrom(inFile_5_all.GetDirectory("subdir_muE_spectra"));
-  std::unique_ptr<Spectrum> spect_5_2D = Spectrum::LoadFrom(inFile_5_2D.GetDirectory("subdir_muE_spectra"));
+  std::unique_ptr<Spectrum> spect_0 = Spectrum::LoadFrom(inFile_0.GetDirectory("subdir_numuE_spectra"));
+  std::unique_ptr<Spectrum> spect_5 = Spectrum::LoadFrom(inFile_5.GetDirectory("subdir_numuE_spectra"));
+  std::unique_ptr<Spectrum> spect_5_all = Spectrum::LoadFrom(inFile_5_all.GetDirectory("subdir_numuE_spectra"));
+  std::unique_ptr<Spectrum> spect_5_2D = Spectrum::LoadFrom(inFile_5_2D.GetDirectory("subdir_numuE_spectra"));
 
 
 
@@ -65,7 +65,7 @@ void draw_spectra(){
   TH1D_5_2D->Draw("SAME");
 
   auto legend = new TLegend(0.6, 0.6, 0.8, 0.8);
-  legend->SetHeader("Prong-Shifted muon Energy","C"); // option "C" allows to center the header
+  legend->SetHeader("Prong-Shifted muon neutrino Energy","C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_0, "Original mean: "+ TString::Format("%f",TH1D_0->GetMean()),"l");
   legend->AddEntry(TH1D_5, "3D -shift mean: "+ TString::Format("%f",TH1D_5->GetMean()),"l");
   legend->AddEntry(TH1D_5_2D, "2D -shift mean: "+ TString::Format("%f",TH1D_5_2D->GetMean()),"l");
@@ -74,7 +74,7 @@ void draw_spectra(){
 
 
 
-  canvas_0->Print("compare_all_x.pdf");
+  canvas_0->Print("compare_all_numuE_x.pdf");
   cout << "Original(Green) mean:" << TH1D_0->GetMean()<<endl;
   cout << "5% 3D prong-shift(Red) mean:" << TH1D_5->GetMean()<<endl;
   cout << "5% 2D prong-shift(Orange) mean:" << TH1D_5_2D->GetMean()<<endl;
