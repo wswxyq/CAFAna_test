@@ -62,16 +62,17 @@ using namespace ana;
 
         //sr->energy.numu.hadcalE += addedE;   // this goes into the numu energy estimator function
 
-        auto &png2d = sr->vtx.elastic.fuzzyk.png2d;
-        for (size_t i = 0; i < png2d.size(); i++) {
+
+        auto &png = sr->vtx.elastic.fuzzyk.png;
+        for (size_t i = 0; i < png.size(); i++) {
           // png[i].len // this will give you lenght of the prong number i
-          png2d[i].len *= (1 + sigma * 0.01); 
+          png[i].len *= (1 + sigma * 0.01); 
         }
       }
   };
 
 
-void prong_length_adjust_2D()
+void prong_length_adjust_3D_up()
 {
   // Environment variables and wildcards work. Most commonly you want a SAM
   // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
@@ -150,7 +151,7 @@ void prong_length_adjust_2D()
   //len2.ToTH1(pot)->Draw("hist");
 
   // Now save to disk...
-  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_2D.root","RECREATE");
+  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10.root","RECREATE");
 
   muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
   hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
