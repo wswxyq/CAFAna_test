@@ -72,7 +72,7 @@ using namespace ana;
   };
 
 
-void prong_length_adjust()
+void prong_length_adjust_3D()
 {
   // Environment variables and wildcards work. Most commonly you want a SAM
   // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
