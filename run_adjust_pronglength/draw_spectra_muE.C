@@ -77,7 +77,7 @@ void draw_spectra_muE(){
 
 
   TLine *hline = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
-  hLine->SetLineColor(kGreen);
+  hline->SetLineColor(kGreen);
   hline->Draw("hist_1");
 
   TH1D_modified_up_factor->SetLineWidth(1);
