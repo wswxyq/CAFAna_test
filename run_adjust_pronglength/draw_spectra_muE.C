@@ -45,8 +45,8 @@ void draw_spectra_muE(){
   TH1D *TH1D_modified_up = spect_modified_up->ToTH1(spect_modified_up->POT());
   TH1D *TH1D_modified_down = spect_modified_down->ToTH1(spect_modified_down->POT());
 
-  TH1D *TH1D_modified_up_factor = TH1D_modified_up->Clone();
-  TH1D *TH1D_modified_down_factor = TH1D_modified_down->Clone();
+  TH1D *TH1D_modified_up_factor = (TH1D*)TH1D_modified_up->Clone("TH1D_modified_up_factor");
+  TH1D *TH1D_modified_down_factor = (TH1D*)TH1D_modified_down->Clone("TH1D_modified_down_factor");
 
   TH1D_original->SetLineWidth(1);
   TH1D_original->SetLineColor(kGreen);
