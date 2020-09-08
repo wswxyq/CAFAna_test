@@ -8,6 +8,7 @@
 #include "TH1.h"    
 #include "TString.h"
 #include "TLegend.h"
+#include "TLine.h"
 
 #include "CAFAna/Core/Spectrum.h"
 
