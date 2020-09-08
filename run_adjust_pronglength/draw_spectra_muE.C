@@ -22,15 +22,13 @@ void draw_spectra_muE(){
   TString percentage = "5%";
 
   TFile inFile_origin("/nova/ana/users/wus/root_files/FD_FHC_spectra_original_x_0_10.root");
-  TFile inFile_modified_3D("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_3D.root");
-  TFile inFile_modified_all("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_all.root");
-  TFile inFile_modified_2D("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_2D.root");
+  TFile inFile_modified_up("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_all_up.root");
+  TFile inFile_modified_down("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_all_down.root");
 
   // Load the spectrum...
   std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin.GetDirectory(subdir));
-  std::unique_ptr<Spectrum> spect_modified_3D = Spectrum::LoadFrom(inFile_modified_3D.GetDirectory(subdir));
-  std::unique_ptr<Spectrum> spect_modified_2D = Spectrum::LoadFrom(inFile_modified_2D.GetDirectory(subdir));
-  std::unique_ptr<Spectrum> spect_modified_all = Spectrum::LoadFrom(inFile_modified_all.GetDirectory(subdir));
+  std::unique_ptr<Spectrum> spect_modified_up = Spectrum::LoadFrom(inFile_modified_up.GetDirectory(subdir));
+  std::unique_ptr<Spectrum> spect_modified_down = Spectrum::LoadFrom(inFile_modified_down.GetDirectory(subdir));
 
 
 
@@ -41,36 +39,30 @@ void draw_spectra_muE(){
   canvas_0->cd();
 
   TH1D *TH1D_original = spect_origin->ToTH1(spect_origin->POT());
-  TH1D *TH1D_modified_3D = spect_modified_3D->ToTH1(spect_modified_3D->POT());
-  TH1D *TH1D_modified_2D = spect_modified_2D->ToTH1(spect_modified_2D->POT());
-  TH1D *TH1D_modified_all = spect_modified_all->ToTH1(spect_modified_all->POT());
+  TH1D *TH1D_modified_up = spect_modified_up->ToTH1(spect_modified_up->POT());
+  TH1D *TH1D_modified_down = spect_modified_down->ToTH1(spect_modified_down->POT());
 
-  TH1D_original->SetLineWidth(2);
+  TH1D_original->SetLineWidth(1);
   TH1D_original->SetLineColor(kGreen);
   TH1D_original->SetLineStyle(kSolid);
   TH1D_original->Draw("hist_0");
 
-  TH1D_modified_3D->SetLineWidth(2);
-  TH1D_modified_3D->SetLineColor(kRed);
-  TH1D_modified_3D->SetLineStyle(kSolid);
-  TH1D_modified_3D->Draw("SAME");
+  TH1D_modified_up->SetLineWidth(1);
+  TH1D_modified_up->SetLineColor(kRed);
+  TH1D_modified_up->SetLineStyle(kSolid);
+  TH1D_modified_up->Draw("SAME");
 
-  TH1D_modified_2D->SetLineWidth(2);
-  TH1D_modified_2D->SetLineColor(kOrange);
-  TH1D_modified_2D->SetLineStyle(kSolid);
-  TH1D_modified_2D->Draw("SAME");
+  TH1D_modified_down->SetLineWidth(2);
+  TH1D_modified_down->SetLineColor(kOrange);
+  TH1D_modified_down->SetLineStyle(kSolid);
+  TH1D_modified_down->Draw("SAME");
 
-  TH1D_modified_all->SetLineWidth(2);
-  TH1D_modified_all->SetLineColor(kBlue);
-  TH1D_modified_all->SetLineStyle(kSolid);
-  TH1D_modified_all->Draw("SAME");
 
   auto legend = new TLegend(0.6, 0.6, 0.8, 0.8);
   legend->SetHeader("Prong-Shifted muon Energy","C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
-  legend->AddEntry(TH1D_modified_3D, "3D -shift mean: "+ TString::Format("%f",TH1D_modified_3D->GetMean()),"l");
-  legend->AddEntry(TH1D_modified_2D, "2D -shift mean: "+ TString::Format("%f",TH1D_modified_2D->GetMean()),"l");
-  legend->AddEntry(TH1D_modified_all, "3D & 2D -shift mean: "+ TString::Format("%f",TH1D_modified_all->GetMean()),"l");
+  legend->AddEntry(TH1D_modified_up, "up -shift mean: "+ TString::Format("%f",TH1D_modified_up->GetMean()),"l");
+  legend->AddEntry(TH1D_modified_down, "down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
   legend->Draw("SAME");
 
 
@@ -79,8 +71,7 @@ void draw_spectra_muE(){
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
-  cout << percentage + " 3D prong-shift(Red) mean:" << TH1D_modified_3D->GetMean()<<endl;
-  cout << percentage + " 2D prong-shift(Orange) mean:" << TH1D_modified_2D->GetMean()<<endl;
-  cout << percentage + " 3D & 2D prong-shift(Blue) mean:" << TH1D_modified_all->GetMean()<<endl;
+  cout << percentage + " up prong-shift(Red) mean:" << TH1D_modified_up->GetMean()<<endl;
+  cout << percentage + " down prong-shift(Orange) mean:" << TH1D_modified_down->GetMean()<<endl;
 
 }
