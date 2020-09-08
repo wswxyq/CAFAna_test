@@ -37,7 +37,7 @@ void draw_spectra_muE(){
   // Plot the histo...
   //  
   TCanvas *canvas_0 = new TCanvas("canvas_0","plot muE_spectra",1800, 2000);
-	c->Divide(1, 2);
+	canvas_0->Divide(1, 2);
 
   canvas_0->cd(1);
 
