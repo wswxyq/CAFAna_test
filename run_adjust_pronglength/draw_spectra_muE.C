@@ -39,7 +39,7 @@ void draw_spectra_muE(){
   TCanvas *canvas_0 = new TCanvas("canvas_0","plot muE_spectra",1200, 2000);
 	canvas_0->Divide(1, 2);
 
-  canvas_0_1->cd();
+  canvas_0->cd(1);
 
   TH1D *TH1D_original = spect_origin->ToTH1(spect_origin->POT());
   TH1D *TH1D_modified_up = spect_modified_up->ToTH1(spect_modified_up->POT());
@@ -71,7 +71,7 @@ void draw_spectra_muE(){
   legend->AddEntry(TH1D_modified_down, "down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
   legend->Draw("SAME");
 
-  canvas_0_2->cd();
+  canvas_0->cd(2);
   TH1D_modified_up_factor->Divide(TH1D_original);
   TH1D_modified_down_factor->Divide(TH1D_original);
 
