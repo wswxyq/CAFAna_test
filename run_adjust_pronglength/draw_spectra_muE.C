@@ -35,12 +35,17 @@ void draw_spectra_muE(){
   //
   // Plot the histo...
   //  
-  TCanvas *canvas_0 = new TCanvas("canvas_0","plot muE_spectra",2560,1600);
-  canvas_0->cd();
+  TCanvas *canvas_0 = new TCanvas("canvas_0","plot muE_spectra",1800, 2000);
+	c->Divide(1, 2);
+
+  canvas_0->cd(1);
 
   TH1D *TH1D_original = spect_origin->ToTH1(spect_origin->POT());
   TH1D *TH1D_modified_up = spect_modified_up->ToTH1(spect_modified_up->POT());
   TH1D *TH1D_modified_down = spect_modified_down->ToTH1(spect_modified_down->POT());
+
+  TH1D *TH1D_modified_up_factor = TH1D_modified_up->Clone();
+  TH1D *TH1D_modified_down_factor = TH1D_modified_down->Clone();
 
   TH1D_original->SetLineWidth(1);
   TH1D_original->SetLineColor(kGreen);
@@ -52,7 +57,7 @@ void draw_spectra_muE(){
   TH1D_modified_up->SetLineStyle(kSolid);
   TH1D_modified_up->Draw("SAME");
 
-  TH1D_modified_down->SetLineWidth(2);
+  TH1D_modified_down->SetLineWidth(1);
   TH1D_modified_down->SetLineColor(kOrange);
   TH1D_modified_down->SetLineStyle(kSolid);
   TH1D_modified_down->Draw("SAME");
@@ -64,6 +69,25 @@ void draw_spectra_muE(){
   legend->AddEntry(TH1D_modified_up, "up -shift mean: "+ TString::Format("%f",TH1D_modified_up->GetMean()),"l");
   legend->AddEntry(TH1D_modified_down, "down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
   legend->Draw("SAME");
+
+  canvas_0->cd(2);
+  TH1D_modified_up_factor->Divide(TH1D_original);
+  TH1D_modified_down_factor->Divide(TH1D_original);
+
+
+  TLine *hline = new TLine(gPad->GetUxmin(), 1, gPad->GetUxmax(), 1);
+  hLine->SetLineColor(kGreen);
+  hline->Draw("hist_1");
+
+  TH1D_modified_up_factor->SetLineWidth(1);
+  TH1D_modified_up_factor->SetLineColor(kRed);
+  TH1D_modified_up_factor->SetLineStyle(kSolid);
+  TH1D_modified_up_factor->Draw("SAME");
+
+  TH1D_modified_down_factor->SetLineWidth(1);
+  TH1D_modified_down_factor->SetLineColor(kOrange);
+  TH1D_modified_down_factor->SetLineStyle(kSolid);
+  TH1D_modified_down_factor->Draw("SAME");
 
 
 
