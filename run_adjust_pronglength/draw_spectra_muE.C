@@ -36,14 +36,19 @@ void draw_spectra_muE(){
   //
   // Plot the histo...
   //  
-  TCanvas *canvas_0 = new TCanvas("canvas_0","plot muE_spectra",1200, 2000);
-	canvas_0->Divide(1, 2, 0, 0);
+  TCanvas *canvas_0 = new TCanvas("canvas_0","plot muE_spectra",1200, 1200);
+	//canvas_0->Divide(1, 2, 0, 0);
+  TPad *pad1 = new TPad("pad1", " ",0.1,0.35,0.9,0.92);
+  TPad *pad2 = new TPad("pad2", " ",0.1,0.1,0.9,0.35);
 
-  canvas_0->cd(1);
-  canvas_0->GetPad(1)->SetTopMargin(.1);
-  canvas_0->GetPad(1)->SetBottomMargin(.1);
-  canvas_0->GetPad(1)->SetLeftMargin(.1);
-  canvas_0->GetPad(1)->SetRightMargin(.1);
+  pad1->Draw();
+  pad2->Draw();
+
+  pad1->cd();
+  //pad1->SetTopMargin(.1);
+  //pad1->SetBottomMargin(.1);
+  //pad1->SetLeftMargin(.1);
+  //pad1->SetRightMargin(.1);
 
   TH1D *TH1D_original = spect_origin->ToTH1(spect_origin->POT());
   TH1D *TH1D_modified_up = spect_modified_up->ToTH1(spect_modified_up->POT());
@@ -82,13 +87,15 @@ void draw_spectra_muE(){
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
   legend->AddEntry(TH1D_modified_up, "up -shift mean: "+ TString::Format("%f",TH1D_modified_up->GetMean()),"l");
   legend->AddEntry(TH1D_modified_down, "down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
+  legend->SetTextSize(0.02);
   legend->Draw("SAME");
 
-  canvas_0->cd(2);
-  canvas_0->GetPad(2)->SetTopMargin(.1);
-  canvas_0->GetPad(2)->SetLeftMargin(.1);
-  canvas_0->GetPad(2)->SetBottomMargin(.1);
-  canvas_0->GetPad(2)->SetRightMargin(.1);
+  pad2->cd();
+  
+  //pad2->SetTopMargin(.1);
+  //pad2->SetLeftMargin(.1);
+  //pad2->SetBottomMargin(.1);
+  //pad2->SetRightMargin(.1);
   TH1D_modified_up_factor->Divide(TH1D_original);
   TH1D_modified_up_factor->GetYaxis()->SetRangeUser(0.7, 1.3);
 
@@ -100,19 +107,22 @@ void draw_spectra_muE(){
   TH1D_modified_up_factor->SetLineWidth(2);
   TH1D_modified_up_factor->SetLineColor(kRed);
   TH1D_modified_up_factor->SetLineStyle(kSolid);
-  TH1D_modified_up_factor->GetYaxis()->SetTitle("ratio");
+  TH1D_modified_up_factor->GetYaxis()->SetTitle(" ");
   TH1D_modified_up_factor->Draw("DD");
 
   TH1D_modified_down_factor->SetLineWidth(2);
   TH1D_modified_down_factor->SetLineColor(kOrange);
   TH1D_modified_down_factor->SetLineStyle(kSolid);
-  TH1D_modified_up_factor->GetYaxis()->SetTitle("ratio");
+  TH1D_modified_up_factor->GetYaxis()->SetTitle(" ");
+  TH1D_modified_up_factor->GetXaxis()->SetTitle(" ");
   TH1D_modified_down_factor->Draw("SAME");
 
   TLine *hline = new TLine(0,1,5,1);
   hline->SetLineColor(kGreen);
   hline->SetLineWidth(2);
   hline->Draw("SAME");
+
+  canvas_0->Update();
 
   canvas_0->Print("compare_all_muE_x.pdf");
 
