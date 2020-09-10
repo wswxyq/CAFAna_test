@@ -1,0 +1,883 @@
+[1mdiff --git a/run_adjust_pronglength/draw_spectra_muE.C b/run_adjust_pronglength/draw_spectra_muE.C[m
+[1mdeleted file mode 100644[m
+[1mindex d0726ba..0000000[m
+[1m--- a/run_adjust_pronglength/draw_spectra_muE.C[m
+[1m+++ /dev/null[m
+[36m@@ -1,86 +0,0 @@[m
+[31m-// Example of how to read spectra saved to disk in and make[m
+[31m-// pretty plots...[m
+[31m-//[m
+[31m-// This is the second half of the demo2p5a script...[m
+[31m-[m
+[31m-#include "TCanvas.h"[m
+[31m-#include "TFile.h"  [m
+[31m-#include "TH1.h"    [m
+[31m-#include "TString.h"[m
+[31m-#include "TLegend.h"[m
+[31m-[m
+[31m-#include "CAFAna/Core/Spectrum.h"[m
+[31m-[m
+[31m-[m
+[31m-using namespace ana;[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-void draw_spectra_muE(){[m
+[31m-[m
+[31m-  TString subdir = "subdir_muE_spectra";[m
+[31m-  TString percentage = "5%";[m
+[31m-[m
+[31m-  TFile inFile_origin("/nova/ana/users/wus/root_files/FD_FHC_spectra_original_x_0_10.root");[m
+[31m-  TFile inFile_modified_3D("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_3D.root");[m
+[31m-  TFile inFile_modified_all("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_all.root");[m
+[31m-  TFile inFile_modified_2D("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_2D.root");[m
+[31m-[m
+[31m-  // Load the spectrum...[m
+[31m-  std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin.GetDirectory(subdir));[m
+[31m-  std::unique_ptr<Spectrum> spect_modified_3D = Spectrum::LoadFrom(inFile_modified_3D.GetDirectory(subdir));[m
+[31m-  std::unique_ptr<Spectrum> spect_modified_2D = Spectrum::LoadFrom(inFile_modified_2D.GetDirectory(subdir));[m
+[31m-  std::unique_ptr<Spectrum> spect_modified_all = Spectrum::LoadFrom(inFile_modified_all.GetDirectory(subdir));[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-  //[m
+[31m-  // Plot the histo...[m
+[31m-  //  [m
+[31m-  TCanvas *canvas_0 = new TCanvas("canvas_0","plot muE_spectra",2560,1600);[m
+[31m-  canvas_0->cd();[m
+[31m-[m
+[31m-  TH1D *TH1D_original = spect_origin->ToTH1(spect_origin->POT());[m
+[31m-  TH1D *TH1D_modified_3D = spect_modified_3D->ToTH1(spect_modified_3D->POT());[m
+[31m-  TH1D *TH1D_modified_2D = spect_modified_2D->ToTH1(spect_modified_2D->POT());[m
+[31m-  TH1D *TH1D_modified_all = spect_modified_all->ToTH1(spect_modified_all->POT());[m
+[31m-[m
+[31m-  TH1D_original->SetLineWidth(2);[m
+[31m-  TH1D_original->SetLineColor(kGreen);[m
+[31m-  TH1D_original->SetLineStyle(kSolid);[m
+[31m-  TH1D_original->Draw("hist_0");[m
+[31m-[m
+[31m-  TH1D_modified_3D->SetLineWidth(2);[m
+[31m-  TH1D_modified_3D->SetLineColor(kRed);[m
+[31m-  TH1D_modified_3D->SetLineStyle(kSolid);[m
+[31m-  TH1D_modified_3D->Draw("SAME");[m
+[31m-[m
+[31m-  TH1D_modified_2D->SetLineWidth(2);[m
+[31m-  TH1D_modified_2D->SetLineColor(kOrange);[m
+[31m-  TH1D_modified_2D->SetLineStyle(kSolid);[m
+[31m-  TH1D_modified_2D->Draw("SAME");[m
+[31m-[m
+[31m-  TH1D_modified_all->SetLineWidth(2);[m
+[31m-  TH1D_modified_all->SetLineColor(kBlue);[m
+[31m-  TH1D_modified_all->SetLineStyle(kSolid);[m
+[31m-  TH1D_modified_all->Draw("SAME");[m
+[31m-[m
+[31m-  auto legend = new TLegend(0.6, 0.6, 0.8, 0.8);[m
+[31m-  legend->SetHeader("Prong-Shifted muon Energy","C"); // option "C" allows to center the header[m
+[31m-  legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");[m
+[31m-  legend->AddEntry(TH1D_modified_3D, "3D -shift mean: "+ TString::Format("%f",TH1D_modified_3D->GetMean()),"l");[m
+[31m-  legend->AddEntry(TH1D_modified_2D, "2D -shift mean: "+ TString::Format("%f",TH1D_modified_2D->GetMean()),"l");[m
+[31m-  legend->AddEntry(TH1D_modified_all, "3D & 2D -shift mean: "+ TString::Format("%f",TH1D_modified_all->GetMean()),"l");[m
+[31m-  legend->Draw("SAME");[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-  canvas_0->Print("compare_all_muE_x.pdf");[m
+[31m-[m
+[31m-  [m
+[31m-  cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;[m
+[31m-  cout << percentage + " 3D prong-shift(Red) mean:" << TH1D_modified_3D->GetMean()<<endl;[m
+[31m-  cout << percentage + " 2D prong-shift(Orange) mean:" << TH1D_modified_2D->GetMean()<<endl;[m
+[31m-  cout << percentage + " 3D & 2D prong-shift(Blue) mean:" << TH1D_modified_all->GetMean()<<endl;[m
+[31m-[m
+[31m-}[m
+[1mdiff --git a/run_adjust_pronglength/draw_spectra_numuE.C b/run_adjust_pronglength/draw_spectra_numuE.C[m
+[1mdeleted file mode 100644[m
+[1mindex 535b80b..0000000[m
+[1m--- a/run_adjust_pronglength/draw_spectra_numuE.C[m
+[1m+++ /dev/null[m
+[36m@@ -1,86 +0,0 @@[m
+[31m-// Example of how to read spectra saved to disk in and make[m
+[31m-// pretty plots...[m
+[31m-//[m
+[31m-// This is the second half of the demo2p5a script...[m
+[31m-[m
+[31m-#include "TCanvas.h"[m
+[31m-#include "TFile.h"  [m
+[31m-#include "TH1.h"    [m
+[31m-#include "TString.h"[m
+[31m-#include "TLegend.h"[m
+[31m-[m
+[31m-#include "CAFAna/Core/Spectrum.h"[m
+[31m-[m
+[31m-[m
+[31m-using namespace ana;[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-void draw_spectra_numuE(){[m
+[31m-[m
+[31m-  TString subdir = "subdir_numuE_spectra";[m
+[31m-  TString percentage = "5%";[m
+[31m-[m
+[31m-  TFile inFile_origin("/nova/ana/users/wus/root_files/FD_FHC_spectra_original_x_0_10.root");[m
+[31m-  TFile inFile_modified_3D("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_3D.root");[m
+[31m-  TFile inFile_modified_all("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_all.root");[m
+[31m-  TFile inFile_modified_2D("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_2D.root");[m
+[31m-[m
+[31m-  // Load the spectrum...[m
+[31m-  std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin.GetDirectory(subdir));[m
+[31m-  std::unique_ptr<Spectrum> spect_modified_3D = Spectrum::LoadFrom(inFile_modified_3D.GetDirectory(subdir));[m
+[31m-  std::unique_ptr<Spectrum> spect_modified_2D = Spectrum::LoadFrom(inFile_modified_2D.GetDirectory(subdir));[m
+[31m-  std::unique_ptr<Spectrum> spect_modified_all = Spectrum::LoadFrom(inFile_modified_all.GetDirectory(subdir));[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-  //[m
+[31m-  // Plot the histo...[m
+[31m-  //  [m
+[31m-  TCanvas *canvas_0 = new TCanvas("canvas_0","plot numuE_spectra",2560,1600);[m
+[31m-  canvas_0->cd();[m
+[31m-[m
+[31m-  TH1D *TH1D_original = spect_origin->ToTH1(spect_origin->POT());[m
+[31m-  TH1D *TH1D_modified_3D = spect_modified_3D->ToTH1(spect_modified_3D->POT());[m
+[31m-  TH1D *TH1D_modified_2D = spect_modified_2D->ToTH1(spect_modified_2D->POT());[m
+[31m-  TH1D *TH1D_modified_all = spect_modified_all->ToTH1(spect_modified_all->POT());[m
+[31m-[m
+[31m-  TH1D_original->SetLineWidth(2);[m
+[31m-  TH1D_original->SetLineColor(kGreen);[m
+[31m-  TH1D_original->SetLineStyle(kSolid);[m
+[31m-  TH1D_original->Draw("hist_0");[m
+[31m-[m
+[31m-  TH1D_modified_3D->SetLineWidth(2);[m
+[31m-  TH1D_modified_3D->SetLineColor(kRed);[m
+[31m-  TH1D_modified_3D->SetLineStyle(kSolid);[m
+[31m-  TH1D_modified_3D->Draw("SAME");[m
+[31m-[m
+[31m-  TH1D_modified_2D->SetLineWidth(2);[m
+[31m-  TH1D_modified_2D->SetLineColor(kOrange);[m
+[31m-  TH1D_modified_2D->SetLineStyle(kSolid);[m
+[31m-  TH1D_modified_2D->Draw("SAME");[m
+[31m-[m
+[31m-  TH1D_modified_all->SetLineWidth(2);[m
+[31m-  TH1D_modified_all->SetLineColor(kBlue);[m
+[31m-  TH1D_modified_all->SetLineStyle(kSolid);[m
+[31m-  TH1D_modified_all->Draw("SAME");[m
+[31m-[m
+[31m-  auto legend = new TLegend(0.6, 0.6, 0.8, 0.8);[m
+[31m-  legend->SetHeader("Prong-Shifted muon neutrino Energy","C"); // option "C" allows to center the header[m
+[31m-  legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");[m
+[31m-  legend->AddEntry(TH1D_modified_3D, "3D -shift mean: "+ TString::Format("%f",TH1D_modified_3D->GetMean()),"l");[m
+[31m-  legend->AddEntry(TH1D_modified_2D, "2D -shift mean: "+ TString::Format("%f",TH1D_modified_2D->GetMean()),"l");[m
+[31m-  legend->AddEntry(TH1D_modified_all, "3D & 2D -shift mean: "+ TString::Format("%f",TH1D_modified_all->GetMean()),"l");[m
+[31m-  legend->Draw("SAME");[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-  canvas_0->Print("compare_all_numuE_x.pdf");[m
+[31m-[m
+[31m-  [m
+[31m-  cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;[m
+[31m-  cout << percentage + " 3D prong-shift(Red) mean:" << TH1D_modified_3D->GetMean()<<endl;[m
+[31m-  cout << percentage + " 2D prong-shift(Orange) mean:" << TH1D_modified_2D->GetMean()<<endl;[m
+[31m-  cout << percentage + " 3D & 2D prong-shift(Blue) mean:" << TH1D_modified_all->GetMean()<<endl;[m
+[31m-[m
+[31m-}[m
+[1mdiff --git a/run_adjust_pronglength/prong_length_adjust_2D.C b/run_adjust_pronglength/prong_length_adjust_2D.C[m
+[1mdeleted file mode 100644[m
+[1mindex bd24967..0000000[m
+[1m--- a/run_adjust_pronglength/prong_length_adjust_2D.C[m
+[1m+++ /dev/null[m
+[36m@@ -1,160 +0,0 @@[m
+[31m-// Make a simple spectrum plot[m
+[31m-[m
+[31m-#include "CAFAna/Core/Binning.h"[m
+[31m-#include "CAFAna/Cuts/Cuts.h"[m
+[31m-#include "CAFAna/Core/Spectrum.h"[m
+[31m-#include "CAFAna/Core/SpectrumLoader.h"[m
+[31m-#include "CAFAna/Vars/Vars.h"[m
+[31m-[m
+[31m-#include "StandardRecord/Proxy/SRProxy.h"[m
+[31m-[m
+[31m-#include "TCanvas.h"[m
+[31m-#include "TH2.h"[m
+[31m-[m
+[31m-#include "TensorFlowEvaluator/LSTME/cafana/LSTMEVar.h"[m
+[31m-[m
+[31m-#include "CAFAna/Cuts/NumuCuts.h"[m
+[31m-#include "CAFAna/Cuts/NumuCuts2018.h"[m
+[31m-#include "TFile.h"  [m
+[31m-#include "TH1.h"   [m
+[31m-[m
+[31m-#include "CAFAna/Core/ISyst.h"[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-using namespace ana;[m
+[31m-[m
+[31m-[m
+[31m-  class Prong_length_Shift : public ISyst[m
+[31m-  {[m
+[31m-    public:[m
+[31m-      Prong_length_Shift()[m
+[31m-        : ISyst("Prong_length_Shift", "Prong_length_Shift ##0")[m
+[31m-      {}[m
+[31m-[m
+[31m-      // we'll be modifying the SRProxy this time.[m
+[31m-      // (that's why it's passed non-const.)[m
+[31m-      void Shift(double sigma, caf::SRProxy* sr, double& weight) const override[m
+[31m-      {[m
+[31m-        // if no truth info, we can't do anything[m
+[31m-        //if (sr->mc.nnu != 1)[m
+[31m-        //  return;[m
+[31m-[m
+[31m-        //unsigned int nNeutron = 0;[m
+[31m-        //for (const auto & particle : sr->mc.nu[0].prim)[m
+[31m-        //{[m
+[31m-        //  if (particle.pdg != 2112)[m
+[31m-        //    continue;[m
+[31m-[m
+[31m-          // only increase if they were less than 50 MeV to begin with[m
+[31m-        //  if (particle.visEinslcBirks + particle.daughterVisEinslcBirks >= 0.050)[m
+[31m-        //    continue;[m
+[31m-[m
+[31m-        //  nNeutron++;[m
+[31m-        //}[m
+[31m-[m
+[31m-        // now adjust the numu energy.[m
+[31m-        // we're going to add 25 MeV of visible energy for each neutron[m
+[31m-        // for the +1 sigma shift (and subtract it for -1 sigma, etc.)[m
+[31m-        //double addedE = sigma * 0.025 * nNeutron;[m
+[31m-        //if (sr->energy.numu.hadcalE + addedE < 0)[m
+[31m-        //  addedE = -sr->energy.numu.hadcalE;  // don't let the shift make a negative energy deposit[m
+[31m-[m
+[31m-        //sr->energy.numu.hadcalE += addedE;   // this goes into the numu energy estimator function[m
+[31m-[m
+[31m-        auto &png2d = sr->vtx.elastic.fuzzyk.png2d;[m
+[31m-        for (size_t i = 0; i < png2d.size(); i++) {[m
+[31m-          // png[i].len // this will give you lenght of the prong number i[m
+[31m-          png2d[i].len *= (1 + sigma * 0.01); [m
+[31m-        }[m
+[31m-      }[m
+[31m-  };[m
+[31m-[m
+[31m-[m
+[31m-void prong_length_adjust_2D()[m
+[31m-{[m
+[31m-  // Environment variables and wildcards work. Most commonly you want a SAM[m
+[31m-  // dataset. Pass -ss --limit 1 on the cafe command line to make this take a[m
+[31m-  // reasonable amount of time for demo purposes.[m
+[31m-  const std::string fname = "prod_caf_R19-11-18-prod5reco.f_fd_genie_N1810j0211a_nonswap_fhc_nova_v08_period3_v1";[m
+[31m-[m
+[31m-  SpectrumLoader loader(fname);[m
+[31m-[m
+[31m-  const Binning bins = Binning::Simple(100, 0, 10);[m
+[31m-[m
+[31m-  // Specify variables needed and arbitrary code to extract value from[m
+[31m-  // SRProxy[m
+[31m-  const Var kTrackLen([](const caf::SRProxy* sr)[m
+[31m-                      {[m
+[31m-                        if(sr->trk.kalman.ntracks == 0) return 0.0f;[m
+[31m-                        return float(sr->trk.kalman.tracks[0].len);[m
+[31m-                      });[m
+[31m-[m
+[31m-  // Cut[m
+[31m-  const Cut kTrueEbelow7GeV = kTrueE < 7.0;[m
+[31m-[m
+[31m-  const Cut SanityCut([m
+[31m-      [] (const caf::SRProxy *sr)[m
+[31m-      {[m
+[31m-          return (sr->mc.nnu > 0) && (! sr->mc.nu[0].prim.empty());[m
+[31m-      }[m
+[31m-  );[m
+[31m-[m
+[31m-  const Cut kNumuLoosePID([m
+[31m-      [] (const caf::SRProxy* sr)[m
+[31m-      {[m
+[31m-          return ([m
+[31m-                (sr->sel.remid.pid > 0.5)[m
+[31m-              && (sr->sel.cvnloosepreselptp.numuid > 0.5)[m
+[31m-          );[m
+[31m-      }[m
+[31m-  );[m
+[31m-[m
+[31m-  const Cut cut    =[m
+[31m-        kIsNumuCC[m
+[31m-        && ([m
+[31m-            kNumuBasicQuality[m
+[31m-          && kNumuContainFD2017[m
+[31m-          && kNumuLoosePID[m
+[31m-        )[m
+[31m-        && kTrueEbelow7GeV[m
+[31m-        && SanityCut;[m
+[31m-[m
+[31m-[m
+[31m-  auto model = LSTME::initCAFAnaModel("tf");[m
+[31m-[m
+[31m-  Var muE   = LSTME::muonEnergy(model);[m
+[31m-  Var hadE  = LSTME::hadEnergy(model);[m
+[31m-  Var numuE = LSTME::numuEnergy(model);[m
+[31m-[m
+[31m-  // Spectrum to be filled from the loader[m
+[31m-  const Prong_length_Shift wsw_sys;[m
+[31m-[m
+[31m-  SystShifts shift_2020(&wsw_sys, 5.0);[m
+[31m-[m
+[31m-  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020);[m
+[31m-  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020);[m
+[31m-  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut, shift_2020);[m
+[31m-[m
+[31m-  // Do it![m
+[31m-  loader.Go();[m
+[31m-[m
+[31m-  // How to scale histograms[m
+[31m-  //const double pot = 18e20;[m
+[31m-[m
+[31m-  // We have histograms[m
+[31m-  //len.ToTH1(pot)->Draw("hist");[m
+[31m-  //new TCanvas;[m
+[31m-  //len1.ToTH1(pot)->Draw("hist");[m
+[31m-  //new TCanvas;[m
+[31m-  //len2.ToTH1(pot)->Draw("hist");[m
+[31m-[m
+[31m-  // Now save to disk...[m
+[31m-  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_2D.root","RECREATE");[m
+[31m-[m
+[31m-  muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));[m
+[31m-  hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));[m
+[31m-  numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));[m
+[31m-[m
+[31m-  outFile->Close();[m
+[31m-}[m
+[1mdiff --git a/run_adjust_pronglength/prong_length_adjust_3D.C b/run_adjust_pronglength/prong_length_adjust_3D.C[m
+[1mdeleted file mode 100644[m
+[1mindex 412db71..0000000[m
+[1m--- a/run_adjust_pronglength/prong_length_adjust_3D.C[m
+[1m+++ /dev/null[m
+[36m@@ -1,161 +0,0 @@[m
+[31m-// Make a simple spectrum plot[m
+[31m-[m
+[31m-#include "CAFAna/Core/Binning.h"[m
+[31m-#include "CAFAna/Cuts/Cuts.h"[m
+[31m-#include "CAFAna/Core/Spectrum.h"[m
+[31m-#include "CAFAna/Core/SpectrumLoader.h"[m
+[31m-#include "CAFAna/Vars/Vars.h"[m
+[31m-[m
+[31m-#include "StandardRecord/Proxy/SRProxy.h"[m
+[31m-[m
+[31m-#include "TCanvas.h"[m
+[31m-#include "TH2.h"[m
+[31m-[m
+[31m-#include "TensorFlowEvaluator/LSTME/cafana/LSTMEVar.h"[m
+[31m-[m
+[31m-#include "CAFAna/Cuts/NumuCuts.h"[m
+[31m-#include "CAFAna/Cuts/NumuCuts2018.h"[m
+[31m-#include "TFile.h"  [m
+[31m-#include "TH1.h"   [m
+[31m-[m
+[31m-#include "CAFAna/Core/ISyst.h"[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-using namespace ana;[m
+[31m-[m
+[31m-[m
+[31m-  class Prong_length_Shift : public ISyst[m
+[31m-  {[m
+[31m-    public:[m
+[31m-      Prong_length_Shift()[m
+[31m-        : ISyst("Prong_length_Shift", "Prong_length_Shift ##0")[m
+[31m-      {}[m
+[31m-[m
+[31m-      // we'll be modifying the SRProxy this time.[m
+[31m-      // (that's why it's passed non-const.)[m
+[31m-      void Shift(double sigma, caf::SRProxy* sr, double& weight) const override[m
+[31m-      {[m
+[31m-        // if no truth info, we can't do anything[m
+[31m-        //if (sr->mc.nnu != 1)[m
+[31m-        //  return;[m
+[31m-[m
+[31m-        //unsigned int nNeutron = 0;[m
+[31m-        //for (const auto & particle : sr->mc.nu[0].prim)[m
+[31m-        //{[m
+[31m-        //  if (particle.pdg != 2112)[m
+[31m-        //    continue;[m
+[31m-[m
+[31m-          // only increase if they were less than 50 MeV to begin with[m
+[31m-        //  if (particle.visEinslcBirks + particle.daughterVisEinslcBirks >= 0.050)[m
+[31m-        //    continue;[m
+[31m-[m
+[31m-        //  nNeutron++;[m
+[31m-        //}[m
+[31m-[m
+[31m-        // now adjust the numu energy.[m
+[31m-        // we're going to add 25 MeV of visible energy for each neutron[m
+[31m-        // for the +1 sigma shift (and subtract it for -1 sigma, etc.)[m
+[31m-        //double addedE = sigma * 0.025 * nNeutron;[m
+[31m-        //if (sr->energy.numu.hadcalE + addedE < 0)[m
+[31m-        //  addedE = -sr->energy.numu.hadcalE;  // don't let the shift make a negative energy deposit[m
+[31m-[m
+[31m-        //sr->energy.numu.hadcalE += addedE;   // this goes into the numu energy estimator function[m
+[31m-[m
+[31m-[m
+[31m-        auto &png = sr->vtx.elastic.fuzzyk.png;[m
+[31m-        for (size_t i = 0; i < png.size(); i++) {[m
+[31m-          // png[i].len // this will give you lenght of the prong number i[m
+[31m-          png[i].len *= (1 + sigma * 0.01); [m
+[31m-        }[m
+[31m-      }[m
+[31m-  };[m
+[31m-[m
+[31m-[m
+[31m-void prong_length_adjust_3D()[m
+[31m-{[m
+[31m-  // Environment variables and wildcards work. Most commonly you want a SAM[m
+[31m-  // dataset. Pass -ss --limit 1 on the cafe command line to make this take a[m
+[31m-  // reasonable amount of time for demo purposes.[m
+[31m-  const std::string fname = "prod_caf_R19-11-18-prod5reco.f_fd_genie_N1810j0211a_nonswap_fhc_nova_v08_period3_v1";[m
+[31m-[m
+[31m-  SpectrumLoader loader(fname);[m
+[31m-[m
+[31m-  const Binning bins = Binning::Simple(100, 0, 10);[m
+[31m-[m
+[31m-  // Specify variables needed and arbitrary code to extract value from[m
+[31m-  // SRProxy[m
+[31m-  const Var kTrackLen([](const caf::SRProxy* sr)[m
+[31m-                      {[m
+[31m-                        if(sr->trk.kalman.ntracks == 0) return 0.0f;[m
+[31m-                        return float(sr->trk.kalman.tracks[0].len);[m
+[31m-                      });[m
+[31m-[m
+[31m-  // Cut[m
+[31m-  const Cut kTrueEbelow7GeV = kTrueE < 7.0;[m
+[31m-[m
+[31m-  const Cut SanityCut([m
+[31m-      [] (const caf::SRProxy *sr)[m
+[31m-      {[m
+[31m-          return (sr->mc.nnu > 0) && (! sr->mc.nu[0].prim.empty());[m
+[31m-      }[m
+[31m-  );[m
+[31m-[m
+[31m-  const Cut kNumuLoosePID([m
+[31m-      [] (const caf::SRProxy* sr)[m
+[31m-      {[m
+[31m-          return ([m
+[31m-                (sr->sel.remid.pid > 0.5)[m
+[31m-              && (sr->sel.cvnloosepreselptp.numuid > 0.5)[m
+[31m-          );[m
+[31m-      }[m
+[31m-  );[m
+[31m-[m
+[31m-  const Cut cut    =[m
+[31m-        kIsNumuCC[m
+[31m-        && ([m
+[31m-            kNumuBasicQuality[m
+[31m-          && kNumuContainFD2017[m
+[31m-          && kNumuLoosePID[m
+[31m-        )[m
+[31m-        && kTrueEbelow7GeV[m
+[31m-        && SanityCut;[m
+[31m-[m
+[31m-[m
+[31m-  auto model = LSTME::initCAFAnaModel("tf");[m
+[31m-[m
+[31m-  Var muE   = LSTME::muonEnergy(model);[m
+[31m-  Var hadE  = LSTME::hadEnergy(model);[m
+[31m-  Var numuE = LSTME::numuEnergy(model);[m
+[31m-[m
+[31m-  // Spectrum to be filled from the loader[m
+[31m-  const Prong_length_Shift wsw_sys;[m
+[31m-[m
+[31m-  SystShifts shift_2020(&wsw_sys, 5.0);[m
+[31m-[m
+[31m-  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020);[m
+[31m-  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020);[m
+[31m-  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut, shift_2020);[m
+[31m-[m
+[31m-  // Do it![m
+[31m-  loader.Go();[m
+[31m-[m
+[31m-  // How to scale histograms[m
+[31m-  //const double pot = 18e20;[m
+[31m-[m
+[31m-  // We have histograms[m
+[31m-  //len.ToTH1(pot)->Draw("hist");[m
+[31m-  //new TCanvas;[m
+[31m-  //len1.ToTH1(pot)->Draw("hist");[m
+[31m-  //new TCanvas;[m
+[31m-  //len2.ToTH1(pot)->Draw("hist");[m
+[31m-[m
+[31m-  // Now save to disk...[m
+[31m-  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10.root","RECREATE");[m
+[31m-[m
+[31m-  muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));[m
+[31m-  hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));[m
+[31m-  numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));[m
+[31m-[m
+[31m-  outFile->Close();[m
+[31m-}[m
+[1mdiff --git a/run_adjust_pronglength/prong_length_adjust_all.C b/run_adjust_pronglength/prong_length_adjust_all.C[m
+[1mdeleted file mode 100644[m
+[1mindex 1029650..0000000[m
+[1m--- a/run_adjust_pronglength/prong_length_adjust_all.C[m
+[1m+++ /dev/null[m
+[36m@@ -1,166 +0,0 @@[m
+[31m-// Make a simple spectrum plot[m
+[31m-[m
+[31m-#include "CAFAna/Core/Binning.h"[m
+[31m-#include "CAFAna/Cuts/Cuts.h"[m
+[31m-#include "CAFAna/Core/Spectrum.h"[m
+[31m-#include "CAFAna/Core/SpectrumLoader.h"[m
+[31m-#include "CAFAna/Vars/Vars.h"[m
+[31m-[m
+[31m-#include "StandardRecord/Proxy/SRProxy.h"[m
+[31m-[m
+[31m-#include "TCanvas.h"[m
+[31m-#include "TH2.h"[m
+[31m-[m
+[31m-#include "TensorFlowEvaluator/LSTME/cafana/LSTMEVar.h"[m
+[31m-[m
+[31m-#include "CAFAna/Cuts/NumuCuts.h"[m
+[31m-#include "CAFAna/Cuts/NumuCuts2018.h"[m
+[31m-#include "TFile.h"  [m
+[31m-#include "TH1.h"   [m
+[31m-[m
+[31m-#include "CAFAna/Core/ISyst.h"[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-using namespace ana;[m
+[31m-[m
+[31m-[m
+[31m-  class Prong_length_Shift : public ISyst[m
+[31m-  {[m
+[31m-    public:[m
+[31m-      Prong_length_Shift()[m
+[31m-        : ISyst("Prong_length_Shift", "Prong_length_Shift ##0")[m
+[31m-      {}[m
+[31m-[m
+[31m-      // we'll be modifying the SRProxy this time.[m
+[31m-      // (that's why it's passed non-const.)[m
+[31m-      void Shift(double sigma, caf::SRProxy* sr, double& weight) const override[m
+[31m-      {[m
+[31m-        // if no truth info, we can't do anything[m
+[31m-        //if (sr->mc.nnu != 1)[m
+[31m-        //  return;[m
+[31m-[m
+[31m-        //unsigned int nNeutron = 0;[m
+[31m-        //for (const auto & particle : sr->mc.nu[0].prim)[m
+[31m-        //{[m
+[31m-        //  if (particle.pdg != 2112)[m
+[31m-        //    continue;[m
+[31m-[m
+[31m-          // only increase if they were less than 50 MeV to begin with[m
+[31m-        //  if (particle.visEinslcBirks + particle.daughterVisEinslcBirks >= 0.050)[m
+[31m-        //    continue;[m
+[31m-[m
+[31m-        //  nNeutron++;[m
+[31m-        //}[m
+[31m-[m
+[31m-        // now adjust the numu energy.[m
+[31m-        // we're going to add 25 MeV of visible energy for each neutron[m
+[31m-        // for the +1 sigma shift (and subtract it for -1 sigma, etc.)[m
+[31m-        //double addedE = sigma * 0.025 * nNeutron;[m
+[31m-        //if (sr->energy.numu.hadcalE + addedE < 0)[m
+[31m-        //  addedE = -sr->energy.numu.hadcalE;  // don't let the shift make a negative energy deposit[m
+[31m-[m
+[31m-        //sr->energy.numu.hadcalE += addedE;   // this goes into the numu energy estimator function[m
+[31m-[m
+[31m-[m
+[31m-        auto &png = sr->vtx.elastic.fuzzyk.png;[m
+[31m-        for (size_t i = 0; i < png.size(); i++) {[m
+[31m-          // png[i].len // this will give you lenght of the prong number i[m
+[31m-          png[i].len *= (1 + sigma * 0.01); [m
+[31m-        }[m
+[31m-        auto &png2d = sr->vtx.elastic.fuzzyk.png2d;[m
+[31m-        for (size_t i = 0; i < png2d.size(); i++) {[m
+[31m-          // png[i].len // this will give you lenght of the prong number i[m
+[31m-          png2d[i].len *= (1 + sigma * 0.01); [m
+[31m-        }[m
+[31m-      }[m
+[31m-  };[m
+[31m-[m
+[31m-[m
+[31m-void prong_length_adjust_all()[m
+[31m-{[m
+[31m-  // Environment variables and wildcards work. Most commonly you want a SAM[m
+[31m-  // dataset. Pass -ss --limit 1 on the cafe command line to make this take a[m
+[31m-  // reasonable amount of time for demo purposes.[m
+[31m-  const std::string fname = "prod_caf_R19-11-18-prod5reco.f_fd_genie_N1810j0211a_nonswap_fhc_nova_v08_period3_v1";[m
+[31m-[m
+[31m-  SpectrumLoader loader(fname);[m
+[31m-[m
+[31m-  const Binning bins = Binning::Simple(100, 0, 10);[m
+[31m-[m
+[31m-  // Specify variables needed and arbitrary code to extract value from[m
+[31m-  // SRProxy[m
+[31m-  const Var kTrackLen([](const caf::SRProxy* sr)[m
+[31m-                      {[m
+[31m-                        if(sr->trk.kalman.ntracks == 0) return 0.0f;[m
+[31m-                        return float(sr->trk.kalman.tracks[0].len);[m
+[31m-                      });[m
+[31m-[m
+[31m-  // Cut[m
+[31m-  const Cut kTrueEbelow7GeV = kTrueE < 7.0;[m
+[31m-[m
+[31m-  const Cut SanityCut([m
+[31m-      [] (const caf::SRProxy *sr)[m
+[31m-      {[m
+[31m-          return (sr->mc.nnu > 0) && (! sr->mc.nu[0].prim.empty());[m
+[31m-      }[m
+[31m-  );[m
+[31m-[m
+[31m-  const Cut kNumuLoosePID([m
+[31m-      [] (const caf::SRProxy* sr)[m
+[31m-      {[m
+[31m-          return ([m
+[31m-                (sr->sel.remid.pid > 0.5)[m
+[31m-              && (sr->sel.cvnloosepreselptp.numuid > 0.5)[m
+[31m-          );[m
+[31m-      }[m
+[31m-  );[m
+[31m-[m
+[31m-  const Cut cut    =[m
+[31m-        kIsNumuCC[m
+[31m-        && ([m
+[31m-            kNumuBasicQuality[m
+[31m-          && kNumuContainFD2017[m
+[31m-          && kNumuLoosePID[m
+[31m-        )[m
+[31m-        && kTrueEbelow7GeV[m
+[31m-        && SanityCut;[m
+[31m-[m
+[31m-[m
+[31m-  auto model = LSTME::initCAFAnaModel("tf");[m
+[31m-[m
+[31m-  Var muE   = LSTME::muonEnergy(model);[m
+[31m-  Var hadE  = LSTME::hadEnergy(model);[m
+[31m-  Var numuE = LSTME::numuEnergy(model);[m
+[31m-[m
+[31m-  // Spectrum to be filled from the loader[m
+[31m-  const Prong_length_Shift wsw_sys;[m
+[31m-[m
+[31m-  SystShifts shift_2020(&wsw_sys, 5.0);[m
+[31m-[m
+[31m-  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020);[m
+[31m-  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020);[m
+[31m-  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut, shift_2020);[m
+[31m-[m
+[31m-  // Do it![m
+[31m-  loader.Go();[m
+[31m-[m
+[31m-  // How to scale histograms[m
+[31m-  //const double pot = 18e20;[m
+[31m-[m
+[31m-  // We have histograms[m
+[31m-  //len.ToTH1(pot)->Draw("hist");[m
+[31m-  //new TCanvas;[m
+[31m-  //len1.ToTH1(pot)->Draw("hist");[m
+[31m-  //new TCanvas;[m
+[31m-  //len2.ToTH1(pot)->Draw("hist");[m
+[31m-[m
+[31m-  // Now save to disk...[m
+[31m-  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_all.root","RECREATE");[m
+[31m-[m
+[31m-  muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));[m
+[31m-  hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));[m
+[31m-  numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));[m
+[31m-[m
+[31m-  outFile->Close();[m
+[31m-}[m
+[1mdiff --git a/run_adjust_pronglength/prong_length_original.C b/run_adjust_pronglength/prong_length_original.C[m
+[1mdeleted file mode 100644[m
+[1mindex 3064f4e..0000000[m
+[1m--- a/run_adjust_pronglength/prong_length_original.C[m
+[1m+++ /dev/null[m
+[36m@@ -1,112 +0,0 @@[m
+[31m-// Make a simple spectrum plot[m
+[31m-[m
+[31m-#include "CAFAna/Core/Binning.h"[m
+[31m-#include "CAFAna/Cuts/Cuts.h"[m
+[31m-#include "CAFAna/Core/Spectrum.h"[m
+[31m-#include "CAFAna/Core/SpectrumLoader.h"[m
+[31m-#include "CAFAna/Vars/Vars.h"[m
+[31m-[m
+[31m-#include "StandardRecord/Proxy/SRProxy.h"[m
+[31m-[m
+[31m-#include "TCanvas.h"[m
+[31m-#include "TH2.h"[m
+[31m-[m
+[31m-#include "TensorFlowEvaluator/LSTME/cafana/LSTMEVar.h"[m
+[31m-[m
+[31m-#include "CAFAna/Cuts/NumuCuts.h"[m
+[31m-#include "CAFAna/Cuts/NumuCuts2018.h"[m
+[31m-#include "TFile.h"  [m
+[31m-#include "TH1.h"   [m
+[31m-[m
+[31m-#include "CAFAna/Core/ISyst.h"[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-using namespace ana;[m
+[31m-[m
+[31m-[m
+[31m-void prong_length_original()[m
+[31m-{[m
+[31m-  // Environment variables and wildcards work. Most commonly you want a SAM[m
+[31m-  // dataset. Pass -ss --limit 1 on the cafe command line to make this take a[m
+[31m-  // reasonable amount of time for demo purposes.[m
+[31m-  const std::string fname = "prod_caf_R19-11-18-prod5reco.f_fd_genie_N1810j0211a_nonswap_fhc_nova_v08_period3_v1";[m
+[31m-[m
+[31m-  SpectrumLoader loader(fname);[m
+[31m-[m
+[31m-  const Binning bins = Binning::Simple(100, 0, 10);[m
+[31m-[m
+[31m-  // Specify variables needed and arbitrary code to extract value from[m
+[31m-  // SRProxy[m
+[31m-  const Var kTrackLen([](const caf::SRProxy* sr)[m
+[31m-                      {[m
+[31m-                        if(sr->trk.kalman.ntracks == 0) return 0.0f;[m
+[31m-                        return float(sr->trk.kalman.tracks[0].len);[m
+[31m-                      });[m
+[31m-[m
+[31m-  // Cut[m
+[31m-  const Cut kTrueEbelow7GeV = kTrueE < 7.0;[m
+[31m-[m
+[31m-  const Cut SanityCut([m
+[31m-      [] (const caf::SRProxy *sr)[m
+[31m-      {[m
+[31m-          return (sr->mc.nnu > 0) && (! sr->mc.nu[0].prim.empty());[m
+[31m-      }[m
+[31m-  );[m
+[31m-[m
+[31m-  const Cut kNumuLoosePID([m
+[31m-      [] (const caf::SRProxy* sr)[m
+[31m-      {[m
+[31m-          return ([m
+[31m-                (sr->sel.remid.pid > 0.5)[m
+[31m-              && (sr->sel.cvnloosepreselptp.numuid > 0.5)[m
+[31m-          );[m
+[31m-      }[m
+[31m-  );[m
+[31m-[m
+[31m-  const Cut cut    =[m
+[31m-        kIsNumuCC[m
+[31m-        && ([m
+[31m-            kNumuBasicQuality[m
+[31m-          && kNumuContainFD2017[m
+[31m-          && kNumuLoosePID[m
+[31m-        )[m
+[31m-        && kTrueEbelow7GeV[m
+[31m-        && SanityCut;[m
+[31m-[m
+[31m-[m
+[31m-  auto model = LSTME::initCAFAnaModel("tf");[m
+[31m-[m
+[31m-  Var muE   = LSTME::muonEnergy(model);[m
+[31m-  Var hadE  = LSTME::hadEnergy(model);[m
+[31m-  Var numuE = LSTME::numuEnergy(model);[m
+[31m-[m
+[31m-  // Spectrum to be filled from the loader[m
+[31m-[m
+[31m-[m
+[31m-  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut);[m
+[31m-  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut);[m
+[31m-  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut);[m
+[31m-[m
+[31m-  // Do it![m
+[31m-  loader.Go();[m
+[31m-[m
+[31m-  // How to scale histograms[m
+[31m-  //const double pot = 18e20;[m
+[31m-[m
+[31m-  // We have histograms[m
+[31m-  //len.ToTH1(pot)->Draw("hist");[m
+[31m-  //new TCanvas;[m
+[31m-  //len1.ToTH1(pot)->Draw("hist");[m
+[31m-  //new TCanvas;[m
+[31m-  //len2.ToTH1(pot)->Draw("hist");[m
+[31m-[m
+[31m-  // Now save to disk...[m
+[31m-  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_original_x_0_10.root","RECREATE");[m
+[31m-[m
+[31m-  muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));[m
+[31m-  hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));[m
+[31m-  numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));[m
+[31m-[m
+[31m-  outFile->Close();[m
+[31m-}[m
+[1mdiff --git a/run_adjust_pronglength/tf/config.json b/run_adjust_pronglength/tf/config.json[m
+[1mdeleted file mode 100644[m
+[1mindex ac028a4..0000000[m
+[1m--- a/run_adjust_pronglength/tf/config.json[m
+[1m+++ /dev/null[m
+[36m@@ -1,65 +0,0 @@[m
+[31m-{[m
+[31m-    "input_png2d": "input_png2d",[m
+[31m-    "input_png3d": "input_png3d",[m
+[31m-    "input_slice": "input_slice",[m
+[31m-    "target_lep": "target_primary/BiasAdd",[m
+[31m-    "target_nu": "target_total/BiasAdd",[m
+[31m-    "vars_png2d": [[m
+[31m-        "png2d.dir.x",[m
+[31m-        "png2d.dir.y",[m
+[31m-        "png2d.dir.z",[m
+[31m-        "png2d.len",[m
+[31m-        "png2d.weightedCalE",[m
+[31m-        "png2d.calE",[m
+[31m-        "png2d.nhit",[m
+[31m-        "png2d.nhitx",[m
+[31m-        "png2d.nhity",[m
+[31m-        "png2d.nplane",[m
+[31m-        "png2d.start.x",[m
+[31m-        "png2d.start.y",[m
+[31m-        "png2d.start.z"[m
+[31m-    ],[m
+[31m-    "vars_png3d": [[m
+[31m-        "png.dir.x",[m
+[31m-        "png.dir.y",[m
+[31m-        "png.dir.z",[m
+[31m-        "png.start.x",[m
+[31m-        "png.start.y",[m
+[31m-        "png.start.z",[m
+[31m-        "png.cvnpart.muonid",[m
+[31m-        "png.cvnpart.electronid",[m
+[31m-        "png.cvnpart.pionid",[m
+[31m-        "png.cvnpart.protonid",[m
+[31m-        "png.cvnpart.photonid",[m
+[31m-        "png.bpf[0].energy",[m
+[31m-        "png.bpf[0].overlapE",[m
+[31m-        "png.bpf[0].momentum.x",[m
+[31m-        "png.bpf[0].momentum.y",[m
+[31m-        "png.bpf[0].momentum.z",[m
+[31m-        "png.bpf[1].energy",[m
+[31m-        "png.bpf[1].overlapE",[m
+[31m-        "png.bpf[1].momentum.x",[m
+[31m-        "png.bpf[1].momentum.y",[m
+[31m-        "png.bpf[1].momentum.z",[m
+[31m-        "png.bpf[2].energy",[m
+[31m-        "png.bpf[2].overlapE",[m
+[31m-        "png.bpf[2].momentum.x",[m
+[31m-        "png.bpf[2].momentum.y",[m
+[31m-        "png.bpf[2].momentum.z",[m
+[31m-        "png.len",[m
+[31m-        "png.nhit",[m
+[31m-        "png.nhitx",[m
+[31m-        "png.nhity",[m
+[31m-        "png.nplane",[m
+[31m-        "png.weightedCalE",[m
+[31m-        "png.calE"[m
+[31m-    ],[m
+[31m-    "vars_slice": [[m
+[31m-        "calE",[m
+[31m-        "remPngCalE",[m
+[31m-        "nHit",[m
+[31m-        "orphCalE",[m
+[31m-        "coarseTiming",[m
+[31m-        "lowGain"[m
+[31m-    ][m
+[31m-}[m
+\ No newline at end of file[m
+[1mdiff --git a/run_adjust_pronglength/tf/model.pb b/run_adjust_pronglength/tf/model.pb[m
+[1mdeleted file mode 100644[m
+[1mindex 358c6c0..0000000[m
+Binary files a/run_adjust_pronglength/tf/model.pb and /dev/null differ
