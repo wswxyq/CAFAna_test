@@ -49,16 +49,16 @@ void draw_spectra_muE(){
   TH1D *TH1D_modified_up = spect_modified_up->ToTH1(spect_modified_up->POT());
   TH1D *TH1D_modified_down = spect_modified_down->ToTH1(spect_modified_down->POT());
 
-  TH1D_original->GetXaxis()->SetRangeUser(0.3, 5);
-  TH1D_modified_up->GetXaxis()->SetRangeUser(0.3, 5);
-  TH1D_modified_down->GetXaxis()->SetRangeUser(0.3, 5);
+  TH1D_original->GetXaxis()->SetRangeUser(0, 5);
+  TH1D_modified_up->GetXaxis()->SetRangeUser(0, 5);
+  TH1D_modified_down->GetXaxis()->SetRangeUser(0, 5);
 
 
   TH1D *TH1D_modified_up_factor = spect_modified_up->ToTH1(spect_modified_up->POT());
   TH1D *TH1D_modified_down_factor = spect_modified_down->ToTH1(spect_modified_down->POT());
 
-  TH1D_modified_up_factor->GetXaxis()->SetRangeUser(0.3, 5);
-  TH1D_modified_down_factor->GetXaxis()->SetRangeUser(0.3, 5);
+  TH1D_modified_up_factor->GetXaxis()->SetRangeUser(0, 5);
+  TH1D_modified_down_factor->GetXaxis()->SetRangeUser(0, 5);
 
 
   TH1D_original->SetLineWidth(2);
@@ -109,7 +109,7 @@ void draw_spectra_muE(){
   TH1D_modified_up_factor->GetYaxis()->SetTitle("ratio");
   TH1D_modified_down_factor->Draw("SAME");
 
-  TLine *hline = new TLine(0.3,1,5,1);
+  TLine *hline = new TLine(0,1,5,1);
   hline->SetLineColor(kGreen);
   hline->SetLineWidth(2);
   hline->Draw("SAME");
