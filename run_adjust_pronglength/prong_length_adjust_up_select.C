@@ -20,7 +20,9 @@
 
 #include "CAFAna/Core/ISyst.h"
 
+#include <string> 
 
+using namespace std;
 
 using namespace ana;
 
@@ -66,7 +68,7 @@ void prong_length_adjust_up_select()
   // reasonable amount of time for demo purposes.
 
 
-	map<int, char> pdg_map={
+	map<int, string> pdg_map={
     {111,  "pi0"}, {211, "pi+"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, 
       {-211, "pi-"}, {-2212, "p-"}, {-2112, "anti-neutron"},{-11, "e+"}, {-13, "mu+"}, {-15, "tau+"}
 	};
@@ -76,10 +78,10 @@ void prong_length_adjust_up_select()
   std::cin >> input_pdg;
 
   
-  if ( pdg_map.count(input_pdg > 0 ) )
+  if ( pdg_map.count(input_pdg) > 0  )
     std::cout<<"Found supported pdg. Now continue... with pdg="<<input_pdg<<std::endl;
   else{
-    std::cout<<"NOT FOUND "+input_pdg+" ! QUIT..."<<std::endl;
+    std::cout<<"NOT FOUND "<<input_pdg<<" ! QUIT..."<<std::endl;
     return;
   }
 
@@ -159,7 +161,7 @@ void prong_length_adjust_up_select()
 
   // Now save to disk...
 
-  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_up_"+pdg_map[input_pdg]+".root","RECREATE");
+  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_up_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
 
   muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
   hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
