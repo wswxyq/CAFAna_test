@@ -145,7 +145,7 @@ void draw_spectra_muE_select(){
   canvas_0->Update();
 
   // canvas_0->Print("compare_all_muE_x.pdf");
-  canvas_0->Print(("compare_muE_"+pdg_map[input_pdg]+".pdf").c_str());
+  canvas_0->Print(("./pdf/compare_muE_"+pdg_map[input_pdg]+".pdf").c_str());
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
