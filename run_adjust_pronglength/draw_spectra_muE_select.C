@@ -15,16 +15,36 @@
 
 using namespace ana;
 
+int input_pdg = -9999;
 
 
-void draw_spectra_numuE_all(){
+void draw_spectra_muE_select(){
 
-  TString subdir = "subdir_numuE_spectra";
+
+  map<int, string> pdg_map={
+    {111,  "pi0"}, {211, "pi+"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, 
+    {-211, "pi-"}, {-2212, "p-"}, {-2112, "anti-neutron"},{-11, "e+"}, {-13, "mu+"}, {-15, "tau+"}
+	};
+
+
+  std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
+  std::cin >> input_pdg;
+
+  
+  if ( pdg_map.count(input_pdg) > 0  )
+    std::cout<<"Found supported pdg. Now continue... with pdg="<<input_pdg<<std::endl;
+  else{
+    std::cout<<"NOT FOUND "<<input_pdg<<" ! QUIT..."<<std::endl;
+    return;
+  }
+
+  TString subdir = "subdir_muE_spectra";
   TString percentage = "5%";
 
   TFile inFile_origin("/nova/ana/users/wus/root_files/FD_FHC_spectra_original_x_0_10.root");
-  TFile inFile_modified_up("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_all_up.root");
-  TFile inFile_modified_down("/nova/ana/users/wus/root_files/FD_FHC_spectra_sys5_x_0_10_all_down.root");
+  TFile inFile_modified_up(("/nova/ana/users/wus/root_files/up/FD_FHC_spectra_sys5_x_0_10_up_"+pdg_map[input_pdg]+".root").c_str());
+  TFile inFile_modified_down(("/nova/ana/users/wus/root_files/down/FD_FHC_spectra_sys5_x_0_10_down_"+pdg_map[input_pdg]+".root").c_str());
+
 
   // Load the spectrum...
   std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin.GetDirectory(subdir));
@@ -36,7 +56,7 @@ void draw_spectra_numuE_all(){
   //
   // Plot the histo...
   //  
-  TCanvas *canvas_0 = new TCanvas("canvas_0","plot numuE_spectra",1200, 1200);
+  TCanvas *canvas_0 = new TCanvas("canvas_0","plot muE_spectra",1200, 1200);
 	//canvas_0->Divide(1, 2, 0, 0);
   TPad *pad1 = new TPad("pad1", " ",0.1,0.35,0.9,0.92);
   TPad *pad2 = new TPad("pad2", " ",0.1,0.1,0.9,0.35);
@@ -83,7 +103,7 @@ void draw_spectra_numuE_all(){
 
 
   auto legend = new TLegend(0.6, 0.6, 0.8, 0.8);
-  legend->SetHeader("Prong-Shifted muon neutrino Energy","C"); // option "C" allows to center the header
+  legend->SetHeader("Prong-Shifted muon Energy","C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
   legend->AddEntry(TH1D_modified_up, "up -shift mean: "+ TString::Format("%f",TH1D_modified_up->GetMean()),"l");
   legend->AddEntry(TH1D_modified_down, "down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
@@ -124,7 +144,8 @@ void draw_spectra_numuE_all(){
 
   canvas_0->Update();
 
-  canvas_0->Print("compare_all_numuE_x.pdf");
+  // canvas_0->Print("compare_all_muE_x.pdf");
+  canvas_0->Print(("compare_muE_"+pdg_map[input_pdg]+".pdf").c_str());
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;

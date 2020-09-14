@@ -17,7 +17,7 @@ using namespace ana;
 
 
 
-void draw_spectra_muE(){
+void draw_spectra_muE_all(){
 
   TString subdir = "subdir_muE_spectra";
   TString percentage = "5%";
