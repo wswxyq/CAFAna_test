@@ -1,12 +1,12 @@
-211|cafe -qb prong_length_adjust_up_select.C
-2212|cafe -qb prong_length_adjust_up_select.C
-2112|cafe -qb prong_length_adjust_up_select.C
-11|cafe -qb prong_length_adjust_up_select.C
-13|cafe -qb prong_length_adjust_up_select.C
-15|cafe -qb prong_length_adjust_up_select.C
--211|cafe -qb prong_length_adjust_up_select.C
--2212|cafe -qb prong_length_adjust_up_select.C
--2112|cafe -qb prong_length_adjust_up_select.C
--11|cafe -qb prong_length_adjust_up_select.C
--13|cafe -qb prong_length_adjust_up_select.C
--15|cafe -qb prong_length_adjust_up_select.C
+cafe -qb prong_length_adjust_up_select.C <<< "211"
+cafe -qb prong_length_adjust_up_select.C <<< "2212"
+cafe -qb prong_length_adjust_up_select.C <<< "2112"
+cafe -qb prong_length_adjust_up_select.C <<< "11"
+cafe -qb prong_length_adjust_up_select.C <<< "13"
+cafe -qb prong_length_adjust_up_select.C <<< "15"
+cafe -qb prong_length_adjust_up_select.C <<< "-211"
+cafe -qb prong_length_adjust_up_select.C <<< "-2212"
+cafe -qb prong_length_adjust_up_select.C <<< "-2112"
+cafe -qb prong_length_adjust_up_select.C <<< "-11"
+cafe -qb prong_length_adjust_up_select.C <<< "-13"
+cafe -qb prong_length_adjust_up_select.C <<< "-15"
