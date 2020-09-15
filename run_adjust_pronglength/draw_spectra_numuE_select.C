@@ -26,6 +26,11 @@ void draw_spectra_numuE_select(){
     {-211, "pi-"}, {-2212, "p-"}, {-2112, "anti-neutron"},{-11, "e+"}, {-13, "mu+"}, {-15, "tau+"}
 	};
 
+  map<int, string> pdg_latex={
+    {111, "#pi^{0}"}, {211, "#pi^{+}"}, {2212, "p"}, {2112, "n"},{11, "e^{-}"}, {13, "#mu^{-}"}, {15, "#tau^{-}"}, 
+    {-211, "#pi^{-}"}, {-2212, "p^{-}"}, {-2112, "#bar{n}"},{-11, "e^{+}"}, {-13, "#mu^{+}"}, {-15, "#tau^{+}"}
+	};
+
 
   std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
   std::cin >> input_pdg;
@@ -90,6 +95,7 @@ void draw_spectra_numuE_select(){
   TH1D_original->SetLineColor(kGreen);
   TH1D_original->SetLineStyle(kSolid);
   TH1D_original->Draw("hist_0");
+  TH1D_original->SetTitle(pdg_latex[input_pdg].c_str());
 
   TH1D_modified_up->SetLineWidth(2);
   TH1D_modified_up->SetLineColor(kRed);
@@ -102,12 +108,12 @@ void draw_spectra_numuE_select(){
   TH1D_modified_down->Draw("SAME");
 
 
-  auto legend = new TLegend(0.6, 0.6, 0.8, 0.8);
-  legend->SetHeader("Prong-Shifted muon neutrino Energy","C"); // option "C" allows to center the header
+  auto legend = new TLegend(0.5, 0.6, 0.7, 0.8);
+  legend->SetHeader(" ","C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
-  legend->AddEntry(TH1D_modified_up, "up -shift mean: "+ TString::Format("%f",TH1D_modified_up->GetMean()),"l");
-  legend->AddEntry(TH1D_modified_down, "down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
-  legend->SetTextSize(0.02);
+  legend->AddEntry(TH1D_modified_up, "5% up -shift mean: "+ TString::Format("%f",TH1D_modified_up->GetMean()),"l");
+  legend->AddEntry(TH1D_modified_down, "5% down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
+  legend->SetTextSize(0.03);
   legend->Draw("SAME");
 
   pad2->cd();
@@ -146,6 +152,7 @@ void draw_spectra_numuE_select(){
 
   // canvas_0->Print("compare_all_muE_x.pdf");
   canvas_0->Print(("./pdf/compare_numuE_"+pdg_map[input_pdg]+".pdf").c_str());
+  canvas_0->Print(("./pdf/compare_numuE_"+pdg_map[input_pdg]+".png").c_str());
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
