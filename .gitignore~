@@ -1,8 +1,0 @@
-.vscode/
-*.pdf
-*.so
-*.root
-*.d
-*.pcm
-.nfs*
-*.C~
