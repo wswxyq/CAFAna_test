@@ -76,8 +76,7 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
 
 
   std::cout << "Please enter a pdg value(number, negative for antiparticle): "<<std::endl;
-  std::cout << "{111,  \"pi0\"}, {211, \"pi+\"}, {2212, \"p\"}, 
-        {2112, \"n\"},{11, \"e\"}, {13, \"mu\"}, {15, \"tau\"}" << endl;
+  std::cout << "{111,  \"pi0\"}, {211, \"pi+\"}, {2212, \"p\"}, {2112, \"n\"},{11, \"e\"}, {13, \"mu\"}, {15, \"tau\"}" << endl;
   input_pdg=pdg_val;
   
   if ( pdg_map.count(input_pdg) > 0  )
