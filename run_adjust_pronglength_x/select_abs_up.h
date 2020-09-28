@@ -121,63 +121,39 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
       }
   );
 
-  // QE, RES, DIS, Coh, MEC cut map
+
+  const Cut cut_0    =
+        kIsNumuCC
+        && (
+            kNumuBasicQuality
+          && kNumuContainFD2017
+          && kNumuLoosePID
+        )
+        && kTrueEbelow7GeV
+        && SanityCut;
+
+  Cut cut;
 
   if (mode_val==0)
   {
-    const Cut cut    =
-        kIsNumuCC && (
-            kNumuBasicQuality
-          && kNumuContainFD2017
-          && kNumuLoosePID
-        )
-        && kTrueEbelow7GeV
-        && SanityCut && mode_Cut_QE;
+    cut=mode_Cut_QE && cut_0;
   }
   else if (mode_val==1)
   {
-    const Cut cut    =
-        kIsNumuCC && (
-            kNumuBasicQuality
-          && kNumuContainFD2017
-          && kNumuLoosePID
-        )
-        && kTrueEbelow7GeV
-        && SanityCut && mode_Cut_RES;  
-        }
+    cut=mode_Cut_RES && cut_0;
+  }
   else if (mode_val==2)
   {
-    const Cut cut    =
-        kIsNumuCC && (
-            kNumuBasicQuality
-          && kNumuContainFD2017
-          && kNumuLoosePID
-        )
-        && kTrueEbelow7GeV
-        && SanityCut && mode_Cut_DIS;  
-        }
+    cut=mode_Cut_DIS && cut_0;
+  }
   else if (mode_val==3)
   {
-    const Cut cut    =
-        kIsNumuCC && (
-            kNumuBasicQuality
-          && kNumuContainFD2017
-          && kNumuLoosePID
-        )
-        && kTrueEbelow7GeV
-        && SanityCut && mode_Cut_Coh;  
-        }
+    cut=mode_Cut_Coh && cut_0;
+  }
   else if (mode_val==10)
   {
-    const Cut cut    =
-        kIsNumuCC && (
-            kNumuBasicQuality
-          && kNumuContainFD2017
-          && kNumuLoosePID
-        )
-        && kTrueEbelow7GeV
-        && SanityCut && mode_Cut_MEC;
-        }
+    cut=mode_Cut_MEC && cut_0;
+  }
   else{
     std::cout << "could not find matching mode: mode_val=" << mode_val << endl;
     return;
