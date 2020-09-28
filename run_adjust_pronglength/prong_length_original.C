@@ -104,8 +104,8 @@ void prong_length_original()
   // Now save to disk...
   TFile *outFile = new TFile("/nova/ana/users/wus/root_files/FD_FHC_spectra_original_x_0_10.root","RECREATE");
 
-  muE_spectra.SaveTo(outFile, "subdir_muE_spectra"));
-  hadE_spectra.SaveTo(outFile, "subdir_hadE_spectra"));
+  muE_spectra.SaveTo(outFile, "subdir_muE_spectra");
+  hadE_spectra.SaveTo(outFile, "subdir_hadE_spectra");
   numuE_spectra.SaveTo(outFile, "subdir_numuE_spectra");
 
   outFile->Close();
