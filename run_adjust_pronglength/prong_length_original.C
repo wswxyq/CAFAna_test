@@ -75,7 +75,7 @@ void prong_length_original()
         && SanityCut;
 
 
-  auto model = LSTME::initCAFAnaModel("tf");
+  auto model = LSTME::initCAFAnaModel("tfS0906");
 
   Var muE   = LSTME::primaryEnergy(model);
   Var hadE  = LSTME::secondaryEnergy(model);
