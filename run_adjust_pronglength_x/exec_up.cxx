@@ -25,7 +25,7 @@ using namespace std;
 using namespace ana;
 
 
-
+int input_pdg=-9999;
 
 const Cut mode_Cut_QE(
     [] (const caf::SRProxy* sr)
