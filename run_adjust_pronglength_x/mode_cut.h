@@ -7,24 +7,38 @@
 using namespace ana;
 
   // Cut
-  const Cut kTrueEbelow7GeV = kTrueE < 7.0;
 
-  const Cut SanityCut(
-      [] (const caf::SRProxy *sr)
-      {
-          return (sr->mc.nnu > 0) && (! sr->mc.nu[0].prim.empty());
-      }
-  );
-
-  const Cut C(
+  const Cut mode_Cut_QE(
       [] (const caf::SRProxy* sr)
       {
-          return (
-                (sr->sel.remid.pid > 0.5)
-              && (sr->sel.cvnloosepreselptp.numuid > 0.5)
-          );
+          return (sr->mc.nu[0].mode == 0);
       }
   );
 
-  const Cut 
-  sr->mc.nu[0].mode == 0
+  const Cut mode_Cut_RES(
+      [] (const caf::SRProxy* sr)
+      {
+          return (sr->mc.nu[0].mode == 1);
+      }
+  );
+
+  const Cut mode_Cut_DIS(
+      [] (const caf::SRProxy* sr)
+      {
+          return (sr->mc.nu[0].mode == 2);
+      }
+  );
+
+  const Cut mode_Cut_Coh(
+      [] (const caf::SRProxy* sr)
+      {
+          return (sr->mc.nu[0].mode == 3);
+      }
+  );
+
+  const Cut mode_Cut_MEC(
+      [] (const caf::SRProxy* sr)
+      {
+          return (sr->mc.nu[0].mode == 10);
+      }
+  );
