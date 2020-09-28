@@ -25,11 +25,6 @@ using namespace std;
 using namespace ana;
 
 
-void exec_up(){
-    select_abs_and_mode_up(111, 0);
-}
-
-
 
 
 const Cut mode_Cut_QE(
@@ -241,3 +236,11 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
 
   outFile->Close();
 }
+
+
+
+
+void exec_up(){
+    select_abs_and_mode_up(111, 0);
+}
+
