@@ -132,7 +132,7 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
         && kTrueEbelow7GeV
         && SanityCut;
 
-  Cut cut;
+  Cut cut=cut_0;
 
   if (mode_val==0)
   {
