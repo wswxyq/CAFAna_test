@@ -1,3 +1,5 @@
+// Make a simple spectrum plot
+
 #include "CAFAna/Core/Binning.h"
 #include "CAFAna/Cuts/Cuts.h"
 #include "CAFAna/Core/Spectrum.h"
@@ -24,44 +26,7 @@ using namespace std;
 
 using namespace ana;
 
-
-int input_pdg=-9999;
-
-const Cut mode_Cut_QE(
-    [] (const caf::SRProxy* sr)
-    {
-        return (sr->mc.nu[0].mode == 0);
-    }
-);
-
-const Cut mode_Cut_RES(
-    [] (const caf::SRProxy* sr)
-    {
-        return (sr->mc.nu[0].mode == 1);
-    }
-);
-
-const Cut mode_Cut_DIS(
-    [] (const caf::SRProxy* sr)
-    {
-        return (sr->mc.nu[0].mode == 2);
-    }
-);
-
-const Cut mode_Cut_Coh(
-    [] (const caf::SRProxy* sr)
-    {
-        return (sr->mc.nu[0].mode == 3);
-    }
-);
-
-const Cut mode_Cut_MEC(
-    [] (const caf::SRProxy* sr)
-    {
-        return (sr->mc.nu[0].mode == 10);
-    }
-);
-
+  int input_pdg = -9999;
 
 
   class Prong_length_Shift : public ISyst
@@ -96,7 +61,7 @@ const Cut mode_Cut_MEC(
   };
 
 
-void select_abs_and_mode_up(int pdg_val, int mode_val)
+void exec_up_QE()
 {
   // Environment variables and wildcards work. Most commonly you want a SAM
   // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
@@ -104,19 +69,13 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
 
 
 	map<int, string> pdg_map={
-    {111,  "pi0"}, {211, "pi+"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}
-    };
-
-  // QE, RES, DIS, Coh, MEC cut map
-
-  map<int, string> mode_Cut={
-    {0,  "QE"}, {1, "RES"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"}
+    {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}
     };
 
 
-  std::cout << "Please enter a pdg value(number, negative for antiparticle): "<<std::endl;
-  std::cout << "{111,  \"pi0\"}, {211, \"pi+\"}, {2212, \"p\"}, {2112, \"n\"},{11, \"e\"}, {13, \"mu\"}, {15, \"tau\"}" << endl;
-  input_pdg=pdg_val;
+  std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
+  std::cin >> input_pdg;
+
   
   if ( pdg_map.count(input_pdg) > 0  )
     std::cout<<"Found supported pdg. Now continue... with pdg="<<input_pdg<<std::endl;
@@ -160,8 +119,14 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
       }
   );
 
+  const Cut mode_Cut_QE(
+    [] (const caf::SRProxy* sr)
+    {
+        return (sr->mc.nu[0].mode == 0);
+    }
+  );
 
-  const Cut cut_0    =
+  const Cut cut    =
         kIsNumuCC
         && (
             kNumuBasicQuality
@@ -169,34 +134,9 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
           && kNumuLoosePID
         )
         && kTrueEbelow7GeV
-        && SanityCut;
+        && SanityCut
+        && mode_Cut_QE;
 
-  Cut cut=cut_0;
-
-  if (mode_val==0)
-  {
-    cut=mode_Cut_QE && cut_0;
-  }
-  else if (mode_val==1)
-  {
-    cut=mode_Cut_RES && cut_0;
-  }
-  else if (mode_val==2)
-  {
-    cut=mode_Cut_DIS && cut_0;
-  }
-  else if (mode_val==3)
-  {
-    cut=mode_Cut_Coh && cut_0;
-  }
-  else if (mode_val==10)
-  {
-    cut=mode_Cut_MEC && cut_0;
-  }
-  else{
-    std::cout << "could not find matching mode: mode_val=" << mode_val << endl;
-    return;
-  }
 
   auto model = LSTME::initCAFAnaModel("tf");
 
@@ -209,9 +149,9 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
 
   SystShifts shift_2020(&wsw_sys, 5.0);
 
-  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut_0, shift_2020);
-  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut_0, shift_2020);
-  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut_0, shift_2020);
+  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020);
+  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020);
+  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut, shift_2020);
 
   // Do it!
   loader.Go();
@@ -228,7 +168,7 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
 
   // Now save to disk...
 
-  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new_"+ mode_Cut[mode_val] +"/FD_FHC_spectra_sys5_x_0_10_up_abs_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
+  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new/FD_FHC_spectra_sys5_x_0_10_up_abs_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
 
   muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
   hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
@@ -236,11 +176,3 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
 
   outFile->Close();
 }
-
-
-
-
-void exec_up(){
-    select_abs_and_mode_up(111, 0);
-}
-
