@@ -168,7 +168,7 @@ void exec_up_QE()
 
   // Now save to disk...
 
-  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new/FD_FHC_spectra_sys5_x_0_10_up_abs_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
+  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new_QE/FD_FHC_spectra_sys5_x_0_10_up_abs_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
 
   muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
   hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
