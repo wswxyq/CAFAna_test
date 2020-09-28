@@ -170,9 +170,9 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
 
   SystShifts shift_2020(&wsw_sys, 5.0);
 
-  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020);
-  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020);
-  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut, shift_2020);
+  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut_0, shift_2020);
+  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut_0, shift_2020);
+  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut_0, shift_2020);
 
   // Do it!
   loader.Go();
