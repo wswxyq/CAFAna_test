@@ -1,3 +1,31 @@
+// Make a simple spectrum plot
+
+#include "CAFAna/Core/Binning.h"
+#include "CAFAna/Cuts/Cuts.h"
+#include "CAFAna/Core/Spectrum.h"
+#include "CAFAna/Core/SpectrumLoader.h"
+#include "CAFAna/Vars/Vars.h"
+
+#include "StandardRecord/Proxy/SRProxy.h"
+
+#include "TCanvas.h"
+#include "TH2.h"
+
+#include "TensorFlowEvaluator/LSTME/cafana/LSTMEVar.h"
+
+#include "CAFAna/Cuts/NumuCuts.h"
+#include "CAFAna/Cuts/NumuCuts2018.h"
+#include "TFile.h"  
+#include "TH1.h"   
+
+#include "CAFAna/Core/ISyst.h"
+
+#include <string> 
+
+using namespace std;
+
+using namespace ana;
+
 
 const Cut mode_Cut_QE(
     [] (const caf::SRProxy* sr)
