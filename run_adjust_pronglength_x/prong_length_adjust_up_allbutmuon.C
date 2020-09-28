@@ -148,7 +148,7 @@ void prong_length_adjust_up_allbutmuon()
 
   // Now save to disk...
 
-  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new/FD_FHC_spectra_sys5_x_0_10_up_allbutmuon.root").c_str(),"RECREATE");
+  TFile *outFile = new TFile("/nova/ana/users/wus/root_files/new/FD_FHC_spectra_sys5_x_0_10_up_allbutmuon.root","RECREATE");
 
   muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
   hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
