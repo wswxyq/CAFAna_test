@@ -122,33 +122,6 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
   );
 
 
-  Cut select_mode;
-  if (mode_val==0)
-  {
-    select_mode=mode_Cut_QE
-  }
-  else if (mode_val==1)
-  {
-    select_mode=mode_Cut_RES
-  }
-  else if (mode_val==2)
-  {
-    select_mode=mode_Cut_DIS
-  }
-  else if (mode_val==3)
-  {
-    select_mode=mode_Cut_Coh
-  }
-  else if (mode_val==10)
-  {
-    select_mode=mode_Cut_MEC
-  }
-  else{
-    std::cout << "could not find matching mode: mode_val=" << mode_val << endl;
-    return;
-  }
-
-
   const Cut cut    =
         kIsNumuCC
         && (
@@ -159,6 +132,30 @@ void select_abs_and_mode_up(int pdg_val, int mode_val)
         && kTrueEbelow7GeV
         && SanityCut && select_mode;
 
+  if (mode_val==0)
+  {
+    cut=mode_Cut_QE && cut
+  }
+  else if (mode_val==1)
+  {
+    cut=mode_Cut_RES && cut
+  }
+  else if (mode_val==2)
+  {
+    cut=mode_Cut_DIS && cut
+  }
+  else if (mode_val==3)
+  {
+    cut=mode_Cut_Coh && cut
+  }
+  else if (mode_val==10)
+  {
+    cut=mode_Cut_MEC && cut
+  }
+  else{
+    std::cout << "could not find matching mode: mode_val=" << mode_val << endl;
+    return;
+  }
 
   auto model = LSTME::initCAFAnaModel("tf");
 
