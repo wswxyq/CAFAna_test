@@ -62,7 +62,7 @@ using namespace ana;
   };
 
 
-void exec_mode_up(int mode_val, int pdg_val)
+void exec_mode_up_fun(int mode_val, int pdg_val)
 {
   // Environment variables and wildcards work. Most commonly you want a SAM
   // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
@@ -201,4 +201,7 @@ void exec_mode_up(int mode_val, int pdg_val)
   outFile->Close();
 }
 
-exec_mode_up(0, 111);
+
+void exec_mode_up(){
+  exec_mode_up_fun(0, 111);
+}
