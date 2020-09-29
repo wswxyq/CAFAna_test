@@ -200,3 +200,5 @@ void exec_mode_up(int mode_val, int pdg_val)
 
   outFile->Close();
 }
+
+exec_mode_up(0, 111);
