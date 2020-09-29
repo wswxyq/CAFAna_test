@@ -21,6 +21,7 @@
 #include "CAFAna/Core/ISyst.h"
 
 #include <string> 
+#include "cut_mode.h"
 
 using namespace std;
 
@@ -61,7 +62,7 @@ using namespace ana;
   };
 
 
-void exec_up_QE()
+void exec_mode_up(int mode_val, int pdg_val)
 {
   // Environment variables and wildcards work. Most commonly you want a SAM
   // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
@@ -71,11 +72,11 @@ void exec_up_QE()
 	map<int, string> pdg_map={
     {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}
     };
-
+  map<int, string> mode_map={
+    {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"} };
 
   std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
-  std::cin >> input_pdg;
-
+  input_pdg = pdg_val;
   
   if ( pdg_map.count(input_pdg) > 0  )
     std::cout<<"Found supported pdg. Now continue... with pdg="<<input_pdg<<std::endl;
@@ -126,7 +127,7 @@ void exec_up_QE()
     }
   );
 
-  const Cut cut    =
+  const Cut cut_0    =
         kIsNumuCC
         && (
             kNumuBasicQuality
@@ -137,12 +138,35 @@ void exec_up_QE()
         && SanityCut
         && mode_Cut_QE;
 
+  Cut cut=cut_0;
+  if (mode_val==0)
+  {
+    cut=cut_0 && mode_Cut_QE;
+  }else if (mode_val==1)
+  {
+    cut=cut_0 && mode_Cut_Res;
+  }else if (mode_val==2)
+  {
+    cut=cut_0 && mode_Cut_DIS;
+  }else if (mode_val==3)
+  {
+    cut=cut_0 && mode_Cut_Coh;
+  }else if (mode_val==10)
+  {
+    cut=cut_0 && mode_Cut_MEC;
+  }else
+  {
+    return;
+  }
+  
+  
+
 
   auto model = LSTME::initCAFAnaModel("tf");
 
-  Var muE   = LSTME::muonEnergy(model);
-  Var hadE  = LSTME::hadEnergy(model);
-  Var numuE = LSTME::numuEnergy(model);
+  Var muE   = LSTME::primaryEnergy(model);
+  Var hadE  = LSTME::secondaryEnergy(model);
+  Var numuE = LSTME::totalEnergy(model);
 
   // Spectrum to be filled from the loader
   const Prong_length_Shift wsw_sys;
@@ -168,11 +192,11 @@ void exec_up_QE()
 
   // Now save to disk...
 
-  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new_QE/FD_FHC_spectra_sys5_x_0_10_up_abs_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
+  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new_"+mode_map[mode_val]+"/FD_FHC_spectra_sys5_x_0_10_up_abs_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
 
-  muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
-  hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
-  numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));
+  muE_spectra.SaveTo(outFile, "subdir_muE_spectra");
+  hadE_spectra.SaveTo(outFile, "subdir_hadE_spectra");
+  numuE_spectra.SaveTo(outFile, "subdir_numuE_spectra");
 
   outFile->Close();
 }
