@@ -27,7 +27,11 @@ using namespace std;
 
 using namespace ana;
 
+  // global vars used.
+  
   int input_pdg = -9999;
+  double shift_pm = 1.0;  // bool var that determine whether positive or negative shift is used.
+                      // by default we choose positive.
 
 
   class Prong_length_Shift : public ISyst
@@ -41,34 +45,60 @@ using namespace ana;
       // (that's why it's passed non-const.)
       void Shift(double sigma, caf::SRProxy* sr, double& weight) const override
       {
-
+        double shift_ratio = (1 + shift_pm * sigma * 0.01);
         auto &png = sr->vtx.elastic.fuzzyk.png;
         for (size_t i = 0; i < png.size(); i++) {
           // png[i].len // this will give you lenght of the prong number i
           if (abs(png[i].truth.pdg)==input_pdg)
           {
-            png[i].len *= (1 + sigma * 0.01); 
+            png[i].len *= shift_ratio; // 0.01 = 1%
+            png[i].bpf.muon.energy *= shift_ratio;
+            png[i].bpf.pion.energy *= shift_ratio;
+            png[i].bpf.proton.energy *= shift_ratio;
+            png[i].bpf.muon.momentum.x *= shift_ratio;
+            png[i].bpf.muon.momentum.y *= shift_ratio;
+            png[i].bpf.muon.momentum.z *= shift_ratio;
+            png[i].bpf.pion.momentum.x *= shift_ratio;
+            png[i].bpf.pion.momentum.y *= shift_ratio;
+            png[i].bpf.pion.momentum.z *= shift_ratio;
+            png[i].bpf.proton.momentum.x *= shift_ratio;
+            png[i].bpf.proton.momentum.y *= shift_ratio;
+            png[i].bpf.proton.momentum.z *= shift_ratio;
           }
-        
         }
         auto &png2d = sr->vtx.elastic.fuzzyk.png2d;
         for (size_t i = 0; i < png2d.size(); i++) {
           if (abs(png2d[i].truth.pdg)==input_pdg)
           {
-            png2d[i].len *= (1 + sigma * 0.01); 
+            png2d[i].len *= shift_ratio; 
           }
         }
       }
   };
 
 
-void exec_mode_up_fun(int mode_val, int pdg_val)
+void exec_mode_fun(int mode_val, int pdg_val, doubel p_m)
 {
   // Environment variables and wildcards work. Most commonly you want a SAM
   // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
   // reasonable amount of time for demo purposes.
+  string up_down;
 
-
+  if (p_m == 1)
+  {
+    shift_pm = p_m;
+    up_down = "up";
+  }else if (p_m==-1)
+  {
+    shift_pm = p_m;
+    up_down = "down";
+  }else  
+  {
+    cout << "Please choose valid value for p_m. Your value is" << p_m << endl;
+    return;
+  }
+  
+  
 	map<int, string> pdg_map={
     {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}
     };
@@ -120,12 +150,6 @@ void exec_mode_up_fun(int mode_val, int pdg_val)
       }
   );
 
-  const Cut mode_Cut_QE(
-    [] (const caf::SRProxy* sr)
-    {
-        return (sr->mc.nu[0].mode == 0);
-    }
-  );
 
   const Cut cut_0    =
         kIsNumuCC
@@ -135,8 +159,7 @@ void exec_mode_up_fun(int mode_val, int pdg_val)
           && kNumuLoosePID
         )
         && kTrueEbelow7GeV
-        && SanityCut
-        && mode_Cut_QE;
+        && SanityCut;
 
   Cut cut=cut_0;
   if (mode_val==0)
@@ -160,8 +183,6 @@ void exec_mode_up_fun(int mode_val, int pdg_val)
   }
   
   
-
-
   auto model = LSTME::initCAFAnaModel("tf");
 
   Var muE   = LSTME::primaryEnergy(model);
@@ -192,7 +213,7 @@ void exec_mode_up_fun(int mode_val, int pdg_val)
 
   // Now save to disk...
 
-  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new_"+mode_map[mode_val]+"/FD_FHC_spectra_sys5_x_0_10_up_abs_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
+  TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new_"+mode_map[mode_val]+"/FD_FHC_spectra_sys5_x_0_10_" + up_down + "_abs_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
 
   muE_spectra.SaveTo(outFile, "subdir_muE_spectra");
   hadE_spectra.SaveTo(outFile, "subdir_hadE_spectra");
@@ -202,6 +223,6 @@ void exec_mode_up_fun(int mode_val, int pdg_val)
 }
 
 
-void exec_mode_up(){
-  exec_mode_up_fun(0, 111);
+void exec_mode(){
+  exec_mode_fun(0, 111, 1);
 }
