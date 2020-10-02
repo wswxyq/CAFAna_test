@@ -185,9 +185,9 @@ void exec_mode_fun(int mode_val, int pdg_val, double p_m)
   
   auto model = LSTME::initCAFAnaModel("tf");
 
-  Var muE   = LSTME::primaryEnergy(model);
-  Var hadE  = LSTME::secondaryEnergy(model);
-  Var numuE = LSTME::totalEnergy(model);
+  Var muE   = LSTME::muonEnergy(model);
+  Var hadE  = LSTME::hadEnergy(model);
+  Var numuE = LSTME::numuEnergy(model);
 
   // Spectrum to be filled from the loader
   const Prong_length_Shift wsw_sys;
@@ -215,9 +215,9 @@ void exec_mode_fun(int mode_val, int pdg_val, double p_m)
 
   TFile *outFile = new TFile(("/nova/ana/users/wus/root_files/new_"+mode_map[mode_val]+"/FD_FHC_spectra_sys5_x_0_10_" + up_down + "_abs_"+pdg_map[input_pdg]+".root").c_str(),"RECREATE");
 
-  muE_spectra.SaveTo(outFile, "subdir_muE_spectra");
-  hadE_spectra.SaveTo(outFile, "subdir_hadE_spectra");
-  numuE_spectra.SaveTo(outFile, "subdir_numuE_spectra");
+  muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
+  hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
+  numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));
 
   outFile->Close();
 }
@@ -225,4 +225,18 @@ void exec_mode_fun(int mode_val, int pdg_val, double p_m)
 
 void exec_mode(){
   exec_mode_fun(0, 111, 1);
+  exec_mode_fun(0, 211, 1);
+  exec_mode_fun(0, 2212, 1);
+  exec_mode_fun(0, 2112, 1);
+  exec_mode_fun(0, 11, 1);
+  exec_mode_fun(0, 13, 1);
+  exec_mode_fun(0, 15, 1);
+
+  exec_mode_fun(0, 111, -1);
+  exec_mode_fun(0, 211, -1);
+  exec_mode_fun(0, 2212, -1);
+  exec_mode_fun(0, 2112, -1);
+  exec_mode_fun(0, 11, -1);
+  exec_mode_fun(0, 13, -1);
+  exec_mode_fun(0, 15, -1);
 }
