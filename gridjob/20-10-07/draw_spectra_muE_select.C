@@ -11,14 +11,14 @@
 #include "TLine.h"
 
 #include "CAFAna/Core/Spectrum.h"
-
+#include <string>
 
 using namespace ana;
 
 int input_pdg = -9999;
 
 
-void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
+void draw_spectra_muE_select(int mode_val, int pdg_val){
 
 
 
@@ -54,8 +54,8 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
   TString percentage = "5%";
 
   TFile inFile_origin("FD_FHC_spectra_original_x_0_10.root");
-  TFile inFile_modified_up(("./results/"+std::to_string(mode_val)+"_"+pdg_map[input_pdg]+"_1.root").c_str());
-  TFile inFile_modified_down(("./results/"+std::to_string(mode_val)+"_"+pdg_map[input_pdg]+"_-1.root").c_str());
+  TFile inFile_modified_up(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_1/spectra.root").c_str());
+  TFile inFile_modified_down(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_-1/spectra.root").c_str());
 
 
   // Load the spectrum...
@@ -168,16 +168,4 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
 
 }
 
-void draw_spectra_muE_select(){
-  int mode_list[] = {0, 1, 2, 3, 10};
-  int pdg_list[] = {111, 211, 2212, 2112, 11, 13, 15};
 
-  for (size_t i = 0; i < std::sizeof(mode_list); i++)
-  {
-    for (size_t ii = 0; ii < std::sizeof(pdg_list); ii++)
-    {
-      draw_spectra_muE_select_fun(mode_list[i], pdg_list[ii]);
-    }
-    
-  }
-}
