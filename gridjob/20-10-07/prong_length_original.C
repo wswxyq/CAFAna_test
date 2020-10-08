@@ -140,17 +140,6 @@ void prong_length_original(int mode_val)
   
 
 
-  const Cut cut    =
-        kIsNumuCC
-        && (
-            kNumuBasicQuality
-          && kNumuContainFD2017
-          && kNumuLoosePID
-        )
-        && kTrueEbelow7GeV
-        && SanityCut;
-
-
   auto model = LSTME::initCAFAnaModel("tf");
 
   Var muE   = LSTME::muonEnergy(model);
