@@ -11,7 +11,7 @@ JOB_OPTIONS=(
     --testrel "/nova/app/users/wus/fake_release"
 )
 
-OUTDIR="/pnfs/nova/scratch/users/wus/2020-10-07_wu_test"
+OUTDIR="/pnfs/nova/scratch/users/wus/2020-10-08_wu_test"
 
 MODE_VALUES=( 0 1 2 3 10 )
 
