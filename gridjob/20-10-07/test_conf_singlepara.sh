@@ -3,7 +3,7 @@
 RESULT_DIR="./results/"
 RESULT_FILE="spectra.root"
 
-SCRIPT=( exec_mode.C )
+SCRIPT=( prong_length_original.C )
 NJOBS=20
 
 JOB_OPTIONS=(
