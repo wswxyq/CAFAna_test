@@ -113,6 +113,50 @@ using namespace ana;
   };
 
 
+  class Prong_length_Shift_exclude : public ISyst
+  {
+    public:
+      Prong_length_Shift_exclude()
+        : ISyst("Prong_length_Shift_exclude", "Prong_length_Shift_exclude ##0")
+      {}
+
+      // we'll be modifying the SRProxy this time.
+      // (that's why it's passed non-const.)
+      void Shift(double sigma, caf::SRProxy* sr, double& weight) const override
+      {
+        double shift_ratio = (1 + shift_pm * sigma * 0.01);
+        auto &png = sr->vtx.elastic.fuzzyk.png;
+        for (size_t i = 0; i < png.size(); i++) {
+          // png[i].len // this will give you lenght of the prong number i
+          if (abs(png[i].truth.pdg)!==input_pdg)
+          {
+            png[i].len *= shift_ratio; // 0.01 = 1%
+            png[i].bpf.muon.energy *= shift_ratio;
+            png[i].bpf.pion.energy *= shift_ratio;
+            png[i].bpf.proton.energy *= shift_ratio;
+            png[i].bpf.muon.momentum.x *= shift_ratio;
+            png[i].bpf.muon.momentum.y *= shift_ratio;
+            png[i].bpf.muon.momentum.z *= shift_ratio;
+            png[i].bpf.pion.momentum.x *= shift_ratio;
+            png[i].bpf.pion.momentum.y *= shift_ratio;
+            png[i].bpf.pion.momentum.z *= shift_ratio;
+            png[i].bpf.proton.momentum.x *= shift_ratio;
+            png[i].bpf.proton.momentum.y *= shift_ratio;
+            png[i].bpf.proton.momentum.z *= shift_ratio;
+          }
+        }
+        auto &png2d = sr->vtx.elastic.fuzzyk.png2d;
+        for (size_t i = 0; i < png2d.size(); i++) {
+          if (abs(png2d[i].truth.pdg)!==input_pdg)
+          {
+            png2d[i].len *= shift_ratio; 
+          }
+        }
+      }
+  };
+
+
+
 void exec_mode(int mode_val, int pdg_val, int p_m)
 {
   // Environment variables and wildcards work. Most commonly you want a SAM
@@ -134,9 +178,11 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
     return;
   }
   
+  // positive pdg value means modifying the selected particle prong length
+  // negative pdg value means modifying the prong length of all particles except the selected particle
   
 	map<int, string> pdg_map={
-    {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}
+    {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, {-13, "nomuon"}
     };
   map<int, string> mode_map={
     {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"} };
@@ -145,7 +191,7 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
   input_pdg = pdg_val;
   
   if ( pdg_map.count(input_pdg) > 0  )
-    std::cout<<"Found supported pdg. Now continue... with pdg="<<input_pdg<<std::endl;
+    std::cout<<">>>>Found supported pdg. Now continue with pdg="<<input_pdg<<std::endl;
   else{
     std::cout<<"NOT FOUND "<<input_pdg<<" ! QUIT..."<<std::endl;
     return;
@@ -226,7 +272,14 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
   Var numuE = LSTME::numuEnergy(model);
 
   // Spectrum to be filled from the loader
-  const Prong_length_Shift wsw_sys;
+  if (input_pdg > 0)
+  {
+    const Prong_length_Shift wsw_sys;
+  }else
+  {
+    const Prong_length_Shift_exclude wsw_sys;
+  }
+  
 
   SystShifts shift_2020(&wsw_sys, 5.0);
 
@@ -236,18 +289,6 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
 
   // Do it!
   loader.Go();
-
-  // How to scale histograms
-  //const double pot = 18e20;
-
-  // We have histograms
-  //len.ToTH1(pot)->Draw("hist");
-  //new TCanvas;
-  //len1.ToTH1(pot)->Draw("hist");
-  //new TCanvas;
-  //len2.ToTH1(pot)->Draw("hist");
-
-  // Now save to disk...
 
   TFile *outFile = new TFile("spectra.root", "RECREATE");
 
