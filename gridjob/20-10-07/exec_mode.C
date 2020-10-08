@@ -272,16 +272,17 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
   Var numuE = LSTME::numuEnergy(model);
 
   // Spectrum to be filled from the loader
-  if (input_pdg > 0)
-  {
-    const Prong_length_Shift wsw_sys;
-  }else
-  {
-    const Prong_length_Shift_exclude wsw_sys;
-  }
+
   
+  Prong_length_Shift wsw_sys;
+  Prong_length_Shift_exclude wsw_sys_ex;
 
   SystShifts shift_2020(&wsw_sys, 5.0);
+  if (pdg_val<0)
+  {
+    SystShifts shift_2020(&wsw_sys_ex, 5.0);
+  }
+  
 
   Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut, shift_2020);
   Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut, shift_2020);
