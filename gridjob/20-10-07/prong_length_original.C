@@ -153,9 +153,9 @@ void prong_length_original(int mode_val)
 
   auto model = LSTME::initCAFAnaModel("tf");
 
-  Var muE   = LSTME::primaryEnergy(model);
-  Var hadE  = LSTME::secondaryEnergy(model);
-  Var numuE = LSTME::totalEnergy(model);
+  Var muE   = LSTME::muonEnergy(model);
+  Var hadE  = LSTME::hadEnergy(model);
+  Var numuE = LSTME::numuEnergy(model);
 
   // Spectrum to be filled from the loader
 
@@ -180,9 +180,9 @@ void prong_length_original(int mode_val)
   // Now save to disk...
   TFile *outFile = new TFile(("FD_FHC_spectra_original_x_0_10"+mode_map[mode_val]+".root").c_str(),"RECREATE");
 
-  muE_spectra.SaveTo(outFile, "subdir_muE_spectra");
-  hadE_spectra.SaveTo(outFile, "subdir_hadE_spectra");
-  numuE_spectra.SaveTo(outFile, "subdir_numuE_spectra");
+  muE_spectra.SaveTo(outFile->mkdir("subdir_muE_spectra"));
+  hadE_spectra.SaveTo(outFile->mkdir("subdir_hadE_spectra"));
+  numuE_spectra.SaveTo(outFile->mkdir("subdir_numuE_spectra"));
 
   outFile->Close();
 }
