@@ -53,7 +53,7 @@ void draw_spectra_muE_select(int mode_val, int pdg_val){
   TString subdir = "subdir_muE_spectra";
   TString percentage = "5%";
 
-  TFile inFile_origin("FD_FHC_spectra_original_x_0_10.root");
+  TFile inFile_origin(("./results/"+std::to_string(mode_val)+"__/spectra.root").c_str());
   TFile inFile_modified_up(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_1/spectra.root").c_str());
   TFile inFile_modified_down(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_-1/spectra.root").c_str());
 
@@ -102,7 +102,7 @@ void draw_spectra_muE_select(int mode_val, int pdg_val){
   TH1D_original->SetLineColor(kGreen);
   TH1D_original->SetLineStyle(kSolid);
   TH1D_original->Draw("hist_0");
-  TH1D_original->SetTitle(pdg_latex[input_pdg].c_str());
+  TH1D_original->SetTitle("E_{#mu} spectrum");
 
   TH1D_modified_up->SetLineWidth(2);
   TH1D_modified_up->SetLineColor(kRed);
@@ -116,7 +116,7 @@ void draw_spectra_muE_select(int mode_val, int pdg_val){
 
 
   auto legend = new TLegend(0.5, 0.6, 0.7, 0.8);
-  legend->SetHeader(("muon energy spectrum with " + pdg_latex[pdg_val] + " prong length shifted, interaction mode "+ mode_map[mode_val]).c_str(),"C"); // option "C" allows to center the header
+  legend->SetHeader((pdg_latex[pdg_val] + " prong length shifted #pm 5%, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
   legend->AddEntry(TH1D_modified_up, "5% up -shift mean: "+ TString::Format("%f",TH1D_modified_up->GetMean()),"l");
   legend->AddEntry(TH1D_modified_down, "5% down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
@@ -158,8 +158,8 @@ void draw_spectra_muE_select(int mode_val, int pdg_val){
   canvas_0->Update();
 
   // canvas_0->Print("compare_all_muE_x.pdf");
-  canvas_0->Print(("./pdf/muE_"+mode_map[mode_val]+pdg_map[input_pdg]+".pdf").c_str());
-  canvas_0->Print(("./png/muE_"+mode_map[mode_val]+pdg_map[input_pdg]+".png").c_str());
+  canvas_0->Print(("./pdf/muE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".pdf").c_str());
+  canvas_0->Print(("./png/muE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".png").c_str());
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
