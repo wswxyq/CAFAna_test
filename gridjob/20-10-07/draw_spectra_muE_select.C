@@ -169,8 +169,8 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
 }
 
 void draw_spectra_muE_select(){
-  mode_list = [0, 1, 2, 3, 10];
-  pdg_list = [111, 211, 2212, 2112, 11, 13, 15]
+  int mode_list[] = {0, 1, 2, 3, 10};
+  int pdg_list[] = {111, 211, 2212, 2112, 11, 13, 15}
 
   for (size_t i = 0; i < std::sizeof(mode_list); i++)
   {
