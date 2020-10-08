@@ -139,8 +139,7 @@ void prong_length_original(int mode_val)
   }
   
 
-
-  auto model = LSTME::initCAFAnaModel("tf");
+  auto model = LSTME::initCAFAnaModel((util::EnvExpansion("${SRT_PRIVATE_CONTEXT}")+"/tf").c_str());
 
   Var muE   = LSTME::muonEnergy(model);
   Var hadE  = LSTME::hadEnergy(model);
