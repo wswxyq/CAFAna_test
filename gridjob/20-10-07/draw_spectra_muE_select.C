@@ -176,7 +176,7 @@ void draw_spectra_muE_select(){
   {
     for (size_t ii = 0; ii < std::sizeof(pdg_list); ii++)
     {
-      draw_spectra_muE_select_fun(mode_list[i], pdg_list[ii])
+      draw_spectra_muE_select_fun(mode_list[i], pdg_list[ii]);
     }
     
   }
