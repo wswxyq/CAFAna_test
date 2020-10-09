@@ -1,0 +1,1 @@
+rsync -chavzP --stats wus@novagpvm05.fnal.gov:/nova/app/users/wus/CAFAna_test . --exclude=.git
