@@ -23,10 +23,11 @@ void draw_spectra_muE_select(int mode_val, int pdg_val){
 
 
   map<int, string> pdg_latex={
-    {111, "#pi^{0}"}, {211, "#pi^{+/-}"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "#mu"}, {15, "#tau"} };
+    {111, "#pi^{0}"}, {211, "#pi^{+/-}"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "#mu"}, {15, "#tau"},
+    {-13, "all but #mu"}  };
 
 	map<int, string> pdg_map={
-    {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}
+    {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, {-13, "nomuon"}
     };
   map<int, string> mode_map={
     {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"} };
