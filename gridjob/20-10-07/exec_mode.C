@@ -185,7 +185,7 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
     {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, {-13, "nomuon"}
     };
   map<int, string> mode_map={
-    {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"} };
+    {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"}, {10, "MEC"}, {100000, "NOCUT"} };
 
   std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
   input_pdg = pdg_val;
@@ -259,6 +259,9 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
   }else if (mode_val==10)
   {
     cut=cut_0 && mode_Cut_MEC;
+  }else if (mode_val==100000)
+  {
+    cut=cut_0;
   }else
   {
     return;

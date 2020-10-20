@@ -11,29 +11,37 @@
 #include "TLine.h"
 
 #include "CAFAna/Core/Spectrum.h"
-
+#include <string>
 
 using namespace ana;
 
 int input_pdg = -9999;
 
 
-void draw_spectra_numuE_select(){
+void draw_spectra_numuE_select(int mode_val, int pdg_val){
 
 
-  map<int, string> pdg_map={
-    {111,  "pi0"}, {211, "pi+"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, 
-    {-211, "pi-"}, {-2212, "p-"}, {-2112, "anti-neutron"},{-11, "e+"}, {-13, "mu+"}, {-15, "tau+"}
-	};
 
   map<int, string> pdg_latex={
-    {111, "#pi^{0}"}, {211, "#pi^{+}"}, {2212, "p"}, {2112, "n"},{11, "e^{-}"}, {13, "#mu^{-}"}, {15, "#tau^{-}"}, 
-    {-211, "#pi^{-}"}, {-2212, "p^{-}"}, {-2112, "#bar{n}"},{-11, "e^{+}"}, {-13, "#mu^{+}"}, {-15, "#tau^{+}"}
-	};
+    {111, "#pi^{0}"}, {211, "#pi^{+/-}"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "#mu"}, {15, "#tau"},
+    {-13, "all but #mu"}  };
 
+	map<int, string> pdg_map={
+    {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, {-13, "nomuon"}
+    };
+  map<int, string> mode_map={
+    {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"}, {10000, "NOCUT"}};
 
   std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
-  std::cin >> input_pdg;
+  input_pdg = pdg_val;
+  
+  if ( pdg_map.count(input_pdg) > 0  )
+    std::cout<<"Found supported pdg. Now continue... with pdg="<<input_pdg<<std::endl;
+  else{
+    std::cout<<"NOT FOUND "<<input_pdg<<" ! QUIT..."<<std::endl;
+    return;
+  }
+
 
   
   if ( pdg_map.count(input_pdg) > 0  )
@@ -46,9 +54,9 @@ void draw_spectra_numuE_select(){
   TString subdir = "subdir_numuE_spectra";
   TString percentage = "5%";
 
-  TFile inFile_origin("/nova/ana/users/wus/root_files/FD_FHC_spectra_original_x_0_10.root");
-  TFile inFile_modified_up(("/nova/ana/users/wus/root_files/up/FD_FHC_spectra_sys5_x_0_10_up_"+pdg_map[input_pdg]+".root").c_str());
-  TFile inFile_modified_down(("/nova/ana/users/wus/root_files/down/FD_FHC_spectra_sys5_x_0_10_down_"+pdg_map[input_pdg]+".root").c_str());
+  TFile inFile_origin(("./results/"+std::to_string(mode_val)+"__/spectra.root").c_str());
+  TFile inFile_modified_up(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_1/spectra.root").c_str());
+  TFile inFile_modified_down(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_-1/spectra.root").c_str());
 
 
   // Load the spectrum...
@@ -95,7 +103,7 @@ void draw_spectra_numuE_select(){
   TH1D_original->SetLineColor(kGreen);
   TH1D_original->SetLineStyle(kSolid);
   TH1D_original->Draw("hist_0");
-  TH1D_original->SetTitle(pdg_latex[input_pdg].c_str());
+  TH1D_original->SetTitle("E_{#upsilon_{#mu}} spectrum");
 
   TH1D_modified_up->SetLineWidth(2);
   TH1D_modified_up->SetLineColor(kRed);
@@ -109,7 +117,7 @@ void draw_spectra_numuE_select(){
 
 
   auto legend = new TLegend(0.5, 0.6, 0.7, 0.8);
-  legend->SetHeader(" ","C"); // option "C" allows to center the header
+  legend->SetHeader((pdg_latex[pdg_val] + " prong length shifted #pm 5%, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
   legend->AddEntry(TH1D_modified_up, "5% up -shift mean: "+ TString::Format("%f",TH1D_modified_up->GetMean()),"l");
   legend->AddEntry(TH1D_modified_down, "5% down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
@@ -150,9 +158,8 @@ void draw_spectra_numuE_select(){
 
   canvas_0->Update();
 
-  // canvas_0->Print("compare_all_muE_x.pdf");
-  canvas_0->Print(("./pdf/compare_numuE_"+pdg_map[input_pdg]+".pdf").c_str());
-  canvas_0->Print(("./pdf/compare_numuE_"+pdg_map[input_pdg]+".png").c_str());
+  canvas_0->Print(("./pdf/numuE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".pdf").c_str());
+  canvas_0->Print(("./png/numuE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".png").c_str());
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
@@ -160,3 +167,5 @@ void draw_spectra_numuE_select(){
   cout << percentage + " down prong-shift(Orange) mean:" << TH1D_modified_down->GetMean()<<endl;
 
 }
+
+

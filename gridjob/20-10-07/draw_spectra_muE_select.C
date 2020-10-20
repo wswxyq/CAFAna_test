@@ -30,7 +30,7 @@ void draw_spectra_muE_select(int mode_val, int pdg_val){
     {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, {-13, "nomuon"}
     };
   map<int, string> mode_map={
-    {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"} };
+    {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"}, {100000, "NOCUT"} };
 
   std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
   input_pdg = pdg_val;
@@ -158,7 +158,6 @@ void draw_spectra_muE_select(int mode_val, int pdg_val){
 
   canvas_0->Update();
 
-  // canvas_0->Print("compare_all_muE_x.pdf");
   canvas_0->Print(("./pdf/muE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".pdf").c_str());
   canvas_0->Print(("./png/muE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".png").c_str());
 
