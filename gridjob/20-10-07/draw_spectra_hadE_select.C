@@ -27,7 +27,7 @@ map<int, string> pdg_map={
 map<int, string> mode_map={
   {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"}, {100000, "NOCUT"} };
 
-void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
+void draw_spectra_hadE_select_fun(int mode_val, int pdg_val){
 
 
 
@@ -52,7 +52,7 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
     return;
   }
 
-  TString subdir = "subdir_muE_spectra";
+  TString subdir = "subdir_hadE_spectra";
   TString percentage = "5%";
 
   TFile inFile_origin(("./results/"+std::to_string(mode_val)+"__/spectra.root").c_str());
@@ -70,7 +70,7 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
   //
   // Plot the histo...
   //  
-  TCanvas *canvas_0 = new TCanvas("canvas_0","plot muE_spectra",1200, 1200);
+  TCanvas *canvas_0 = new TCanvas("canvas_0","plot hadE_spectra",1200, 1200);
 	//canvas_0->Divide(1, 2, 0, 0);
   TPad *pad1 = new TPad("pad1", " ",0.1,0.35,0.9,0.92);
   TPad *pad2 = new TPad("pad2", " ",0.1,0.1,0.9,0.35);
@@ -104,7 +104,7 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
   TH1D_original->SetLineColor(kGreen);
   TH1D_original->SetLineStyle(kSolid);
   TH1D_original->Draw("hist_0");
-  TH1D_original->SetTitle("E_{#mu} spectrum");
+  TH1D_original->SetTitle("E_{had} spectrum");
 
   TH1D_modified_up->SetLineWidth(2);
   TH1D_modified_up->SetLineColor(kRed);
@@ -159,8 +159,8 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
 
   canvas_0->Update();
 
-  canvas_0->Print(("./pdf/muE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".pdf").c_str());
-  canvas_0->Print(("./png/muE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".png").c_str());
+  canvas_0->Print(("./pdf/hadE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".pdf").c_str());
+  canvas_0->Print(("./png/hadE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".png").c_str());
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
@@ -170,10 +170,10 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
 }
 
 
-void draw_spectra_muE_select(){
+void draw_spectra_hadE_select(){
   for (auto const& x : mode_map){
   for (auto const& y : pdg_map){
-      draw_spectra_muE_select_fun(x.first, y.first);
+      draw_spectra_hadE_select_fun(x.first, y.first);
     }
   }
 }

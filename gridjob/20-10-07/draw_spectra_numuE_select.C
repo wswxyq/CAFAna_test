@@ -25,7 +25,7 @@ map<int, string> pdg_map={
   {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, {-13, "nomuon"}
   };
 map<int, string> mode_map={
-  {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"}, {100000, "NOCUT"}};
+  {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"}, {100000, "NOCUT"} };
   
 void draw_spectra_numuE_select_fun(int mode_val, int pdg_val){
 
@@ -33,7 +33,7 @@ void draw_spectra_numuE_select_fun(int mode_val, int pdg_val){
 
 
 
-  std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
+  std::cout << "Please enter a pdg value(number, negative for exclusion): ";
   input_pdg = pdg_val;
   
   if ( pdg_map.count(input_pdg) > 0  )

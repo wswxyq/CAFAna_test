@@ -147,7 +147,7 @@ using namespace ana;
         }
         auto &png2d = sr->vtx.elastic.fuzzyk.png2d;
         for (size_t i = 0; i < png2d.size(); i++) {
-          if (abs(png2d[i].truth.pdg)!=input_pdg)
+          if (abs(png2d[i].truth.pdg)!=abs(input_pdg))
           {
             png2d[i].len *= shift_ratio; 
           }
@@ -187,7 +187,7 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
   map<int, string> mode_map={
     {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"}, {10, "MEC"}, {100000, "NOCUT"} };
 
-  std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
+  std::cout << "Please enter a pdg value(number, negative for exclusion): ";
   input_pdg = pdg_val;
   
   if ( pdg_map.count(input_pdg) > 0  )
@@ -283,7 +283,7 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
   SystShifts shift_2020(&wsw_sys, 5.0);
   if (pdg_val<0)
   {
-    SystShifts shift_2020(&wsw_sys_ex, 5.0);
+    shift_2020 = SystShifts(&wsw_sys_ex, 5.0)
   }
   
 

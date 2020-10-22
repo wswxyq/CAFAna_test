@@ -13,7 +13,7 @@ JOB_OPTIONS=(
 
 OUTDIR="/pnfs/nova/scratch/users/wus/2020-10-07_wu_test"
 
-MODE_VALUES=( 0 1 2 3 10 )
+MODE_VALUES=( 0 1 2 3 10 100000)
 PDG_VALUES=( -13 )
 PM_VALUES=( 1 -1 )
 
