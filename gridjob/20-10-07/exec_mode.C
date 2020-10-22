@@ -128,7 +128,7 @@ using namespace ana;
         auto &png = sr->vtx.elastic.fuzzyk.png;
         for (size_t i = 0; i < png.size(); i++) {
           // png[i].len // this will give you lenght of the prong number i
-          if (abs(png[i].truth.pdg)!=input_pdg)
+          if (abs(png[i].truth.pdg)!=abs(input_pdg))
           {
             png[i].len *= shift_ratio; // 0.01 = 1%
             png[i].bpf.muon.energy *= shift_ratio;
