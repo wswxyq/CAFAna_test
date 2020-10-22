@@ -18,7 +18,7 @@ map<int, string> pdg_map={
   {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, {-13, "nomuon"}
   };
 map<int, string> mode_map={
-  {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"}, {10, "MEC"}};
+  {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"}, {100000, "NOCUT"} };
 
 
 
