@@ -283,7 +283,7 @@ void exec_mode(int mode_val, int pdg_val, int p_m)
   SystShifts shift_2020(&wsw_sys, 5.0);
   if (pdg_val<0)
   {
-    shift_2020 = SystShifts(&wsw_sys_ex, 5.0)
+    shift_2020 = SystShifts(&wsw_sys_ex, 5.0);
   }
   
 

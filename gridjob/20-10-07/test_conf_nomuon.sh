@@ -4,7 +4,7 @@ RESULT_DIR="./results/"
 RESULT_FILE="spectra.root"
 
 SCRIPT=( exec_mode.C )
-NJOBS=20
+NJOBS=40
 
 JOB_OPTIONS=(
     --rel     "S20-04-03"
