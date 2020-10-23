@@ -24,7 +24,7 @@ map<int, string> mode_map={
 
 void table_muE_fun(int mode_val, int pdg_val, string filename){
 
-  std::cout << "Please enter a pdg value(number, negative for antiparticle): ";
+  std::cout << "Please enter a pdg value(number, negative for exclusion): ";
   input_pdg = pdg_val;
   
   if ( pdg_map.count(input_pdg) > 0  )
