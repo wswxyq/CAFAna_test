@@ -1,4 +1,4 @@
-// incompatible with S20-04-03, try S20-09-06.
+// S20-04-03
 
 #include "CAFAna/Core/Binning.h"
 #include "CAFAna/Cuts/Cuts.h"

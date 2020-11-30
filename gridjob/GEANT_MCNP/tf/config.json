@@ -2,8 +2,8 @@
     "input_png2d": "input_png2d",
     "input_png3d": "input_png3d",
     "input_slice": "input_slice",
-    "target_lep": "target_primary/BiasAdd",
-    "target_nu": "target_total/BiasAdd",
+    "target_primary": "target_primary/BiasAdd",
+    "target_total": "target_total/BiasAdd",
     "vars_png2d": [
         "png2d.dir.x",
         "png2d.dir.y",
