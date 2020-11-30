@@ -1,4 +1,4 @@
-// incompatible with S20-04-03, try S20-09-06.
+// S20-10-30.
 
 #include "CAFAna/Core/Binning.h"
 #include "CAFAna/Cuts/Cuts.h"
@@ -15,12 +15,12 @@
 
 #include "3FlavorAna/Cuts/NumuCuts.h"
 #include "3FlavorAna/Cuts/NumuCuts2018.h"
+#include "3FlavorAna/Vars/NumuEFxs.h"
 
-#include "TFile.h"  
-#include "TH1.h"   
+#include "TFile.h"
+#include "TH1.h"
 
 #include "Utilities/func/EnvExpand.cxx"
-
 
 
 using namespace ana;
@@ -64,7 +64,7 @@ using namespace ana;
 
 
   
-void prong_length_original(int mode_val)
+void MCNP_standard_original(int mode_val)
 {
   // Environment variables and wildcards work. Most commonly you want a SAM
   // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
@@ -118,6 +118,7 @@ void prong_length_original(int mode_val)
         )
         && kTrueEbelow7GeV
         && SanityCut;
+  
 
   Cut cut=cut_0;
   if (mode_val==0)
@@ -135,24 +136,22 @@ void prong_length_original(int mode_val)
   }else if (mode_val==10)
   {
     cut=cut_0 && mode_Cut_MEC;
+  }else if (mode_val==100000)
+  {
+    cut=cut_0;
   }else
   {
     return;
   }
-  
+
+
 
   auto model = LSTME::initCAFAnaModel((util::EnvExpansion("${SRT_PRIVATE_CONTEXT}")+"/tf").c_str());
 
-  Var muE   = LSTME::primaryEnergy(model);
-  Var hadE  = LSTME::secondaryEnergy(model);
-  Var numuE = LSTME::totalEnergy(model);
 
   // Spectrum to be filled from the loader
 
-
-  Spectrum muE_spectra("muE_spectra", bins, loader, muE, cut);
-  Spectrum hadE_spectra("hadE_spectra", bins, loader, hadE, cut);
-  Spectrum numuE_spectra("numuE_spectra", bins, loader, numuE, cut);
+  Spectrum E_spectra("E_spectra", bins, loader, kNumuE2020, cut);
 
   // Do it!
   loader.Go();
@@ -170,9 +169,7 @@ void prong_length_original(int mode_val)
   // Now save to disk...
   TFile *outFile = new TFile("spectra.root","RECREATE");
 
-  muE_spectra.SaveTo(outFile, "subdir_muE_spectra");
-  hadE_spectra.SaveTo(outFile, "subdir_hadE_spectra");
-  numuE_spectra.SaveTo(outFile, "subdir_numuE_spectra");
+  E_spectra.SaveTo(outFile, "subdir_E_spectra");
 
   outFile->Close();
 }

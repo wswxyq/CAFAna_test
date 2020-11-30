@@ -4,7 +4,7 @@ RESULT_DIR="./results/"
 RESULT_FILE="spectra.root"
 
 SCRIPT=( prong_length_original.C )
-NJOBS=20
+NJOBS=50
 
 JOB_OPTIONS=(
     --rel     "S20-10-30"
@@ -13,7 +13,7 @@ JOB_OPTIONS=(
 
 OUTDIR="/pnfs/nova/scratch/users/wus/2020-11-27_wu_test"
 
-MODE_VALUES=( 0 )
+MODE_VALUES=( 100000 )
 
 
 declare -A CONFIGS
