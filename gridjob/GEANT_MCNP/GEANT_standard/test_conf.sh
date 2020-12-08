@@ -3,7 +3,7 @@
 RESULT_DIR="./results/"
 RESULT_FILE="spectra.root"
 
-SCRIPT=( MCNP_standard_original.C )
+SCRIPT=( GEANT_standard_original.C )
 NJOBS=50
 
 JOB_OPTIONS=(
@@ -11,7 +11,7 @@ JOB_OPTIONS=(
     --testrel "/nova/app/users/wus/fake_release_10-30"
 )
 
-OUTDIR="/pnfs/nova/scratch/users/wus/2020-11-30_wu_test"
+OUTDIR="/pnfs/nova/scratch/users/wus/2020-11-30_wu"
 
 MODE_VALUES=( 100000 )
 
