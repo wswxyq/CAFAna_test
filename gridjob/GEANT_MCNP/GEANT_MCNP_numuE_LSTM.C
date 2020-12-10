@@ -12,7 +12,7 @@
 
 using namespace ana;
 
-void GEANT_MCNP_numuE(){
+void GEANT_MCNP_numuE_LSTM(){
 
 
   const std::string subdir = "subdir_numuE_spectra";
