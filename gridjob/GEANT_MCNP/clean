@@ -1,0 +1,3 @@
+find . -name '*.pcm' -type f -delete 
+find . -name '*.so' -type f -delete 
+find . -name '*.d' -type f -delete 

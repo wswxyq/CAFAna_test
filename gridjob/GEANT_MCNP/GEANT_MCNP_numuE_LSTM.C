@@ -50,13 +50,16 @@ void GEANT_MCNP_numuE_LSTM(){
   TH1D *TH1D_MCNP = spect_MCNP->ToTH1(spect_MCNP->POT());
   TH1D_MCNP->Scale(TH1D_GEANT->Integral()/TH1D_MCNP->Integral());
 
+  cout << "INt of GEANT:" << TH1D_GEANT->Integral()<<endl;
+  cout << "INt of MCNP:" << TH1D_MCNP->Integral()<<endl;
+
   TH1D_GEANT->GetXaxis()->SetRangeUser(0, 5);
   TH1D_MCNP->GetXaxis()->SetRangeUser(0, 5);
 
   //TH1D *TH1D_difference_factor = spect_MCNP->ToTH1(spect_MCNP->POT());
   TH1D* TH1D_difference_factor = static_cast<TH1D*>(TH1D_MCNP->Clone());
   TH1D_difference_factor->GetXaxis()->SetRangeUser(0, 5);
-  TH1D_difference_factor->Scale(TH1D_GEANT->Integral()/TH1D_MCNP->Integral());
+  //TH1D_difference_factor->Scale(TH1D_GEANT->Integral()/TH1D_MCNP->Integral());
 
 
   TH1D_GEANT->SetLineWidth(2);
@@ -105,8 +108,8 @@ void GEANT_MCNP_numuE_LSTM(){
 
   canvas_0->Print("./pdf/GEANT_MCNP.pdf");
   //canvas_0->Print("./png/numuE_.png");
-  cout << "Entries of GEANT:" << spect_GEANT->POT()<<endl;
-  cout << "Entries of MCNP:" << spect_MCNP->POT()<<endl;
+  cout << "POT of GEANT:" << spect_GEANT->POT()<<endl;
+  cout << "POT of MCNP:" << spect_MCNP->POT()<<endl;
   cout << "INt of GEANT:" << TH1D_GEANT->Integral()<<endl;
   cout << "INt of MCNP:" << TH1D_MCNP->Integral()<<endl;
 

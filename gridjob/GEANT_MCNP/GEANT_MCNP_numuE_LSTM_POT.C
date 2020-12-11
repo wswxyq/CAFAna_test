@@ -12,16 +12,16 @@
 
 using namespace ana;
 
-void GEANT_MCNP_numuE_standard(){
+void GEANT_MCNP_numuE_LSTM_POT(){
 
 
-  const std::string subdir = "subdir_E_spectra";
+  const std::string subdir = "subdir_numuE_spectra";
 
   //TFile inFile_GEANT("../20-10-07/results/100000__/spectra.root");
   //TFile inFile_MCNP("MCNP_LSTM/results/100000/spectra.root");
 
-  TFile * inFile_GEANT = new TFile("GEANT_standard/results/100000/spectra.root", "read");
-  TFile * inFile_MCNP = new TFile("MCNP_standard/results/100000/spectra.root", "read");
+  TFile * inFile_GEANT = new TFile("../20-10-07/results/100000__/spectra.root", "read");
+  TFile * inFile_MCNP = new TFile("MCNP_LSTM/results/100000/spectra.root", "read");
 
 
   // Load the spectrum...
@@ -48,7 +48,10 @@ void GEANT_MCNP_numuE_standard(){
 
   TH1D *TH1D_GEANT = spect_GEANT->ToTH1(spect_GEANT->POT());
   TH1D *TH1D_MCNP = spect_MCNP->ToTH1(spect_MCNP->POT());
-  TH1D_MCNP->Scale(TH1D_GEANT->Integral()/TH1D_MCNP->Integral());
+  TH1D_MCNP->Scale(spect_GEANT->POT()/spect_MCNP->POT());
+
+  cout << "INt of GEANT:" << TH1D_GEANT->Integral()<<endl;
+  cout << "INt of MCNP:" << TH1D_MCNP->Integral()<<endl;
 
   TH1D_GEANT->GetXaxis()->SetRangeUser(0, 5);
   TH1D_MCNP->GetXaxis()->SetRangeUser(0, 5);
@@ -103,7 +106,7 @@ void GEANT_MCNP_numuE_standard(){
 
   canvas_0->Update();
 
-  canvas_0->Print("./pdf/GEANT_MCNP_standard.pdf");
+  canvas_0->Print("./pdf/GEANT_MCNP.pdf");
   //canvas_0->Print("./png/numuE_.png");
   cout << "POT of GEANT:" << spect_GEANT->POT()<<endl;
   cout << "POT of MCNP:" << spect_MCNP->POT()<<endl;
