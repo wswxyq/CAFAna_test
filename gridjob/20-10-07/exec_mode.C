@@ -66,7 +66,7 @@ using namespace ana;
   // global vars used.
   
   int input_pdg = -9999;
-  double shift_pm = 1.0;  // bool var that determine whether positive or negative shift is used.
+  double shift_pm = 1.0;  // var that determine whether positive or negative shift is used.
                       // by default we choose positive.
 
 
