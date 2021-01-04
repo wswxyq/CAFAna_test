@@ -8,7 +8,7 @@
 #include "CAFAna/Core/ISyst.h"
 #include "CAFAna/Core/Ratio.h"
 #include "CAFAna/Core/Spectrum.h"
-#include "CAFAna/Cuts/NumuCuts.h"
+#include "3FlavorAna/Cuts/NumuCuts.h"
 #include "CAFAna/Cuts/SpillCuts.h"
 #include "CAFAna/Prediction/PredictionInterp.h"
 #include "CAFAna/Prediction/PredictionNoOsc.h"
