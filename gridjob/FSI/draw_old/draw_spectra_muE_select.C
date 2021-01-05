@@ -26,15 +26,7 @@ void draw_spectra_muE_select_fun(int mode_val, int input_FSI){
 
   std::cout << "Please enter a FSI value(number, negative for exclusion): ";
   
-  if ( FSI_map.count(input_FSI) > 0  )
-    std::cout<<"Found supported FSI. Now continue... with FSI="<<input_FSI<<std::endl;
-  else{
-    std::cout<<"NOT FOUND "<<input_FSI<<" ! QUIT..."<<std::endl;
-    return;
-  }
 
-
-  
   if ( FSI_map.count(input_FSI) > 0  )
     std::cout<<"Found supported FSI. Now continue... with FSI="<<input_FSI<<std::endl;
   else{
@@ -121,7 +113,7 @@ void draw_spectra_muE_select_fun(int mode_val, int input_FSI){
 
 
   auto legend = new TLegend(0.5, 0.6, 0.7, 0.8);
-  legend->SetHeader((FSI_map[input_FSI] + " sigma uncertainties, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
+  legend->SetHeader((FSI_map[input_FSI] + " uncertainties, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
   legend->AddEntry(TH1D_modified_1, "1 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_1->GetMean()),"l");
   legend->AddEntry(TH1D_modified_2, "2 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_2->GetMean()),"l");

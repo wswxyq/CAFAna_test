@@ -21,18 +21,10 @@ map<int, string> mode_map={
   {100000, "NOCUT"} 
   };
 
-void draw_spectra_numuE_select_fun(int mode_val, int input_FSI){
+void draw_spectra_hadE_select_fun(int mode_val, int input_FSI){
 
 
   std::cout << "Please enter a FSI value(number, negative for exclusion): ";
-  
-  if ( FSI_map.count(input_FSI) > 0  )
-    std::cout<<"Found supported FSI. Now continue... with FSI="<<input_FSI<<std::endl;
-  else{
-    std::cout<<"NOT FOUND "<<input_FSI<<" ! QUIT..."<<std::endl;
-    return;
-  }
-
 
   
   if ( FSI_map.count(input_FSI) > 0  )
@@ -42,7 +34,7 @@ void draw_spectra_numuE_select_fun(int mode_val, int input_FSI){
     return;
   }
 
-  auto subdir = "subdir_numuE_spectra";
+  auto subdir = "subdir_hadE_spectra";
 
 
   auto * inFile_origin = new TFile(("./results/"+std::to_string(mode_val)+"__/spectra.root").c_str());
@@ -62,7 +54,7 @@ void draw_spectra_numuE_select_fun(int mode_val, int input_FSI){
   //
   // Plot the histo...
   //  
-  TCanvas *canvas_0 = new TCanvas("canvas_0","plot numuE_spectra",1200, 1200);
+  TCanvas *canvas_0 = new TCanvas("canvas_0","plot hadE_spectra",1200, 1200);
 	//canvas_0->Divide(1, 2, 0, 0);
   TPad *pad1 = new TPad("pad1", " ",0.1,0.35,0.9,0.92);
   TPad *pad2 = new TPad("pad2", " ",0.1,0.1,0.9,0.35);
@@ -102,7 +94,7 @@ void draw_spectra_numuE_select_fun(int mode_val, int input_FSI){
   TH1D_original->Draw("hist_0");
   TH1D_original->GetYaxis()->SetTitle(" ");
   TH1D_original->GetXaxis()->SetTitle(" ");
-  TH1D_original->SetTitle("E_{numu} spectrum");
+  TH1D_original->SetTitle("E_{had} spectrum");
 
   TH1D_modified_1->SetLineWidth(2);
   TH1D_modified_1->SetLineColor(kRed);
@@ -121,7 +113,7 @@ void draw_spectra_numuE_select_fun(int mode_val, int input_FSI){
 
 
   auto legend = new TLegend(0.5, 0.6, 0.7, 0.8);
-  legend->SetHeader((FSI_map[input_FSI] + " sigma uncertainties, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
+  legend->SetHeader((FSI_map[input_FSI] + " uncertainties, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
   legend->AddEntry(TH1D_modified_1, "1 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_1->GetMean()),"l");
   legend->AddEntry(TH1D_modified_2, "2 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_2->GetMean()),"l");
@@ -174,8 +166,8 @@ void draw_spectra_numuE_select_fun(int mode_val, int input_FSI){
 
   canvas_0->Update();
 
-  canvas_0->Print(("./pdf/numuE_"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+".pdf").c_str());
-  canvas_0->Print(("./png/numuE_"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+".png").c_str());
+  canvas_0->Print(("./pdf/hadE_"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+".pdf").c_str());
+  canvas_0->Print(("./png/hadE_"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+".png").c_str());
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
@@ -186,11 +178,11 @@ void draw_spectra_numuE_select_fun(int mode_val, int input_FSI){
 }
 
 
-void draw_spectra_numuE_select(){
+void draw_spectra_hadE_select(){
 
   for (auto const& x : mode_map){
     for (auto const& y : FSI_map){
-      draw_spectra_numuE_select_fun(x.first, y.first);
+      draw_spectra_hadE_select_fun(x.first, y.first);
     }
   }
 }
