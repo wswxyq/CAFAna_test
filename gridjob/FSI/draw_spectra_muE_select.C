@@ -9,58 +9,53 @@
 
 #include "CAFAna/Core/Spectrum.h"
 #include <string>
+#include <iostream>
 
 using namespace ana;
 
-int input_pdg = -9999;
 
-map<int, string> pdg_latex={
-  {111, "#pi^{0}"}, {211, "#pi^{+/-}"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "#mu"}, {15, "#tau"},
-  {-13, "all but #mu"}  };
-
-map<int, string> pdg_map={
-  {111,  "pi0"}, {211, "pi"}, {2212, "p"}, {2112, "n"},{11, "e"}, {13, "mu"}, {15, "tau"}, {-13, "nomuon"}
+map<int, string> FSI_map={
+  {1,  "khNFSISyst2020_EV1"}, {2, "khNFSISyst2020_EV2"}, {3, "khNFSISyst2020_EV3"}, {0, "khNFSISyst2020_MFP"}
   };
-map<int, string> mode_map={
-  {0,  "QE"}, {1, "Res"}, {2, "DIS"}, {3, "Coh"},{10, "MEC"}, {100000, "NOCUT"} };
+map<int, string> mode_map={ 
+  {100000, "NOCUT"} 
+  };
 
-void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
-
-
-
+void draw_spectra_muE_select_fun(int mode_val, int input_FSI){
 
 
-  std::cout << "Please enter a pdg value(number, negative for exclusion): ";
-  input_pdg = pdg_val;
+  std::cout << "Please enter a FSI value(number, negative for exclusion): ";
   
-  if ( pdg_map.count(input_pdg) > 0  )
-    std::cout<<"Found supported pdg. Now continue... with pdg="<<input_pdg<<std::endl;
+  if ( FSI_map.count(input_FSI) > 0  )
+    std::cout<<"Found supported FSI. Now continue... with FSI="<<input_FSI<<std::endl;
   else{
-    std::cout<<"NOT FOUND "<<input_pdg<<" ! QUIT..."<<std::endl;
+    std::cout<<"NOT FOUND "<<input_FSI<<" ! QUIT..."<<std::endl;
     return;
   }
 
 
   
-  if ( pdg_map.count(input_pdg) > 0  )
-    std::cout<<"Found supported pdg. Now continue... with pdg="<<input_pdg<<std::endl;
+  if ( FSI_map.count(input_FSI) > 0  )
+    std::cout<<"Found supported FSI. Now continue... with FSI="<<input_FSI<<std::endl;
   else{
-    std::cout<<"NOT FOUND "<<input_pdg<<" ! QUIT..."<<std::endl;
+    std::cout<<"NOT FOUND "<<input_FSI<<" ! QUIT..."<<std::endl;
     return;
   }
 
-  TString subdir = "subdir_muE_spectra";
-  TString percentage = "5%";
+  auto subdir = "subdir_muE_spectra";
 
-  TFile inFile_origin(("./results/"+std::to_string(mode_val)+"__/spectra.root").c_str());
-  TFile inFile_modified_up(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_1/spectra.root").c_str());
-  TFile inFile_modified_down(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_-1/spectra.root").c_str());
+
+  auto * inFile_origin = new TFile(("./results/"+std::to_string(mode_val)+"__/spectra.root").c_str());
+  auto * inFile_modified_1 = new TFile(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_FSI)+"_1/spectra.root").c_str());
+  auto * inFile_modified_2 = new TFile(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_FSI)+"_2/spectra.root").c_str());
+  auto * inFile_modified_3 = new TFile(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_FSI)+"_3/spectra.root").c_str());
 
 
   // Load the spectrum...
-  std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin.GetDirectory(subdir));
-  std::unique_ptr<Spectrum> spect_modified_up = Spectrum::LoadFrom(inFile_modified_up.GetDirectory(subdir));
-  std::unique_ptr<Spectrum> spect_modified_down = Spectrum::LoadFrom(inFile_modified_down.GetDirectory(subdir));
+  std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin, subdir);
+  std::unique_ptr<Spectrum> spect_modified_1 = Spectrum::LoadFrom(inFile_modified_1, subdir);
+  std::unique_ptr<Spectrum> spect_modified_2 = Spectrum::LoadFrom(inFile_modified_2, subdir);
+  std::unique_ptr<Spectrum> spect_modified_3 = Spectrum::LoadFrom(inFile_modified_3, subdir);
 
 
 
@@ -82,43 +77,55 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
   //pad1->SetRightMargin(.1);
 
   TH1D *TH1D_original = spect_origin->ToTH1(spect_origin->POT());
-  TH1D *TH1D_modified_up = spect_modified_up->ToTH1(spect_modified_up->POT());
-  TH1D *TH1D_modified_down = spect_modified_down->ToTH1(spect_modified_down->POT());
+  TH1D *TH1D_modified_1 = spect_modified_1->ToTH1(spect_modified_1->POT());
+  TH1D *TH1D_modified_2 = spect_modified_2->ToTH1(spect_modified_2->POT());
+  TH1D *TH1D_modified_3 = spect_modified_3->ToTH1(spect_modified_3->POT());
 
   TH1D_original->GetXaxis()->SetRangeUser(0, 5);
-  TH1D_modified_up->GetXaxis()->SetRangeUser(0, 5);
-  TH1D_modified_down->GetXaxis()->SetRangeUser(0, 5);
+  TH1D_modified_1->GetXaxis()->SetRangeUser(0, 5);
+  TH1D_modified_2->GetXaxis()->SetRangeUser(0, 5);
+  TH1D_modified_3->GetXaxis()->SetRangeUser(0, 5);
 
 
-  TH1D *TH1D_modified_up_factor = spect_modified_up->ToTH1(spect_modified_up->POT());
-  TH1D *TH1D_modified_down_factor = spect_modified_down->ToTH1(spect_modified_down->POT());
+  TH1D *TH1D_modified_1_factor = spect_modified_1->ToTH1(spect_modified_1->POT());
+  TH1D *TH1D_modified_2_factor = spect_modified_2->ToTH1(spect_modified_2->POT());
+  TH1D *TH1D_modified_3_factor = spect_modified_3->ToTH1(spect_modified_3->POT());
 
-  TH1D_modified_up_factor->GetXaxis()->SetRangeUser(0, 5);
-  TH1D_modified_down_factor->GetXaxis()->SetRangeUser(0, 5);
+  TH1D_modified_1_factor->GetXaxis()->SetRangeUser(0, 5);
+  TH1D_modified_2_factor->GetXaxis()->SetRangeUser(0, 5);
+  TH1D_modified_3_factor->GetXaxis()->SetRangeUser(0, 5);
 
 
   TH1D_original->SetLineWidth(2);
   TH1D_original->SetLineColor(kGreen);
   TH1D_original->SetLineStyle(kSolid);
   TH1D_original->Draw("hist_0");
-  TH1D_original->SetTitle("E_{#mu} spectrum");
+  TH1D_original->GetYaxis()->SetTitle(" ");
+  TH1D_original->GetXaxis()->SetTitle(" ");
+  TH1D_original->SetTitle("E_{mu} spectrum");
 
-  TH1D_modified_up->SetLineWidth(2);
-  TH1D_modified_up->SetLineColor(kRed);
-  TH1D_modified_up->SetLineStyle(kSolid);
-  TH1D_modified_up->Draw("SAME");
+  TH1D_modified_1->SetLineWidth(2);
+  TH1D_modified_1->SetLineColor(kRed);
+  TH1D_modified_1->SetLineStyle(kSolid);
+  TH1D_modified_1->Draw("SAME");
 
-  TH1D_modified_down->SetLineWidth(2);
-  TH1D_modified_down->SetLineColor(kOrange);
-  TH1D_modified_down->SetLineStyle(kSolid);
-  TH1D_modified_down->Draw("SAME");
+  TH1D_modified_2->SetLineWidth(2);
+  TH1D_modified_2->SetLineColor(kOrange);
+  TH1D_modified_2->SetLineStyle(kSolid);
+  TH1D_modified_2->Draw("SAME");
+
+  TH1D_modified_3->SetLineWidth(2);
+  TH1D_modified_3->SetLineColor(kBlue);
+  TH1D_modified_3->SetLineStyle(kSolid);
+  TH1D_modified_3->Draw("SAME");
 
 
   auto legend = new TLegend(0.5, 0.6, 0.7, 0.8);
-  legend->SetHeader((pdg_latex[pdg_val] + " prong length shifted #pm 5%, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
+  legend->SetHeader((FSI_map[input_FSI] + " sigma uncertainties, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
-  legend->AddEntry(TH1D_modified_up, "5% up -shift mean: "+ TString::Format("%f",TH1D_modified_up->GetMean()),"l");
-  legend->AddEntry(TH1D_modified_down, "5% down -shift mean: "+ TString::Format("%f",TH1D_modified_down->GetMean()),"l");
+  legend->AddEntry(TH1D_modified_1, "1 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_1->GetMean()),"l");
+  legend->AddEntry(TH1D_modified_2, "2 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_2->GetMean()),"l");
+  legend->AddEntry(TH1D_modified_3, "3 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_3->GetMean()),"l");
   legend->SetTextSize(0.03);
   legend->Draw("SAME");
 
@@ -128,26 +135,37 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
   //pad2->SetLeftMargin(.1);
   //pad2->SetBottomMargin(.1);
   //pad2->SetRightMargin(.1);
-  TH1D_modified_up_factor->Divide(TH1D_original);
-  TH1D_modified_up_factor->GetYaxis()->SetRangeUser(0.7, 1.3);
+  TH1D_modified_1_factor->Divide(TH1D_original);
+  TH1D_modified_1_factor->GetYaxis()->SetRangeUser(0.85, 1.15);
 
    
-  TH1D_modified_down_factor->Divide(TH1D_original);
-  TH1D_modified_down_factor->GetYaxis()->SetRangeUser(0.7, 1.3);
+  TH1D_modified_2_factor->Divide(TH1D_original);
+  TH1D_modified_2_factor->GetYaxis()->SetRangeUser(0.85, 1.15);
+
+  TH1D_modified_3_factor->Divide(TH1D_original);
+  TH1D_modified_3_factor->GetYaxis()->SetRangeUser(0.85, 1.15);
 
 
-  TH1D_modified_up_factor->SetLineWidth(2);
-  TH1D_modified_up_factor->SetLineColor(kRed);
-  TH1D_modified_up_factor->SetLineStyle(kSolid);
-  TH1D_modified_up_factor->GetYaxis()->SetTitle(" ");
-  TH1D_modified_up_factor->Draw("DD");
+  TH1D_modified_1_factor->SetLineWidth(2);
+  TH1D_modified_1_factor->SetLineColor(kRed);
+  TH1D_modified_1_factor->SetLineStyle(kSolid);
+  TH1D_modified_1_factor->GetYaxis()->SetTitle(" ");
+  TH1D_modified_2_factor->GetXaxis()->SetTitle(" ");
+  TH1D_modified_1_factor->Draw("DD");
 
-  TH1D_modified_down_factor->SetLineWidth(2);
-  TH1D_modified_down_factor->SetLineColor(kOrange);
-  TH1D_modified_down_factor->SetLineStyle(kSolid);
-  TH1D_modified_up_factor->GetYaxis()->SetTitle(" ");
-  TH1D_modified_up_factor->GetXaxis()->SetTitle(" ");
-  TH1D_modified_down_factor->Draw("SAME");
+  TH1D_modified_2_factor->SetLineWidth(2);
+  TH1D_modified_2_factor->SetLineColor(kOrange);
+  TH1D_modified_2_factor->SetLineStyle(kSolid);
+  TH1D_modified_2_factor->GetYaxis()->SetTitle(" ");
+  TH1D_modified_2_factor->GetXaxis()->SetTitle(" ");
+  TH1D_modified_2_factor->Draw("SAME");
+
+  TH1D_modified_3_factor->SetLineWidth(2);
+  TH1D_modified_3_factor->SetLineColor(kBlue);
+  TH1D_modified_3_factor->SetLineStyle(kSolid);
+  TH1D_modified_3_factor->GetYaxis()->SetTitle(" ");
+  TH1D_modified_3_factor->GetXaxis()->SetTitle(" ");
+  TH1D_modified_3_factor->Draw("SAME");
 
   TLine *hline = new TLine(0,1,5,1);
   hline->SetLineColor(kGreen);
@@ -156,20 +174,22 @@ void draw_spectra_muE_select_fun(int mode_val, int pdg_val){
 
   canvas_0->Update();
 
-  canvas_0->Print(("./pdf/muE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".pdf").c_str());
-  canvas_0->Print(("./png/muE_"+mode_map[mode_val]+"_"+pdg_map[input_pdg]+".png").c_str());
+  canvas_0->Print(("./pdf/muE_"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+".pdf").c_str());
+  canvas_0->Print(("./png/muE_"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+".png").c_str());
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
-  cout << percentage + " up prong-shift(Red) mean:" << TH1D_modified_up->GetMean()<<endl;
-  cout << percentage + " down prong-shift(Orange) mean:" << TH1D_modified_down->GetMean()<<endl;
+  cout <<  " 1 sigma mean:" << TH1D_modified_1->GetMean()<<endl;
+  cout <<  " 2 sigma mean:" << TH1D_modified_2->GetMean()<<endl;
+  cout <<  " 3 sigma mean:" << TH1D_modified_3->GetMean()<<endl;
 
 }
 
 
 void draw_spectra_muE_select(){
+
   for (auto const& x : mode_map){
-  for (auto const& y : pdg_map){
+    for (auto const& y : FSI_map){
       draw_spectra_muE_select_fun(x.first, y.first);
     }
   }

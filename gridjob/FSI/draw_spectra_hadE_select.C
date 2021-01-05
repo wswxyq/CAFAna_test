@@ -100,6 +100,8 @@ void draw_spectra_hadE_select_fun(int mode_val, int input_FSI){
   TH1D_original->SetLineColor(kGreen);
   TH1D_original->SetLineStyle(kSolid);
   TH1D_original->Draw("hist_0");
+  TH1D_original->GetYaxis()->SetTitle(" ");
+  TH1D_original->GetXaxis()->SetTitle(" ");
   TH1D_original->SetTitle("E_{had} spectrum");
 
   TH1D_modified_1->SetLineWidth(2);
@@ -119,7 +121,7 @@ void draw_spectra_hadE_select_fun(int mode_val, int input_FSI){
 
 
   auto legend = new TLegend(0.5, 0.6, 0.7, 0.8);
-  legend->SetHeader((FSI_map[input_FSI] + " #pm 1, 2, 3 sigma uncertainties, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
+  legend->SetHeader((FSI_map[input_FSI] + " uncertainties, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
   legend->AddEntry(TH1D_modified_1, "1 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_1->GetMean()),"l");
   legend->AddEntry(TH1D_modified_2, "2 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_2->GetMean()),"l");
@@ -134,14 +136,14 @@ void draw_spectra_hadE_select_fun(int mode_val, int input_FSI){
   //pad2->SetBottomMargin(.1);
   //pad2->SetRightMargin(.1);
   TH1D_modified_1_factor->Divide(TH1D_original);
-  TH1D_modified_1_factor->GetYaxis()->SetRangeUser(0.7, 1.3);
+  TH1D_modified_1_factor->GetYaxis()->SetRangeUser(0.85, 1.15);
 
    
   TH1D_modified_2_factor->Divide(TH1D_original);
-  TH1D_modified_2_factor->GetYaxis()->SetRangeUser(0.7, 1.3);
+  TH1D_modified_2_factor->GetYaxis()->SetRangeUser(0.85, 1.15);
 
   TH1D_modified_3_factor->Divide(TH1D_original);
-  TH1D_modified_3_factor->GetYaxis()->SetRangeUser(0.7, 1.3);
+  TH1D_modified_3_factor->GetYaxis()->SetRangeUser(0.85, 1.15);
 
 
   TH1D_modified_1_factor->SetLineWidth(2);
@@ -177,9 +179,9 @@ void draw_spectra_hadE_select_fun(int mode_val, int input_FSI){
 
   
   cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
-  cout << std::to_string(sigma) + " 1 sigma mean:" << TH1D_modified_1->GetMean()<<endl;
-  cout << std::to_string(sigma) + " 2 sigma mean:" << TH1D_modified_2->GetMean()<<endl;
-  cout << std::to_string(sigma) + " 3 sigma mean:" << TH1D_modified_3->GetMean()<<endl;
+  cout <<  " 1 sigma mean:" << TH1D_modified_1->GetMean()<<endl;
+  cout <<  " 2 sigma mean:" << TH1D_modified_2->GetMean()<<endl;
+  cout <<  " 3 sigma mean:" << TH1D_modified_3->GetMean()<<endl;
 
 }
 
@@ -188,8 +190,7 @@ void draw_spectra_hadE_select(){
 
   for (auto const& x : mode_map){
     for (auto const& y : FSI_map){
-      draw_spectra_hadE_select_fun(x.first, y.first, i);
-      draw_spectra_hadE_select_fun(x.first, y.first, -1*i);
+      draw_spectra_hadE_select_fun(x.first, y.first);
     }
   }
 }
