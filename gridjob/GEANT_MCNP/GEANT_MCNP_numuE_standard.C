@@ -48,6 +48,12 @@ void GEANT_MCNP_numuE_standard(){
 
   TH1D *TH1D_GEANT = spect_GEANT->ToTH1(spect_GEANT->POT());
   TH1D *TH1D_MCNP = spect_MCNP->ToTH1(spect_MCNP->POT());
+
+  cout << "POT of GEANT:" << spect_GEANT->POT()<<endl;
+  cout << "POT of MCNP:" << spect_MCNP->POT()<<endl;
+  cout << "Integral of GEANT:" << TH1D_GEANT->Integral()<<endl;
+  cout << "Integral of MCNP:" << TH1D_MCNP->Integral()<<endl;
+
   TH1D_MCNP->Scale(TH1D_GEANT->Integral()/TH1D_MCNP->Integral());
 
   TH1D_GEANT->GetXaxis()->SetRangeUser(0, 5);
@@ -107,8 +113,8 @@ void GEANT_MCNP_numuE_standard(){
   //canvas_0->Print("./png/numuE_.png");
   cout << "POT of GEANT:" << spect_GEANT->POT()<<endl;
   cout << "POT of MCNP:" << spect_MCNP->POT()<<endl;
-  cout << "INt of GEANT:" << TH1D_GEANT->Integral()<<endl;
-  cout << "INt of MCNP:" << TH1D_MCNP->Integral()<<endl;
+  cout << "Integral of GEANT:" << TH1D_GEANT->Integral()<<endl;
+  cout << "Integral of MCNP:" << TH1D_MCNP->Integral()<<endl;
 
   
 }

@@ -72,8 +72,8 @@ void Draw_resolution(int file_index=0){
   canvas_0->Print("./pdf/Resolution.pdf");
   cout << "POT of LSTM:" << spect_LSTM->POT()<<endl;
   cout << "POT of standard:" << spect_STANDARD->POT()<<endl;
-  cout << "INt of LSTM:" << TH1D_LSTM->Integral()<<endl;
-  cout << "INt of standard:" << TH1D_STANDARD->Integral()<<endl;
+  cout << "Integral of LSTM:" << TH1D_LSTM->Integral()<<endl;
+  cout << "Integral of standard:" << TH1D_STANDARD->Integral()<<endl;
   cout << "RMS OF LSTM:" << TH1D_LSTM->GetRMS()<<endl;
   cout << "RMS OF STANDARD:" << TH1D_STANDARD->GetRMS()<<endl;
 
