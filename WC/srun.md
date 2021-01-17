@@ -29,3 +29,13 @@ singularity shell --userns --nv \
     /scratch/tensorflow_1_12_gpu/
 
 # the mappped directory will store the change in container i.e. .bash_history, .bash_rc 
+
+lstm_ee env:
+
+Keras 2.2.4
+TensorFlow 1.12
+Cuda 9.0
+
+Keras 2.2.5
+TensorFlow 1.14
+Cuda 10.0
