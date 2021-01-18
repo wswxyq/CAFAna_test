@@ -29,13 +29,7 @@ void Draw_resolution(int file_index=0){
   //
   // Plot the histo...
   //  
-  TCanvas *canvas_0 = new TCanvas("canvas_0","plot numuE_spectra",1200, 1200);
-	//canvas_0->Divide(1, 2, 0, 0);
-  TPad *pad1 = new TPad("pad1", " ",0.1, 0.45, 0.9, 0.9);
-  TPad *pad2 = new TPad("pad2", " ",0.1, 0.1, 0.9, 0.45);
-
-  pad1->Draw();
-  pad2->Draw();
+  TCanvas *canvas_0 = new TCanvas("canvas_0","plot numuE_spectra",1200, 800);
 
 
   TH1D *TH1D_LSTM = spect_LSTM->ToTH1(spect_LSTM->POT());
@@ -46,28 +40,22 @@ void Draw_resolution(int file_index=0){
   TH1D_LSTM->GetXaxis()->SetRangeUser(-2, 2);
   TH1D_STANDARD->GetXaxis()->SetRangeUser(-2, 2);
 
-  pad1->cd();
-  //pad1->SetTopMargin(.1);
-  //pad1->SetBottomMargin(.1);
-  //pad1->SetLeftMargin(.1);
-  //pad1->SetRightMargin(.1);
+
   TH1D_LSTM->SetLineWidth(2);
   TH1D_LSTM->SetLineColor(kGreen);
   TH1D_LSTM->SetLineStyle(kSolid);
   TH1D_LSTM->Draw("hist_0");
-  TH1D_LSTM->SetTitle("Resolution of LSTM energy");
+  TH1D_LSTM->SetName("LSTM");
+  TH1D_LSTM->GetXaxis()->SetTitle("Resolution");
 
-  pad2->cd();
-  
-  //pad2->SetTopMargin(.1);
-  //pad2->SetLeftMargin(.1);
-  //pad2->SetBottomMargin(.1);
-  //pad2->SetRightMargin(.1);
+
   TH1D_STANDARD->SetLineWidth(2);
-  TH1D_STANDARD->SetLineColor(kGreen);
+  TH1D_STANDARD->SetLineColor(kBlue);
   TH1D_STANDARD->SetLineStyle(kSolid);
-  TH1D_STANDARD->Draw("hist_0");
-  TH1D_STANDARD->SetTitle("Resolution of Standard estimated energy");
+  TH1D_STANDARD->SetName("STANDARD");
+  TH1D_STANDARD->Draw("hist_0 SAME");
+
+  canvas_0->BuildLegend()->SetTextSize(0.025);
 
   canvas_0->Update();
 
