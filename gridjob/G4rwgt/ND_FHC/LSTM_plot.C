@@ -29,6 +29,9 @@
 #include "TLegend.h"
 #include "TLegendEntry.h"
 
+#include <iostream>
+#include <fstream>
+
 // for plotting
 #include "CAFAna/Analysis/Plots.h"
 
@@ -147,7 +150,7 @@ void LSTM_plot()
 
   TGaxis::SetMaxDigits(5);
 
-  std::string inName = "spectra20.root";
+  std::string inName = "spectra.root";
 
   TFile* inFile = TFile::Open(inName.c_str(), "read");
 
@@ -199,6 +202,12 @@ void LSTM_plot()
     TH1 * hSig = sSig->ToTH1(pot);
     hSig->GetXaxis()->SetTitle(myFullLabel.c_str());
 
+    std::ofstream outfile;
+
+    outfile.open(myLabel_vec[i], std::ios::in | std::ios::out | std::ios::app);
+
+    outfile << "nom: " << hSig->GetMean() << std::endl;
+
     std::vector<TH1*> hUnivs;
     for(int iUniv=0; iUniv<nUnivs; iUniv++){
       std::string univ_dir = "univ_" + std::to_string(iUniv);
@@ -206,7 +215,12 @@ void LSTM_plot()
       TH1* hUniv = sUniv->ToTH1(pot);
       hUniv->GetXaxis()->SetTitle(myFullLabel.c_str());
       hUnivs.push_back(hUniv);
+      outfile << iUniv << "\t\t" << hUniv->GetMean() << std::endl;
     }
+
+    outfile.close();
+
+
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -290,8 +304,7 @@ void LSTM_plot()
       frac_1->Draw("");
       frac_2->Draw("SAME");
       frac_3->Draw("SAME");
-      
-      
+
       
       P1->cd();
 
@@ -318,6 +331,10 @@ void LSTM_plot()
       
       rC->SaveAs((outName + ".png").c_str());
 
+      delete rC;
+      delete frac_1;
+      delete frac_2;
+      delete frac_3;
     }
 
     /*    

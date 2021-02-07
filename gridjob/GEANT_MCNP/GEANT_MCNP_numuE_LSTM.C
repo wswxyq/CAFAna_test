@@ -112,7 +112,8 @@ void GEANT_MCNP_numuE_LSTM(){
   cout << "POT of MCNP:" << spect_MCNP->POT()<<endl;
   cout << "Integral of GEANT:" << TH1D_GEANT->Integral()<<endl;
   cout << "Integral of MCNP:" << TH1D_MCNP->Integral()<<endl;
-
+  cout << "GEANT mean:" << TH1D_GEANT->GetMean()<<endl;
+  cout << "MCNP mean:" << TH1D_MCNP->GetMean()<<endl;
   
 }
 

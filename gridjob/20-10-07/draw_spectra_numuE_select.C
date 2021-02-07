@@ -12,6 +12,8 @@
 
 #include "CAFAna/Core/Spectrum.h"
 #include <string>
+#include <iostream>
+
 
 using namespace ana;
 
@@ -52,18 +54,18 @@ void draw_spectra_numuE_select_fun(int mode_val, int pdg_val){
     return;
   }
 
-  TString subdir = "subdir_numuE_spectra";
+  auto subdir = "subdir_numuE_spectra";
   TString percentage = "5%";
 
-  TFile inFile_origin(("./results/"+std::to_string(mode_val)+"__/spectra.root").c_str());
-  TFile inFile_modified_up(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_1/spectra.root").c_str());
-  TFile inFile_modified_down(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_-1/spectra.root").c_str());
+  auto* inFile_origin = new TFile(("./results/"+std::to_string(mode_val)+"__/spectra.root").c_str());
+  auto* inFile_modified_up = new TFile(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_1/spectra.root").c_str());
+  auto* inFile_modified_down = new TFile(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_pdg)+"_-1/spectra.root").c_str());
 
 
   // Load the spectrum...
-  std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin.GetDirectory(subdir));
-  std::unique_ptr<Spectrum> spect_modified_up = Spectrum::LoadFrom(inFile_modified_up.GetDirectory(subdir));
-  std::unique_ptr<Spectrum> spect_modified_down = Spectrum::LoadFrom(inFile_modified_down.GetDirectory(subdir));
+  std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin, subdir);
+  std::unique_ptr<Spectrum> spect_modified_up = Spectrum::LoadFrom(inFile_modified_up, subdir);
+  std::unique_ptr<Spectrum> spect_modified_down = Spectrum::LoadFrom(inFile_modified_down, subdir);
 
 
 

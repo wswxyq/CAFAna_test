@@ -151,8 +151,8 @@ void draw_spectra_select_fun(int mode_val, int input_FSI, int particle, int p_m 
   TH1D_modified_3->Draw("SAME");
 
 
-  auto legend = new TLegend(0.5, 0.6, 0.7, 0.8);
-  legend->SetHeader((FSI_map[input_FSI] + " uncertainties, "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
+  auto legend = new TLegend(0.55, 0.6, 0.8, 0.8);
+  legend->SetHeader((FSI_map[input_FSI] + " , "+ mode_map[mode_val]+" mode").c_str(),"C"); // option "C" allows to center the header
   legend->AddEntry(TH1D_original, "Original mean: "+ TString::Format("%f",TH1D_original->GetMean()),"l");
   legend->AddEntry(TH1D_modified_1, pm_list[p_m] + "1 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_1->GetMean()),"l");
   legend->AddEntry(TH1D_modified_2, pm_list[p_m] + "2 sigma -shift mean: "+ TString::Format("%f",TH1D_modified_2->GetMean()),"l");

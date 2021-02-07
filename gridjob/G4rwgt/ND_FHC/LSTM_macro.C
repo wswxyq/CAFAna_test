@@ -3,6 +3,8 @@
 //
 // Author: Cathal Sweeney - csweeney@fnal.gov
 
+// This script requires CAFAna release after 1/15/2021
+
 #include "CAFAna/Core/Binning.h"
 #include "CAFAna/Core/Spectrum.h"
 #include "CAFAna/Core/SpectrumLoader.h"
@@ -22,13 +24,14 @@
 #include "3FlavorAna/Vars/NumuEFxs.h"
 
 #include "TensorFlowEvaluator/LSTME/cafana/LSTMEVar.h"
+#include "Utilities/func/EnvExpand.cxx"
 
 using namespace ana;  
 
 void LSTM_macro()
 {
-	SpectrumLoader* loader = new SpectrumLoader("prod_caf_R19-11-18-prod5reco.f_fd_genie_N1810j0211a_nonswap_fhc_nova_v08_period3_v1");
-  std::string outName =  "spectra20.root";
+	SpectrumLoader* loader = new SpectrumLoader("prod_caf_R20-11-25-prod5.1reco.a_nd_genie_N1810j0211a_nonswap_fhc_nova_v08_full_v1");
+  std::string outName =  "spectra.root";
   
   int nUniv = 36;
 
@@ -55,8 +58,8 @@ void LSTM_macro()
 
 
   std::cout<<"Load TensorFlow Model."<<std::endl;
-  //auto model = LSTME::initCAFAnaModel((util::EnvExpansion("${SRT_PRIVATE_CONTEXT}")+"/tf").c_str());
-  auto model = LSTME::initCAFAnaModel("tf");
+  auto model = LSTME::initCAFAnaModel((util::EnvExpansion("${SRT_PRIVATE_CONTEXT}")+"/tf").c_str());
+  //auto model = LSTME::initCAFAnaModel("tf");
 
   std::vector<const Var *> kMyVar_vec{
   new Var(LSTME::primaryEnergy(model)),
@@ -159,6 +162,7 @@ void LSTM_macro()
     }//end for(iUniv)
 
   }//end for(i)
+  outFile->Close();
 
   
 
