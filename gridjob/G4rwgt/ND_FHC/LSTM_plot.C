@@ -73,6 +73,8 @@ namespace ana
     {0.05, 2}
   };
 
+  std::vector<double> variantion_vec = {0.80, 0.90, 0.95, 1.05, 1.10, 1.20};
+
  
   TGraphAsymmErrors* Hypercross_plots(TH1* nom,
                                       std::vector<TH1*> univs,
@@ -215,7 +217,7 @@ void LSTM_plot()
       TH1* hUniv = sUniv->ToTH1(pot);
       hUniv->GetXaxis()->SetTitle(myFullLabel.c_str());
       hUnivs.push_back(hUniv);
-      outfile << iUniv << "\t\t" << hUniv->GetMean() << std::endl;
+      outfile << knob_list[iUniv/6] << "\t\t" << variantion_vec[iUniv%6] << "\t\t" << hUniv->GetMean() << std::endl;
     }
 
     outfile.close();

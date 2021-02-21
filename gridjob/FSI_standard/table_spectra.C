@@ -59,34 +59,40 @@ void table_spectra_select_fun(int mode_val, int input_FSI, int particle, int p_m
   }
   
 
-  auto subdir_had = "subdir_hadE_spectra";
-  auto subdir_mu = "subdir_muE_spectra";
-  auto subdir_numu = "subdir_numuE_spectra";
+  auto subdir_had = "subdir_hadE_spectra_standard";
+  auto subdir_mu = "subdir_muE_spectra_standard";
+  auto subdir_numu = "subdir_numuE_spectra_standard";
 
 
-  auto * inFile_origin = new TFile(("./results/"+std::to_string(mode_val)+"__/spectra.root").c_str());
+  //auto * inFile_origin = new TFile("./results/spectra.root");
+
+  //auto * inFile_origin = new TFile(("./results/"+std::to_string(mode_val)+"/spectra.root").c_str());
+  auto * inFile_origin = new TFile(("./results/"+std::to_string(mode_val)+"__"+"/spectra.root").c_str());
+
   auto * inFile_modified_1 = new TFile(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_FSI)+"_"+pm_list[p_m]+"1/spectra.root").c_str());
   auto * inFile_modified_2 = new TFile(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_FSI)+"_"+pm_list[p_m]+"2/spectra.root").c_str());
   auto * inFile_modified_3 = new TFile(("./results/"+std::to_string(mode_val)+"_"+std::to_string(input_FSI)+"_"+pm_list[p_m]+"3/spectra.root").c_str());
 
   // Load the spectrum...
   // assume default particle to be hadron.
-  std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin, subdir_had);
-  std::unique_ptr<Spectrum> spect_modified_1 = Spectrum::LoadFrom(inFile_modified_1, subdir_had);
-  std::unique_ptr<Spectrum> spect_modified_2 = Spectrum::LoadFrom(inFile_modified_2, subdir_had);
-  std::unique_ptr<Spectrum> spect_modified_3 = Spectrum::LoadFrom(inFile_modified_3, subdir_had);
+
+  std::unique_ptr<Spectrum> spect_origin = Spectrum::LoadFrom(inFile_origin, "subdir_E_spectra");
+  std::unique_ptr<Spectrum> spect_modified_1 = Spectrum::LoadFrom(inFile_modified_1, subdir_numu);
+  std::unique_ptr<Spectrum> spect_modified_2 = Spectrum::LoadFrom(inFile_modified_2, subdir_numu);
+  std::unique_ptr<Spectrum> spect_modified_3 = Spectrum::LoadFrom(inFile_modified_3, subdir_numu);
+
   if(particle==2)
   {
-    spect_origin = Spectrum::LoadFrom(inFile_origin, subdir_mu);
+    spect_origin = Spectrum::LoadFrom(inFile_origin, "subdir_muE_spectra"); // be careful! the standard EE spectra for muon is not generated yet.
     spect_modified_1 = Spectrum::LoadFrom(inFile_modified_1, subdir_mu);
     spect_modified_2 = Spectrum::LoadFrom(inFile_modified_2, subdir_mu);
     spect_modified_3 = Spectrum::LoadFrom(inFile_modified_3, subdir_mu);
-  }else if(particle==3)
+  }else if(particle==1)
   {
-    spect_origin = Spectrum::LoadFrom(inFile_origin, subdir_numu);
-    spect_modified_1 = Spectrum::LoadFrom(inFile_modified_1, subdir_numu);
-    spect_modified_2 = Spectrum::LoadFrom(inFile_modified_2, subdir_numu);
-    spect_modified_3 = Spectrum::LoadFrom(inFile_modified_3, subdir_numu);
+    spect_origin = Spectrum::LoadFrom(inFile_origin, "subdir_hadE_spectra"); // be careful! the standard EE spectra for hadron is not generated yet.
+    spect_modified_1 = Spectrum::LoadFrom(inFile_modified_1, subdir_had);
+    spect_modified_2 = Spectrum::LoadFrom(inFile_modified_2, subdir_had);
+    spect_modified_3 = Spectrum::LoadFrom(inFile_modified_3, subdir_had);
   }
 
   TH1D *TH1D_original = spect_origin->ToTH1(spect_origin->POT());
@@ -135,10 +141,10 @@ void table_spectra(){
 
   for (auto const& x : mode_map){
     for (auto const& y : FSI_map){
-      for (auto const& z : particle_list){
-        table_spectra_select_fun(x.first, y.first, z.first, 1);
-        table_spectra_select_fun(x.first, y.first, z.first, -1);
-      }
+      
+        table_spectra_select_fun(x.first, y.first, 3, 1);
+        table_spectra_select_fun(x.first, y.first, 3, -1);
+      
     }
   }
 }

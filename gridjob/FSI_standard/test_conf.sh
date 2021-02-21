@@ -4,18 +4,18 @@ RESULT_DIR="./results/"
 RESULT_FILE="spectra.root"
 
 SCRIPT=( exec_FSI.C )
-NJOBS=20
+NJOBS=50
 
 JOB_OPTIONS=(
     --rel     "S20-10-30"
     --testrel "/nova/app/users/wus/fake_release_10-30"
 )
 
-OUTDIR="/pnfs/nova/scratch/users/wus/2021-01-02_wu_test"
+OUTDIR="/pnfs/nova/scratch/users/wus/2021-02-20_FSI_standard"
 
 MODE_VALUES=( 100000 )
-FSI_VALUES=( 2 )
-PM_VALUES=( 3 )
+FSI_VALUES=( 0 1 2 3 )
+PM_VALUES=( 1 -1 2 -2 -3 3 -5 5)
 
 declare -A CONFIGS
 
