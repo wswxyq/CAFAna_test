@@ -8,6 +8,7 @@ srun --pty --nodes=1 --partition gpu_gce --gres=gpu:1 --nodelist wcgpu02 bash
 **or**
 
 [recommanded config]
+
 srun --unbuffered --pty -A nova --partition=gpu_gce \
      --time=08:00:00 \
      --nodes=1 --ntasks-per-node=1 --gres=gpu:1 \
