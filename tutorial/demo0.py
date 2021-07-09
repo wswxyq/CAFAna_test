@@ -18,7 +18,7 @@ return float(sr.trk.kalman.tracks[0].len);
 ''')
 
 # Spectrum to be filled from the loader
-length = cafana.Spectrum("Track length (cm)", bins, loader, kTrackLen, cafana.kIsNumuCC);
+length = cafana.Spectrum("Track length (cm)", bins, loader, kTrackLen, cafana.kIsNumuCC)
 
 # Do it!
 loader.Go()
