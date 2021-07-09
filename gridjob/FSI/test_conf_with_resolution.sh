@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RESULT_DIR="./results_with_resolution/"
+RESULT_DIR="./results_resolution/"
 RESULT_FILE="spectra.root"
 
 SCRIPT=( exec_FSI_with_resolution.C )
