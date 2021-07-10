@@ -34,8 +34,7 @@ using namespace ana;
 // global vars used.
 
 
-void exec_rwgt(int rwgt_val, int percentage)
-{
+void exec_rwgt(int rwgt_val, int percentage) {
     // Environment variables and wildcards work. Most commonly you want a SAM
     // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
     // reasonable amount of time for demo purposes.
@@ -62,8 +61,7 @@ void exec_rwgt(int rwgt_val, int percentage)
 
     // Specify variables needed and arbitrary code to extract value from
     // SRProxy
-    const Var kTrackLen([](const caf::SRProxy* sr)
-    {
+    const Var kTrackLen([](const caf::SRProxy* sr) {
         if(sr->trk.kalman.ntracks == 0) return 0.0f;
         return float(sr->trk.kalman.tracks[0].len);
     });
@@ -72,15 +70,13 @@ void exec_rwgt(int rwgt_val, int percentage)
     const Cut kTrueEbelow7GeV = kTrueE < 7.0;
 
     const Cut SanityCut(
-        [] (const caf::SRProxy *sr)
-    {
+    [] (const caf::SRProxy *sr) {
         return (sr->mc.nnu > 0) && (! sr->mc.nu[0].prim.empty());
     }
     );
 
     const Cut kNumuLoosePID(
-        [] (const caf::SRProxy* sr)
-    {
+    [] (const caf::SRProxy* sr) {
         return (
                    (sr->sel.remid.pid > 0.5)
                    && (sr->sel.cvnloosepreselptp.numuid > 0.5)
@@ -114,20 +110,15 @@ void exec_rwgt(int rwgt_val, int percentage)
 
     // By default, set rwgt_val = 0
     SystShifts shift_2020(&kPiplusTotSyst, percentage/20.0);
-    if (rwgt_val == 1)
-    {
+    if (rwgt_val == 1) {
         shift_2020 = SystShifts(&kPiplusCexSyst, percentage/20.0);
-    } else if (rwgt_val == 2)
-    {
+    } else if (rwgt_val == 2) {
         shift_2020 = SystShifts(&kPiplusDcexSyst, percentage/20.0);
-    } else if (rwgt_val == 3)
-    {
+    } else if (rwgt_val == 3) {
         shift_2020 = SystShifts(&kPiplusQeSyst, percentage/20.0);
-    } else if (rwgt_val == 4)
-    {
+    } else if (rwgt_val == 4) {
         shift_2020 = SystShifts(&kPiplusAbsSyst, percentage/20.0);
-    } else if (rwgt_val == 5)
-    {
+    } else if (rwgt_val == 5) {
         shift_2020 = SystShifts(&kPiplusProdSyst, percentage/20.0);
     }
 

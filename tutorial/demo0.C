@@ -14,8 +14,7 @@
 using namespace ana;
 
 
-void demo0()
-{
+void demo0() {
     // Environment variables and wildcards work. Most commonly you want a SAM
     // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
     // reasonable amount of time for demo purposes.
@@ -27,8 +26,7 @@ void demo0()
 
     // Specify variables needed and arbitrary code to extract value from
     // SRProxy
-    const Var kTrackLen([](const caf::SRProxy* sr)
-    {
+    const Var kTrackLen([](const caf::SRProxy* sr) {
         if(sr->trk.kalman.ntracks == 0) return 0.0f;
         return float(sr->trk.kalman.tracks[0].len);
     });

@@ -87,8 +87,7 @@ void table_numuE_fun(int mode_val, int pdg_val, string filename) {
 }
 
 void table_numuE() {
-    if (std::ifstream("numuE.txt"))
-    {
+    if (std::ifstream("numuE.txt")) {
         std::remove("numuE.txt");
     }
     std::ofstream outfile ("numuE.txt");

@@ -87,8 +87,7 @@ void table_muE_fun(int mode_val, int pdg_val, string filename) {
 }
 
 void table_muE() {
-    if (std::ifstream("muE.txt"))
-    {
+    if (std::ifstream("muE.txt")) {
         std::remove("muE.txt");
     }
     std::ofstream outfile ("muE.txt");

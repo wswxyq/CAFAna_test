@@ -27,36 +27,31 @@ using namespace ana;
 
 
 const Cut mode_Cut_QE(
-    [] (const caf::SRProxy* sr)
-{
+[] (const caf::SRProxy* sr) {
     return (sr->mc.nu[0].mode == 0);
 }
 );
 
 const Cut mode_Cut_Res(
-    [] (const caf::SRProxy* sr)
-{
+[] (const caf::SRProxy* sr) {
     return (sr->mc.nu[0].mode == 1);
 }
 );
 
 const Cut mode_Cut_DIS(
-    [] (const caf::SRProxy* sr)
-{
+[] (const caf::SRProxy* sr) {
     return (sr->mc.nu[0].mode == 2);
 }
 );
 
 const Cut mode_Cut_Coh(
-    [] (const caf::SRProxy* sr)
-{
+[] (const caf::SRProxy* sr) {
     return (sr->mc.nu[0].mode == 3);
 }
 );
 
 const Cut mode_Cut_MEC(
-    [] (const caf::SRProxy* sr)
-{
+[] (const caf::SRProxy* sr) {
     return (sr->mc.nu[0].mode == 10);
 }
 );
@@ -64,8 +59,7 @@ const Cut mode_Cut_MEC(
 
 
 
-void MCNP_true_original(int mode_val)
-{
+void MCNP_true_original(int mode_val) {
     // Environment variables and wildcards work. Most commonly you want a SAM
     // dataset. Pass -ss --limit 1 on the cafe command line to make this take a
     // reasonable amount of time for demo purposes.
@@ -83,8 +77,7 @@ void MCNP_true_original(int mode_val)
 
     // Specify variables needed and arbitrary code to extract value from
     // SRProxy
-    const Var kTrackLen([](const caf::SRProxy* sr)
-    {
+    const Var kTrackLen([](const caf::SRProxy* sr) {
         if(sr->trk.kalman.ntracks == 0) return 0.0f;
         return float(sr->trk.kalman.tracks[0].len);
     });
@@ -93,15 +86,13 @@ void MCNP_true_original(int mode_val)
     const Cut kTrueEbelow7GeV = kTrueE < 7.0;
 
     const Cut SanityCut(
-        [] (const caf::SRProxy *sr)
-    {
+    [] (const caf::SRProxy *sr) {
         return (sr->mc.nnu > 0) && (! sr->mc.nu[0].prim.empty());
     }
     );
 
     const Cut kNumuLoosePID(
-        [] (const caf::SRProxy* sr)
-    {
+    [] (const caf::SRProxy* sr) {
         return (
                    (sr->sel.remid.pid > 0.5)
                    && (sr->sel.cvnloosepreselptp.numuid > 0.5)
@@ -122,26 +113,19 @@ void MCNP_true_original(int mode_val)
 
 
     Cut cut=cut_0;
-    if (mode_val==0)
-    {
+    if (mode_val==0) {
         cut=cut_0 && mode_Cut_QE;
-    } else if (mode_val==1)
-    {
+    } else if (mode_val==1) {
         cut=cut_0 && mode_Cut_Res;
-    } else if (mode_val==2)
-    {
+    } else if (mode_val==2) {
         cut=cut_0 && mode_Cut_DIS;
-    } else if (mode_val==3)
-    {
+    } else if (mode_val==3) {
         cut=cut_0 && mode_Cut_Coh;
-    } else if (mode_val==10)
-    {
+    } else if (mode_val==10) {
         cut=cut_0 && mode_Cut_MEC;
-    } else if (mode_val==100000)
-    {
+    } else if (mode_val==100000) {
         cut=cut_0;
-    } else
-    {
+    } else {
         return;
     }
 

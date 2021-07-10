@@ -17,8 +17,7 @@
 
 using namespace ana;
 
-void example_macro()
-{
+void example_macro() {
     SpectrumLoader* loader = new SpectrumLoader("prod_caf_R20-11-25-prod5.1reco.a_nd_genie_N1810j0211a_nonswap_fhc_nova_v08_full_v1");
 
     std::string outName =  "outFile.root";

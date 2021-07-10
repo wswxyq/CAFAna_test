@@ -84,11 +84,9 @@ void exec_FSI_with_resolution(int mode_val, int FSI_val, double p_m) {
 
     if (p_m > 0 && p_m <= 10 ) {
         up_down = "up";
-    }
-    else if (p_m<0 && p_m >= -10 ) {
+    } else if (p_m<0 && p_m >= -10 ) {
         up_down = "down";
-    }
-    else {
+    } else {
         cout << "p_m value out of suggested range. Your value is: " << p_m << endl;
         return;
     }
@@ -159,23 +157,17 @@ void exec_FSI_with_resolution(int mode_val, int FSI_val, double p_m) {
     Cut cut=cut_0;
     if (mode_val==0) {
         cut=cut_0 && mode_Cut_QE;
-    }
-    else if (mode_val==1) {
+    } else if (mode_val==1) {
         cut=cut_0 && mode_Cut_Res;
-    }
-    else if (mode_val==2) {
+    } else if (mode_val==2) {
         cut=cut_0 && mode_Cut_DIS;
-    }
-    else if (mode_val==3) {
+    } else if (mode_val==3) {
         cut=cut_0 && mode_Cut_Coh;
-    }
-    else if (mode_val==10) {
+    } else if (mode_val==10) {
         cut=cut_0 && mode_Cut_MEC;
-    }
-    else if (mode_val==100000) {
+    } else if (mode_val==100000) {
         cut=cut_0;
-    }
-    else {
+    } else {
         return;
     }
 
@@ -194,11 +186,9 @@ void exec_FSI_with_resolution(int mode_val, int FSI_val, double p_m) {
     SystShifts shift_2020(&ana::khNFSISyst2020_EV2, p_m);
     if (FSI_val == 1) {
         shift_2020 = SystShifts(&ana::khNFSISyst2020_EV1, p_m);
-    }
-    else if (FSI_val == 2) {
+    } else if (FSI_val == 2) {
         shift_2020 = SystShifts(&ana::khNFSISyst2020_EV2, p_m);
-    }
-    else if (FSI_val == 3) {
+    } else if (FSI_val == 3) {
         shift_2020 = SystShifts(&ana::khNFSISyst2020_EV3, p_m);
     }
 

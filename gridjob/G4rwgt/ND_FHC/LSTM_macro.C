@@ -28,8 +28,7 @@
 
 using namespace ana;
 
-void LSTM_macro()
-{
+void LSTM_macro() {
     SpectrumLoader* loader = new SpectrumLoader("prod_caf_R20-11-25-prod5.1reco.a_nd_genie_N1810j0211a_nonswap_fhc_nova_v08_full_v1");
     std::string outName =  "spectra.root";
 
@@ -70,8 +69,7 @@ void LSTM_macro()
     //=======================================
     // cut
 
-    const Var kTrackLen([](const caf::SRProxy* sr)
-    {
+    const Var kTrackLen([](const caf::SRProxy* sr) {
         if(sr->trk.kalman.ntracks == 0) return 0.0f;
         return float(sr->trk.kalman.tracks[0].len);
     });
@@ -80,15 +78,13 @@ void LSTM_macro()
     const Cut kTrueEbelow7GeV = kTrueE < 7.0;
 
     const Cut SanityCut(
-        [] (const caf::SRProxy *sr)
-    {
+    [] (const caf::SRProxy *sr) {
         return (sr->mc.nnu > 0) && (! sr->mc.nu[0].prim.empty());
     }
     );
 
     const Cut kNumuLoosePID(
-        [] (const caf::SRProxy* sr)
-    {
+    [] (const caf::SRProxy* sr) {
         return (
                    (sr->sel.remid.pid > 0.5)
                    && (sr->sel.cvnloosepreselptp.numuid > 0.5)

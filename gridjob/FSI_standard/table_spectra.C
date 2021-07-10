@@ -52,8 +52,7 @@ void table_spectra_select_fun(int mode_val, int input_FSI, int particle, int p_m
         return;
     }
 
-    if (p_m != 1 && p_m != -1)
-    {
+    if (p_m != 1 && p_m != -1) {
         std::cout<< "p_m should be either 1 or -1. Input p_m=" << p_m << " . Skipping..." <<std::endl;
         return;
     }
@@ -81,14 +80,12 @@ void table_spectra_select_fun(int mode_val, int input_FSI, int particle, int p_m
     std::unique_ptr<Spectrum> spect_modified_2 = Spectrum::LoadFrom(inFile_modified_2, subdir_numu);
     std::unique_ptr<Spectrum> spect_modified_3 = Spectrum::LoadFrom(inFile_modified_3, subdir_numu);
 
-    if(particle==2)
-    {
+    if(particle==2) {
         spect_origin = Spectrum::LoadFrom(inFile_origin, "subdir_muE_spectra"); // be careful! the standard EE spectra for muon is not generated yet.
         spect_modified_1 = Spectrum::LoadFrom(inFile_modified_1, subdir_mu);
         spect_modified_2 = Spectrum::LoadFrom(inFile_modified_2, subdir_mu);
         spect_modified_3 = Spectrum::LoadFrom(inFile_modified_3, subdir_mu);
-    } else if(particle==1)
-    {
+    } else if(particle==1) {
         spect_origin = Spectrum::LoadFrom(inFile_origin, "subdir_hadE_spectra"); // be careful! the standard EE spectra for hadron is not generated yet.
         spect_modified_1 = Spectrum::LoadFrom(inFile_modified_1, subdir_had);
         spect_modified_2 = Spectrum::LoadFrom(inFile_modified_2, subdir_had);

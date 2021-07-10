@@ -32,8 +32,7 @@
 // for plotting
 #include "CAFAna/Analysis/Plots.h"
 
-namespace ana
-{
+namespace ana {
 
 std::vector<std::string> knobName_list = {
     "Total inelastic",
@@ -101,8 +100,7 @@ TGraphAsymmErrors* Hypercross_plots(TH1* nom,
 TH1* FracUncert(TH1* hSig, std::string knob,
                 std::vector<TH1*> univs,
                 float variation,
-                std::string myFullLabel)
-{
+                std::string myFullLabel) {
 
     int down_idx = knob_map[knob] + variation_map[variation];
     int up_idx = knob_map[knob] + 5 - variation_map[variation];
@@ -142,8 +140,7 @@ TH1* FracUncert(TH1* hSig, std::string knob,
 
 using namespace ana;
 
-void example_plot()
-{
+void example_plot() {
 
     TGaxis::SetMaxDigits(5);
 
@@ -184,11 +181,9 @@ void example_plot()
 
         if(myLabel.compare("piTrkLen") == 0) {
             myFullLabel = "Reco pion shower length (cm)";
-        }
-        else if(myLabel.compare("calE") == 0) {
+        } else if(myLabel.compare("calE") == 0) {
             myFullLabel = "Calorimetric energy (GeV)";
-        }
-        else {
+        } else {
             myFullLabel = "True neutrino energy (GeV)";
         }
 

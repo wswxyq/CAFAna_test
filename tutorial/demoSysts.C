@@ -19,8 +19,7 @@
 
 using namespace ana;
 
-namespace demo
-{
+namespace demo {
 //  Systs are classes derived from ana::ISyst.
 //  Instances of each Syst class must be unique:
 //  if you instantiate more than one, you'll get a complaint
@@ -33,9 +32,8 @@ namespace demo
 //    and 10% + a function that blows up smoothly from 10% to 50%
 //    from 5 to 15 GeV:
 //    y(E) = 0.1 + 0.4*Heaviside(E-5)*(1-exp(-(E-5)**2/10))
-class DemoSyst1 : public ISyst
-{
-public:
+class DemoSyst1 : public ISyst {
+  public:
     DemoSyst1()
     // they have to supply a "short" name (used for lookup internally)
     // and a "Latex" name (which is used on plots).
@@ -46,8 +44,7 @@ public:
     // the magic happens in TruthShift() (when truth-only) or Shift() (when reco involved).
     // here, we're just reweighting events according to the function
     // described above, so we just adjust the weight
-    void TruthShift(double sigma, caf::SRNeutrinoProxy* sr, double& weight) const override
-    {
+    void TruthShift(double sigma, caf::SRNeutrinoProxy* sr, double& weight) const override {
 
         // first calculate the function.
         double additionalWgt = 0.1;
@@ -94,24 +91,21 @@ const DemoSyst1 kDemoSyst1;
 // That (usually) can't be implemented just by reweighting.
 // In this example we'll make one that adds a fixed amount of visible energy
 // for each neutron in the event.
-class DemoSyst2 : public ISyst
-{
-public:
+class DemoSyst2 : public ISyst {
+  public:
     DemoSyst2()
         : ISyst("DemoSyst2", "Demo syst ##2")
     {}
 
     // we'll be modifying the SRProxy this time.
     // (that's why it's passed non-const.)
-    void Shift(double sigma, caf::SRProxy* sr, double& weight) const override
-    {
+    void Shift(double sigma, caf::SRProxy* sr, double& weight) const override {
         // if no truth info, we can't do anything
         if (sr->mc.nnu != 1)
             return;
 
         unsigned int nNeutron = 0;
-        for (const auto & particle : sr->mc.nu[0].prim)
-        {
+        for (const auto & particle : sr->mc.nu[0].prim) {
             if (particle.pdg != 2112)
                 continue;
 
@@ -141,8 +135,7 @@ const DemoSyst2 kDemoSyst2;
 // makes drawing easier later
 TCanvas * DrawUpDownRatioCanvas(const PredictionInterp * pred,
                                 osc::IOscCalc * calc,
-                                const ISyst* syst)
-{
+                                const ISyst* syst) {
     SystShifts shifts;
 
     // get the spectra from the predictions
@@ -194,8 +187,7 @@ TCanvas * DrawUpDownRatioCanvas(const PredictionInterp * pred,
 
 // ---------------------------------------
 
-void demoSysts()
-{
+void demoSysts() {
     // let's use the systs to create some shifted distributions to prove they work.
 
     Prod4NomLoaders loaders(ana::kNumuConcat, ana::Loaders::kFHC);
@@ -223,8 +215,7 @@ void demoSysts()
         if (sr->mc.nnu != 1)
             return false;
 
-        for (const auto & particle : sr->mc.nu[0].prim)
-        {
+        for (const auto & particle : sr->mc.nu[0].prim) {
             if (particle.pdg == 2112)
                 return true;
         }

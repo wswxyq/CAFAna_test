@@ -35,8 +35,7 @@
 // for plotting
 #include "CAFAna/Analysis/Plots.h"
 
-namespace ana
-{
+namespace ana {
 
 std::vector<std::string> knobName_list = {
     "Total inelastic",
@@ -106,8 +105,7 @@ TGraphAsymmErrors* Hypercross_plots(TH1* nom,
 TH1* FracUncert(TH1* hSig, std::string knob,
                 std::vector<TH1*> univs,
                 float variation,
-                std::string myFullLabel)
-{
+                std::string myFullLabel) {
 
     int down_idx = knob_map[knob] + variation_map[variation];
     int up_idx = knob_map[knob] + 5 - variation_map[variation];
@@ -147,8 +145,7 @@ TH1* FracUncert(TH1* hSig, std::string knob,
 
 using namespace ana;
 
-void LSTM_plot()
-{
+void LSTM_plot() {
 
     TGaxis::SetMaxDigits(5);
 
@@ -186,11 +183,9 @@ void LSTM_plot()
 
         if(myLabel.compare("muE") == 0) {
             myFullLabel = "muon Energy";
-        }
-        else if(myLabel.compare("hadE") == 0) {
+        } else if(myLabel.compare("hadE") == 0) {
             myFullLabel = "hadron Energy";
-        }
-        else {
+        } else {
             myFullLabel = "muon neutrino Energy";
         }
 

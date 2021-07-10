@@ -87,8 +87,7 @@ void table_hadE_fun(int mode_val, int pdg_val, string filename) {
 }
 
 void table_hadE() {
-    if (std::ifstream("hadE.txt"))
-    {
+    if (std::ifstream("hadE.txt")) {
         std::remove("hadE.txt");
     }
     std::ofstream outfile ("hadE.txt");
