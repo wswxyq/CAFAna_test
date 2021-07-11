@@ -143,9 +143,12 @@ void draw_resolution_select_fun(int mode_val, int input_FSI) {
     canvas_0->Print(("./pdf/"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+"_resolution.pdf").c_str());
     canvas_0->Print(("./png/"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+"_resolution.png").c_str());
 
-    cout << "Original(Green) mean:" << TH1D_original->GetMean()<<endl;
-    cout << "+1 sigma mean:" << TH1D_modified_up_factor->GetMean()<<endl;
-    cout << "-1 sigma mean:" << TH1D_modified_down_factor->GetMean()<<endl;
+    cout << "Original(Green) mean:" << TH1D_original -> GetMean() << endl;
+    cout << "+1 sigma mean:" << TH1D_modified_up -> GetMean() << endl;
+    cout << "-1 sigma mean:" << TH1D_modified_down -> GetMean()<<endl;
+    cout << "Original(Green) RMS:" << TH1D_original -> GetRMS()<<endl;
+    cout << "+1 sigma RMS:" << TH1D_modified_up -> GetRMS()<<endl;
+    cout << "-1 sigma RMS:" << TH1D_modified_down -> GetRMS()<<endl;
 
     delete canvas_0;
 
@@ -155,8 +158,6 @@ void draw_resolution_select_fun(int mode_val, int input_FSI) {
 void draw_resolution() {
     for (auto const& x : mode_map) {
         for (auto const& y : FSI_map) {
-            draw_resolution_select_fun(x.first, y.first);
-            draw_resolution_select_fun(x.first, y.first);
             draw_resolution_select_fun(x.first, y.first);
         }
     }
