@@ -9,7 +9,7 @@
 #include "CAFAna/Core/Spectrum.h"
 #include <string>
 #include <iostream>
-
+#include <iomanip>
 using namespace ana;
 
 map<int, string> FSI_map= {
@@ -144,12 +144,15 @@ void draw_resolution_select_fun(int mode_val, int input_FSI) {
     canvas_0->Print(("./png/"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+"_resolution.png").c_str());
 
     cout << "Original(Green) mean:" << TH1D_original -> GetMean() << endl;
-    cout << "+1 sigma mean:" << TH1D_modified_up -> GetMean() << endl;
-    cout << "-1 sigma mean:" << TH1D_modified_down -> GetMean()<<endl;
+    cout << "+1 sigma mean:" << TH1D_modified_up -> GetMean() << 
+            "  " << std::setprecision(3) << 100. * ( TH1D_modified_up -> GetMean()-TH1D_original -> GetMean()) / TH1D_original -> GetMean() << "%" << endl;
+    cout << "-1 sigma mean:" << TH1D_modified_down -> GetMean() << 
+            "  " << std::setprecision(3) << 100. * ( TH1D_modified_down -> GetMean()-TH1D_original -> GetMean()) / TH1D_original -> GetMean() << "%" << endl;
     cout << "Original(Green) RMS:" << TH1D_original -> GetRMS()<<endl;
-    cout << "+1 sigma RMS:" << TH1D_modified_up -> GetRMS()<<endl;
-    cout << "-1 sigma RMS:" << TH1D_modified_down -> GetRMS()<<endl;
-
+    cout << "+1 sigma mean:" << TH1D_modified_up -> GetRMS() << 
+            "  " << std::setprecision(3) << 100. * ( TH1D_modified_up -> GetRMS()-TH1D_original -> GetRMS()) / TH1D_original -> GetRMS() << "%" << endl;
+    cout << "-1 sigma mean:" << TH1D_modified_down -> GetRMS() << 
+            "  " << std::setprecision(3) << 100. * ( TH1D_modified_down -> GetRMS()-TH1D_original -> GetRMS()) / TH1D_original -> GetRMS() << "%" << endl;
     delete canvas_0;
 
 }
