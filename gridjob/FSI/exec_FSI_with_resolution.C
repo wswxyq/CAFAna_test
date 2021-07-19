@@ -183,7 +183,7 @@ void exec_FSI_with_resolution(int mode_val, int FSI_val, double p_m) {
     // Spectrum to be filled from the loader
 
     // By default, set FSI_val = 0
-    SystShifts shift_2020(&ana::khNFSISyst2020_EV2, p_m);
+    SystShifts shift_2020(&ana::khNFSISyst2020_MFP, p_m);
     if (FSI_val == 1) {
         shift_2020 = SystShifts(&ana::khNFSISyst2020_EV1, p_m);
     } else if (FSI_val == 2) {

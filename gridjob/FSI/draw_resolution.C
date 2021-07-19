@@ -10,7 +10,10 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 using namespace ana;
+using namespace std;
+
 
 map<int, string> FSI_map= {
     {1,  "khNFSISyst2020_EV1"}, {2, "khNFSISyst2020_EV2"}, {3, "khNFSISyst2020_EV3"}, {0, "khNFSISyst2020_MFP"}
@@ -23,14 +26,14 @@ map<int, string> mode_map= {
 void draw_resolution_select_fun(int mode_val, int input_FSI) {
 
     if ( mode_map.count(mode_val) > 0  )
-        std::cout<<"Found supported mode. Now continue... with mode cut="<< mode_val <<std::endl;
+        std::cout<<"Found supported mode. Now continue... with mode cut="<< mode_map[mode_val] <<std::endl;
     else {
         std::cout<<"NOT FOUND "<< mode_val <<" ! QUIT..."<< std::endl;
         return;
     }
 
     if ( FSI_map.count(input_FSI) > 0  )
-        std::cout<<"Found supported FSI. Now continue... with FSI="<< input_FSI <<std::endl;
+        std::cout<<"Found supported FSI. Now continue... with FSI="<< FSI_map[input_FSI] <<std::endl;
     else {
         std::cout<<"NOT FOUND "<<input_FSI<<" ! QUIT..."<<std::endl;
         return;
@@ -142,17 +145,22 @@ void draw_resolution_select_fun(int mode_val, int input_FSI) {
 
     canvas_0->Print(("./pdf/"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+"_resolution.pdf").c_str());
     canvas_0->Print(("./png/"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+"_resolution.png").c_str());
-
-    cout << "Original(Green) mean:" << TH1D_original -> GetMean() << endl;
-    cout << "+1 sigma mean:" << TH1D_modified_up -> GetMean() << 
+    
+    ofstream logfile;
+    logfile.open("./log_resolution.log", std::ios::app);
+    logfile << mode_map[mode_val] << "\t" << FSI_map[input_FSI] << endl;
+    logfile << "Original(Green) mean:" << TH1D_original -> GetMean() << endl;
+    logfile << "+1 sigma mean:" << TH1D_modified_up -> GetMean() << 
             "  " << std::setprecision(3) << 100. * ( TH1D_modified_up -> GetMean()-TH1D_original -> GetMean()) / TH1D_original -> GetMean() << "%" << endl;
-    cout << "-1 sigma mean:" << TH1D_modified_down -> GetMean() << 
+    logfile << "-1 sigma mean:" << TH1D_modified_down -> GetMean() << 
             "  " << std::setprecision(3) << 100. * ( TH1D_modified_down -> GetMean()-TH1D_original -> GetMean()) / TH1D_original -> GetMean() << "%" << endl;
-    cout << "Original(Green) RMS:" << TH1D_original -> GetRMS()<<endl;
-    cout << "+1 sigma mean:" << TH1D_modified_up -> GetRMS() << 
+    logfile << "Original(Green) RMS:" << TH1D_original -> GetRMS()<<endl;
+    logfile << "+1 sigma mean:" << TH1D_modified_up -> GetRMS() << 
             "  " << std::setprecision(3) << 100. * ( TH1D_modified_up -> GetRMS()-TH1D_original -> GetRMS()) / TH1D_original -> GetRMS() << "%" << endl;
-    cout << "-1 sigma mean:" << TH1D_modified_down -> GetRMS() << 
+    logfile << "-1 sigma mean:" << TH1D_modified_down -> GetRMS() << 
             "  " << std::setprecision(3) << 100. * ( TH1D_modified_down -> GetRMS()-TH1D_original -> GetRMS()) / TH1D_original -> GetRMS() << "%" << endl;
+    logfile << endl;
+    logfile.close();
     delete canvas_0;
 
 }

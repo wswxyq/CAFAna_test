@@ -1,5 +1,4 @@
 //S20-10-30
-
 #include "TCanvas.h"
 #include "TFile.h"
 #include "TH1.h"
@@ -10,8 +9,10 @@
 #include "CAFAna/Core/Spectrum.h"
 #include <string>
 #include <iostream>
-
+#include <iomanip>
+#include <fstream>
 using namespace ana;
+using namespace std;
 
 
 map<int, string> FSI_map= {
@@ -32,21 +33,21 @@ map<int, string> pm_list= {
 void draw_spectra_select_fun(int mode_val, int input_FSI, int particle, int p_m ) {
 
     if ( mode_map.count(mode_val) > 0  )
-        std::cout<<"Found supported mode. Now continue... with mode cut="<< mode_val <<std::endl;
+        std::cout<<"Found supported mode. Now continue... with mode cut="<< mode_map[mode_val] <<std::endl;
     else {
         std::cout<<"NOT FOUND "<< mode_val <<" ! QUIT..."<< std::endl;
         return;
     }
 
     if ( FSI_map.count(input_FSI) > 0  )
-        std::cout<<"Found supported FSI. Now continue... with FSI="<< input_FSI <<std::endl;
+        std::cout<<"Found supported FSI. Now continue... with FSI="<< FSI_map[input_FSI] <<std::endl;
     else {
         std::cout<<"NOT FOUND "<<input_FSI<<" ! QUIT..."<<std::endl;
         return;
     }
 
     if ( particle_list.count(particle) > 0  )
-        std::cout<<"Found supported particle. Now continue... with particle="<< particle <<std::endl;
+        std::cout<<"Found supported particle. Now continue... with particle="<< particle_list[particle] <<std::endl;
     else {
         std::cout<<"NOT FOUND "<< particle <<" ! QUIT..."<<std::endl;
         return;
@@ -205,16 +206,18 @@ void draw_spectra_select_fun(int mode_val, int input_FSI, int particle, int p_m 
     canvas_0->Print(("./pdf/"+particle_list[particle]+"E_"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+pm_list[p_m]+".pdf").c_str());
     canvas_0->Print(("./png/"+particle_list[particle]+"E_"+mode_map[mode_val]+"_"+FSI_map[input_FSI]+pm_list[p_m]+".png").c_str());
 
-
-    cout << "Original(Green) mean:" << TH1D_original->GetMean() << endl;
-    cout << pm_list[p_m] << "1 sigma mean:" << TH1D_modified_1->GetMean() << 
+    ofstream logfile;
+    logfile.open("./log_spectra.log", std::ios::app);
+    logfile << mode_map[mode_val] << "\t" << FSI_map[input_FSI] << "\t" << particle_list[particle] << endl;
+    logfile << "Original(Green) mean:" << TH1D_original->GetMean() << endl;
+    logfile << pm_list[p_m] << "1 sigma mean:" << TH1D_modified_1->GetMean() << 
             "  " << std::setprecision(3) << 100. * ( TH1D_modified_1 -> GetMean()-TH1D_original -> GetMean()) / TH1D_original -> GetMean() << "%" << endl;
-    cout << pm_list[p_m] << "2 sigma mean:" << TH1D_modified_2->GetMean() << 
+    logfile << pm_list[p_m] << "2 sigma mean:" << TH1D_modified_2->GetMean() << 
             "  " << std::setprecision(3) << 100. * ( TH1D_modified_2 -> GetMean()-TH1D_original -> GetMean()) / TH1D_original -> GetMean() << "%" << endl;
-    cout << pm_list[p_m] << "3 sigma mean:" << TH1D_modified_3->GetMean() << 
+    logfile << pm_list[p_m] << "3 sigma mean:" << TH1D_modified_3->GetMean() << 
             "  " << std::setprecision(3) << 100. * ( TH1D_modified_3 -> GetMean()-TH1D_original -> GetMean()) / TH1D_original -> GetMean() << "%" << endl;
-
-
+    logfile << endl;
+    logfile.close();
     delete canvas_0;
 
 }

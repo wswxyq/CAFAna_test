@@ -11,7 +11,7 @@ JOB_OPTIONS=(
     --testrel "/nova/app/users/wus/fake_release_10-30"
 )
 
-OUTDIR="/pnfs/nova/scratch/users/wus/2021-07-09_wu_test"
+OUTDIR="/pnfs/nova/scratch/users/wus/FSI_resolution"
 
 MODE_VALUES=( 100000 )
 FSI_VALUES=( 0 1 2 3 )
