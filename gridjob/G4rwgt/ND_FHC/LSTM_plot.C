@@ -16,7 +16,6 @@
 //
 // Author: Cathal Sweeney - csweeney@fnal.gov
 
-
 #include "CAFAna/Core/Spectrum.h"
 
 #include "TFile.h"
@@ -35,145 +34,134 @@
 // for plotting
 #include "CAFAna/Analysis/Plots.h"
 
-namespace ana {
-
-std::vector<std::string> knobName_list = {
-    "Total inelastic",
-    "Charge exchange",
-    "Double charge exchange",
-    "Quasi-elastic",
-    "Absorption",
-    "Pion production"
-};
-
-std::vector<std::string> knob_list = {
-    "reac",
-    "cex",
-    "dcex",
-    "inel",
-    "abs",
-    "prod"
-};
-
-
-
-std::map<std::string, int> knob_map = {
-    {"reac",  0},
-    {"cex",   6},
-    {"dcex", 12},
-    {"inel", 18},
-    {"abs",  24},
-    {"prod", 30}
-};
-
-std::map<float, int> variation_map = {
-    {0.2,  0},
-    {0.1,  1},
-    {0.05, 2}
-};
-
-std::vector<double> variantion_vec = {0.80, 0.90, 0.95, 1.05, 1.10, 1.20};
-
-
-TGraphAsymmErrors* Hypercross_plots(TH1* nom,
-                                    std::vector<TH1*> univs,
-                                    std::string knob,
-                                    int colour,
-                                    float variation)
-// Plots spectra with error band due to varying a given knob by
-// the specified variation (5, 10, 20%)
+namespace ana
 {
-    int down_idx = knob_map[knob] + variation_map[variation];
-    int up_idx = knob_map[knob] + 5 - variation_map[variation];
 
-    std::vector<TH1*> hDown_vec{univs[down_idx]};
-    std::vector<TH1*> hUp_vec{univs[up_idx]};
+    std::vector<std::string> knobName_list = {
+        "Total inelastic",
+        "Charge exchange",
+        "Double charge exchange",
+        "Quasi-elastic",
+        "Absorption",
+        "Pion production"};
 
-    TGraphAsymmErrors* graph = PlotWithSystErrorBand(nom,
-                               hUp_vec,
-                               hDown_vec,
-                               kBlack,
-                               colour);
+    std::vector<std::string> knob_list = {
+        "reac",
+        "cex",
+        "dcex",
+        "inel",
+        "abs",
+        "prod"};
 
-    return graph;
-}
-// end Hypercross_plots()
+    std::map<std::string, int> knob_map = {
+        {"reac", 0},
+        {"cex", 6},
+        {"dcex", 12},
+        {"inel", 18},
+        {"abs", 24},
+        {"prod", 30}};
 
+    std::map<float, int> variation_map = {
+        {0.2, 0},
+        {0.1, 1},
+        {0.05, 2}};
 
+    std::vector<double> variantion_vec = {0.80, 0.90, 0.95, 1.05, 1.10, 1.20};
 
+    TGraphAsymmErrors *Hypercross_plots(TH1 *nom,
+                                        std::vector<TH1 *> univs,
+                                        std::string knob,
+                                        int colour,
+                                        float variation)
+    // Plots spectra with error band due to varying a given knob by
+    // the specified variation (5, 10, 20%)
+    {
+        int down_idx = knob_map[knob] + variation_map[variation];
+        int up_idx = knob_map[knob] + 5 - variation_map[variation];
 
-TH1* FracUncert(TH1* hSig, std::string knob,
-                std::vector<TH1*> univs,
-                float variation,
-                std::string myFullLabel) {
+        std::vector<TH1 *> hDown_vec{univs[down_idx]};
+        std::vector<TH1 *> hUp_vec{univs[up_idx]};
 
-    int down_idx = knob_map[knob] + variation_map[variation];
-    int up_idx = knob_map[knob] + 5 - variation_map[variation];
+        TGraphAsymmErrors *graph = PlotWithSystErrorBand(nom,
+                                                         hUp_vec,
+                                                         hDown_vec,
+                                                         kBlack,
+                                                         colour);
 
-    TH1* hDown = univs[down_idx];
-    TH1* hUp   = univs[up_idx];
-
-    // Get fractional uncertainty (take larger of +/-)
-    int nBins = hSig->GetNbinsX();
-    double xLow = hSig->GetXaxis()->GetXmin();
-    double xHigh = hSig->GetXaxis()->GetXmax();
-
-    TH1D * fracUncert = new TH1D("frac", "", nBins, xLow, xHigh);
-    for(int i=1; i <= nBins; ++i) {
-        double up   = hUp->GetBinContent(i);
-        double down = hDown->GetBinContent(i);
-        double nom  = hSig->GetBinContent(i);
-
-        double abs_shift = std::max( std::abs(up - nom), std::abs(down - nom) );
-        double frac = abs_shift / nom;
-
-        if( isnan(frac) ) fracUncert->SetBinContent(i, 0.f);
-        else fracUncert->SetBinContent(i, frac);
-
+        return graph;
     }
+    // end Hypercross_plots()
 
-    fracUncert->GetYaxis()->SetTitle("#frac{#deltaN}{N}");
-    fracUncert->GetXaxis()->SetTitle(myFullLabel.c_str());
+    TH1 *FracUncert(TH1 *hSig, std::string knob,
+                    std::vector<TH1 *> univs,
+                    float variation,
+                    std::string myFullLabel)
+    {
 
-    return fracUncert;
+        int down_idx = knob_map[knob] + variation_map[variation];
+        int up_idx = knob_map[knob] + 5 - variation_map[variation];
 
-}//end FracUncert()
+        TH1 *hDown = univs[down_idx];
+        TH1 *hUp = univs[up_idx];
 
+        // Get fractional uncertainty (take larger of +/-)
+        int nBins = hSig->GetNbinsX();
+        double xLow = hSig->GetXaxis()->GetXmin();
+        double xHigh = hSig->GetXaxis()->GetXmax();
+
+        TH1D *fracUncert = new TH1D("frac", "", nBins, xLow, xHigh);
+        for (int i = 1; i <= nBins; ++i)
+        {
+            double up = hUp->GetBinContent(i);
+            double down = hDown->GetBinContent(i);
+            double nom = hSig->GetBinContent(i);
+
+            double abs_shift = std::max(std::abs(up - nom), std::abs(down - nom));
+            double frac = abs_shift / nom;
+
+            if (isnan(frac))
+                fracUncert->SetBinContent(i, 0.f);
+            else
+                fracUncert->SetBinContent(i, frac);
+        }
+
+        fracUncert->GetYaxis()->SetTitle("#frac{#deltaN}{N}");
+        fracUncert->GetXaxis()->SetTitle(myFullLabel.c_str());
+
+        return fracUncert;
+
+    } // end FracUncert()
 
 }
-
 
 using namespace ana;
 
-void LSTM_plot() {
+void LSTM_plot()
+{
 
     TGaxis::SetMaxDigits(5);
 
     std::string inName = "spectra.root";
 
-    TFile* inFile = TFile::Open(inName.c_str(), "read");
+    TFile *inFile = TFile::Open(inName.c_str(), "read");
 
     int nUnivs = knob_map.size() * variation_map.size() * 2;
 
     std::vector<std::string> myLabel_vec{
         "muE",
         "hadE",
-        "numuE"
-    };
+        "numuE"};
     std::vector<std::string> myTitle_vec{
         "Piplus 100 universes",
         "Piplus 100 universes",
-        "Piplus 100 universes"
-    };
-    std::vector<std::string> myName_vec  = {
+        "Piplus 100 universes"};
+    std::vector<std::string> myName_vec = {
         "piplus_muE",
         "piplus_hadE",
-        "piplus_numuE"
-    };
+        "piplus_numuE"};
 
-
-
-    for(uint i=0; i<myName_vec.size(); ++i) {
+    for (uint i = 0; i < myName_vec.size(); ++i)
+    {
 
         std::string myName = myName_vec[i];
         std::string myLabel = myLabel_vec[i];
@@ -181,22 +169,25 @@ void LSTM_plot() {
 
         std::string myFullLabel;
 
-        if(myLabel.compare("muE") == 0) {
+        if (myLabel.compare("muE") == 0)
+        {
             myFullLabel = "muon Energy";
-        } else if(myLabel.compare("hadE") == 0) {
+        }
+        else if (myLabel.compare("hadE") == 0)
+        {
             myFullLabel = "hadron Energy";
-        } else {
+        }
+        else
+        {
             myFullLabel = "muon neutrino Energy";
         }
 
-
         std::string base_dir = myName_vec[i];
         // Load in nominal spectrum
-        Spectrum * sSig = Spectrum::LoadFrom( inFile->GetDirectory(base_dir.c_str()), "nom" ).release();
-
+        Spectrum *sSig = Spectrum::LoadFrom(inFile->GetDirectory(base_dir.c_str()), "nom").release();
 
         double pot = sSig->POT();
-        TH1 * hSig = sSig->ToTH1(pot);
+        TH1 *hSig = sSig->ToTH1(pot);
         hSig->GetXaxis()->SetTitle(myFullLabel.c_str());
 
         std::ofstream outfile;
@@ -205,55 +196,53 @@ void LSTM_plot() {
 
         outfile << "nom: " << hSig->GetMean() << std::endl;
 
-        std::vector<TH1*> hUnivs;
-        for(int iUniv=0; iUniv<nUnivs; iUniv++) {
+        std::vector<TH1 *> hUnivs;
+        for (int iUniv = 0; iUniv < nUnivs; iUniv++)
+        {
             std::string univ_dir = "univ_" + std::to_string(iUniv);
-            Spectrum* sUniv = Spectrum::LoadFrom(inFile->GetDirectory(base_dir.c_str()), univ_dir.c_str()).release();
-            TH1* hUniv = sUniv->ToTH1(pot);
+            Spectrum *sUniv = Spectrum::LoadFrom(inFile->GetDirectory(base_dir.c_str()), univ_dir.c_str()).release();
+            TH1 *hUniv = sUniv->ToTH1(pot);
             hUniv->GetXaxis()->SetTitle(myFullLabel.c_str());
             hUnivs.push_back(hUniv);
-            outfile << knob_list[iUniv/6] << "\t\t" << variantion_vec[iUniv%6] << "\t\t" << hUniv->GetMean() << std::endl;
+            outfile << knob_list[iUniv / 6] << "\t\t" << variantion_vec[iUniv % 6] << "\t\t" << hUniv->GetMean() << std::endl;
         }
 
         outfile.close();
 
-
-
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        for(int iKnob=0; iKnob< (int)knob_list.size(); iKnob++) {
+        for (int iKnob = 0; iKnob < (int)knob_list.size(); iKnob++)
+        {
 
             std::string outName = "./g4rwgt_";
 
             outName += myName;
             outName += "_";
 
-
             std::string knob_name = knob_list[iKnob];
             hSig->SetTitle((knobName_list[iKnob]).c_str());
 
             outName += knob_name;
 
-
-            TGraphAsymmErrors * graph_1 =  Hypercross_plots(hSig, hUnivs,
-                                           knob_name, kRed,
-                                           0.2);
-            TH1* frac_1 = FracUncert(hSig, knob_name, hUnivs, 0.2, myFullLabel);
+            TGraphAsymmErrors *graph_1 = Hypercross_plots(hSig, hUnivs,
+                                                          knob_name, kRed,
+                                                          0.2);
+            TH1 *frac_1 = FracUncert(hSig, knob_name, hUnivs, 0.2, myFullLabel);
             frac_1->SetLineColor(kRed);
 
-            TGraphAsymmErrors * graph_2 =  Hypercross_plots(hSig, hUnivs,
-                                           knob_name, kBlue,
-                                           0.1);
-            TH1* frac_2 = FracUncert(hSig, knob_name, hUnivs, 0.1, myFullLabel);
+            TGraphAsymmErrors *graph_2 = Hypercross_plots(hSig, hUnivs,
+                                                          knob_name, kBlue,
+                                                          0.1);
+            TH1 *frac_2 = FracUncert(hSig, knob_name, hUnivs, 0.1, myFullLabel);
             frac_2->SetLineColor(kBlue);
 
-            TGraphAsymmErrors * graph_3 =  Hypercross_plots(hSig, hUnivs,
-                                           knob_name, kGreen+2,
-                                           0.05);
-            TH1* frac_3 = FracUncert(hSig, knob_name, hUnivs, 0.05, myFullLabel);
-            frac_3->SetLineColor(kGreen +2);
+            TGraphAsymmErrors *graph_3 = Hypercross_plots(hSig, hUnivs,
+                                                          knob_name, kGreen + 2,
+                                                          0.05);
+            TH1 *frac_3 = FracUncert(hSig, knob_name, hUnivs, 0.05, myFullLabel);
+            frac_3->SetLineColor(kGreen + 2);
 
-            auto legend = new TLegend(0.6,0.5,0.95,0.9);
+            auto legend = new TLegend(0.6, 0.5, 0.95, 0.9);
             legend->AddEntry(graph_1, "#pm 20% error band", "f");
             legend->AddEntry(graph_2, "#pm 10% error band", "f");
             legend->AddEntry(graph_3, "#pm  5% error band", "f");
@@ -269,54 +258,49 @@ void LSTM_plot() {
             //.........................................
             TString rCname = "rC";
 
-            TCanvas* rC = new TCanvas(rCname, rCname);
+            TCanvas *rC = new TCanvas(rCname, rCname);
 
-            rC -> SetBottomMargin(0.);
+            rC->SetBottomMargin(0.);
             double Spl = 0.3;
-            TPad* P1 = new TPad( "Temp_1", "", 0.0, Spl, 1.0, 1.0, 0 );
-            TPad* P2 = new TPad( "Temp_2", "", 0.0, 0.0, 1.0, Spl, 0 );
-            P2 -> SetRightMargin (.03);
-            P2 -> SetTopMargin   (.00);
-            P2 -> SetBottomMargin(.3);
-            P2 -> SetLeftMargin  (.13);
-            P2 -> Draw();
-            P1 -> SetRightMargin (.03);
-            P1 -> SetLeftMargin  (.13);
-            P1 -> SetTopMargin   (.1);
-            P1 -> SetBottomMargin(.00);
-            P1 -> Draw();
+            TPad *P1 = new TPad("Temp_1", "", 0.0, Spl, 1.0, 1.0, 0);
+            TPad *P2 = new TPad("Temp_2", "", 0.0, 0.0, 1.0, Spl, 0);
+            P2->SetRightMargin(.03);
+            P2->SetTopMargin(.00);
+            P2->SetBottomMargin(.3);
+            P2->SetLeftMargin(.13);
+            P2->Draw();
+            P1->SetRightMargin(.03);
+            P1->SetLeftMargin(.13);
+            P1->SetTopMargin(.1);
+            P1->SetBottomMargin(.00);
+            P1->Draw();
             // Set some label sizes.
             double Lb1 = 0.07;
             double Lb2 = 0.13;
             // --- First, draw the fracUncert so cd onto Pad2
-            P2 -> cd();
+            P2->cd();
 
             // Set axis ranges etc.
-            frac_1->GetYaxis()->SetTitleSize( Lb2 );
+            frac_1->GetYaxis()->SetTitleSize(Lb2);
             frac_1->GetYaxis()->SetTitleOffset(0.4);
-            //frac_1->GetYaxis()->SetLabelOffset(0.05);
-            frac_1->GetYaxis()->SetLabelSize( Lb2 );
-            frac_1->GetXaxis()->SetTitleSize( Lb2 );
-            frac_1->GetXaxis()->SetLabelSize( Lb2 );
+            // frac_1->GetYaxis()->SetLabelOffset(0.05);
+            frac_1->GetYaxis()->SetLabelSize(Lb2);
+            frac_1->GetXaxis()->SetTitleSize(Lb2);
+            frac_1->GetXaxis()->SetLabelSize(Lb2);
             frac_1->Draw("");
             frac_2->Draw("SAME");
             frac_3->Draw("SAME");
 
-
             P1->cd();
 
-            hSig->GetYaxis()->SetTitleSize( Lb1 );
-            hSig->GetYaxis()->SetLabelSize( Lb1 );
-            hSig->GetYaxis()->SetTitleOffset( 0.7 );
+            hSig->GetYaxis()->SetTitleSize(Lb1);
+            hSig->GetYaxis()->SetLabelSize(Lb1);
+            hSig->GetYaxis()->SetTitleOffset(0.7);
             // Remove the x axis labels
-            hSig->GetXaxis()->SetLabelSize  (0 );
+            hSig->GetXaxis()->SetLabelSize(0);
             hSig->GetXaxis()->SetLabelOffset(99);
 
-
-
             //.........................................
-
-
 
             hSig->Draw("hist ][");
             graph_1->Draw("e2 same");
@@ -394,10 +378,7 @@ void LSTM_plot() {
 
         */
 
-
-    }//end for(myName_vec)
+    } // end for(myName_vec)
 
     inFile->Close();
-
 }
-
